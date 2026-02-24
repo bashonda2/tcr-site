@@ -26,7 +26,7 @@ const tohuTerm = verse2.key_terms.find(t => t.transliteration === 'tohu vavohu')
         <span class="text-teal-600">Rendering</span>
       </h1>
 
-      <p class="text-xl text-stone-500 leading-relaxed max-w-2xl mx-auto mb-10 font-serif italic">
+      <p class="text-xl text-stone-700 leading-relaxed max-w-2xl mx-auto mb-10 font-serif italic">
         A modern English translation of the Hebrew Bible — formal equivalence,
         translated directly from the Westminster Leningrad Codex,
         with every decision documented.
@@ -54,7 +54,7 @@ const tohuTerm = verse2.key_terms.find(t => t.transliteration === 'tohu vavohu')
     <div class="text-center mb-12">
       <p class="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-3">Live Example</p>
       <h2 class="font-serif text-3xl font-medium text-stone-800">Genesis 1:1–2</h2>
-      <p class="text-stone-500 mt-2 text-sm">Every verse includes Hebrew, modern English, and full scholarly apparatus</p>
+      <p class="text-stone-600 mt-2 text-sm">Every verse includes Hebrew, modern English, and full scholarly apparatus</p>
     </div>
 
     <div class="space-y-8">
@@ -73,8 +73,8 @@ const tohuTerm = verse2.key_terms.find(t => t.transliteration === 'tohu vavohu')
           <!-- Modern English -->
           <p class="text-rendering text-xl mb-3">{verse1.rendering}</p>
           <!-- KJV -->
-          <p class="text-sm text-stone-400 font-serif italic mb-6">
-            <span class="not-italic font-sans text-xs font-semibold text-stone-400 uppercase tracking-wider mr-2">KJV</span>
+          <p class="text-sm text-stone-600 font-serif italic mb-6">
+            <span class="not-italic font-sans text-xs font-semibold text-stone-500 uppercase tracking-wider mr-2">KJV</span>
             {verse1.text_kjv}
           </p>
 
@@ -83,12 +83,12 @@ const tohuTerm = verse2.key_terms.find(t => t.transliteration === 'tohu vavohu')
             <div class="flex gap-5 p-5 bg-teal-50 rounded-xl border border-teal-100">
               <div class="flex-shrink-0 text-right">
                 <span class="font-hebrew text-2xl text-stone-700 block leading-loose">{baraTerm.hebrew}</span>
-                <span class="text-xs text-stone-400 italic">{baraTerm.transliteration}</span>
+                <span class="text-xs text-stone-500 italic">{baraTerm.transliteration}</span>
               </div>
               <div class="border-l border-teal-200 pl-5">
                 <div class="flex flex-wrap items-center gap-2 mb-1">
                   <span class="text-sm font-semibold text-stone-700">"{baraTerm.rendered_as}"</span>
-                  <span class="text-xs text-stone-400 italic">{baraTerm.semantic_range}</span>
+                  <span class="text-xs text-stone-600 italic">{baraTerm.semantic_range}</span>
                 </div>
                 <p class="text-sm text-stone-600 leading-relaxed">{baraTerm.note}</p>
               </div>
@@ -109,8 +109,8 @@ const tohuTerm = verse2.key_terms.find(t => t.transliteration === 'tohu vavohu')
 
         <div class="px-8 pb-7 pt-4">
           <p class="text-rendering text-xl mb-3">{verse2.rendering}</p>
-          <p class="text-sm text-stone-400 font-serif italic mb-6">
-            <span class="not-italic font-sans text-xs font-semibold text-stone-400 uppercase tracking-wider mr-2">KJV</span>
+          <p class="text-sm text-stone-600 font-serif italic mb-6">
+            <span class="not-italic font-sans text-xs font-semibold text-stone-500 uppercase tracking-wider mr-2">KJV</span>
             {verse2.text_kjv}
           </p>
 
@@ -118,12 +118,12 @@ const tohuTerm = verse2.key_terms.find(t => t.transliteration === 'tohu vavohu')
             <div class="flex gap-5 p-5 bg-teal-50 rounded-xl border border-teal-100">
               <div class="flex-shrink-0 text-right">
                 <span class="font-hebrew text-xl text-stone-700 block leading-loose">{tohuTerm.hebrew}</span>
-                <span class="text-xs text-stone-400 italic">{tohuTerm.transliteration}</span>
+                <span class="text-xs text-stone-500 italic">{tohuTerm.transliteration}</span>
               </div>
               <div class="border-l border-teal-200 pl-5">
                 <div class="flex flex-wrap items-center gap-2 mb-1">
                   <span class="text-sm font-semibold text-stone-700">"{tohuTerm.rendered_as}"</span>
-                  <span class="text-xs text-stone-400 italic">{tohuTerm.semantic_range}</span>
+                  <span class="text-xs text-stone-600 italic">{tohuTerm.semantic_range}</span>
                 </div>
                 <p class="text-sm text-stone-600 leading-relaxed">{tohuTerm.note}</p>
               </div>

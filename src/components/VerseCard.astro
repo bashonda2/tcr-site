@@ -30,8 +30,8 @@ const cardId = `gen-${chapterNum}-${verse.verse}`;
   <p class="text-rendering mb-4">{verse.rendering}</p>
 
   <!-- KJV comparison -->
-  <p class="text-sm text-stone-400 italic font-serif mb-5">
-    <span class="not-italic font-sans text-xs font-semibold text-stone-400 uppercase tracking-wider mr-2">KJV</span>
+  <p class="text-sm text-stone-600 italic font-serif mb-5">
+    <span class="not-italic font-sans text-xs font-semibold text-stone-500 uppercase tracking-wider mr-2">KJV</span>
     {verse.text_kjv}
   </p>
 
@@ -59,13 +59,13 @@ const cardId = `gen-${chapterNum}-${verse.verse}`;
                 <div class="flex gap-4 p-4 bg-white rounded-xl border border-cream-200 shadow-sm">
                   <div class="flex-shrink-0 text-right min-w-[80px]">
                     <span class="font-hebrew text-xl text-stone-700 block leading-loose">{term.hebrew}</span>
-                    <span class="text-xs text-stone-400 italic">{term.transliteration}</span>
+                    <span class="text-xs text-stone-500 italic">{term.transliteration}</span>
                   </div>
                   <div class="flex-1 border-l border-cream-200 pl-4">
                     <div class="flex flex-wrap items-center gap-2 mb-1">
                       <span class="text-sm font-medium text-stone-700">"{term.rendered_as}"</span>
                       <span class="text-xs text-stone-400">&mdash;</span>
-                      <span class="text-xs text-stone-500 italic">{term.semantic_range}</span>
+                      <span class="text-xs text-stone-600 italic">{term.semantic_range}</span>
                     </div>
                     <p class="text-sm text-stone-600 leading-relaxed">{term.note}</p>
                   </div>
