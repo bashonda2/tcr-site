@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+@theme {
+  --color-teal-50: #f0f9f6;
+  --color-teal-100: #d9f0ea;
+  --color-teal-200: #b3e1d4;
+  --color-teal-300: #7dccba;
+  --color-teal-400: #44b09a;
+  --color-teal-500: #28967f;
+  --color-teal-600: #1e6b5a;
+  --color-teal-700: #1a5a4c;
+  --color-teal-800: #174940;
+  --color-teal-900: #153d35;
+
+  --color-cream-50: #fafaf8;
+  --color-cream-100: #f4f1eb;
+  --color-cream-200: #ece6da;
+  --color-cream-300: #ddd5c4;
+
+  --font-serif: "Cormorant Garamond", "Georgia", serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-hebrew: "Noto Serif Hebrew", "SBL Hebrew", serif;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    background-color: var(--color-cream-50);
+    color: #1c1c1c;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    min-height: 100vh;
+  }
+}
+
+/* Hebrew text */
+.text-hebrew {
+  font-family: var(--font-hebrew);
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  line-height: 2;
+  font-size: 1.35rem;
+  color: #2a2a2a;
+}
+
+/* Verse rendering text */
+.text-rendering {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  line-height: 1.8;
+  color: #1c1c1c;
+}
+
+/* Verse number badge */
+.verse-num {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-teal-600);
+  vertical-align: super;
+  margin-right: 0.35em;
+  letter-spacing: 0.05em;
+}
+
+/* Teal rule */
+.teal-rule {
+  border: none;
+  border-top: 2px solid var(--color-teal-600);
+  opacity: 0.2;
+}

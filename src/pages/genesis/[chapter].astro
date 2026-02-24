@@ -1,0 +1,90 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import VerseCard from '../../components/VerseCard.astro';
+import { getAllChapterNums, loadChapter } from '../../data/tcr';
+
+export async function getStaticPaths() {
+  return getAllChapterNums().map((n) => ({
+    params: { chapter: String(n) },
+  }));
+}
+
+const { chapter } = Astro.params;
+const chapterNum = parseInt(chapter!, 10);
+const chapterData = loadChapter(chapterNum);
+
+const prevChapter = chapterNum > 1 ? chapterNum - 1 : null;
+const nextChapter = chapterNum < 50 ? chapterNum + 1 : null;
+
+const firstVersePreview = chapterData.verses[0]?.rendering?.slice(0, 120) + '…';
+---
+
+<Layout
+  title={`Genesis ${chapterNum}`}
+  description={`Genesis chapter ${chapterNum} — The Covenant Rendering: modern English from Hebrew (WLC). ${firstVersePreview}`}
+  canonical={`/genesis/${chapterNum}`}
+>
+  <!-- Chapter header -->
+  <div class="bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
+    <div class="max-w-3xl mx-auto px-6 py-12">
+      <div class="flex items-center gap-2 text-xs text-stone-400 mb-5">
+        <a href="/genesis" class="hover:text-teal-600 transition-colors">Genesis</a>
+        <span>/</span>
+        <span class="text-stone-600">Chapter {chapterNum}</span>
+      </div>
+
+      <h1 class="font-serif text-4xl font-medium text-stone-800 mb-2">
+        Genesis {chapterNum}
+      </h1>
+      <p class="text-stone-400 text-sm">
+        {chapterData.verses.length} verses &bull; {chapterData.meta.source_text}
+      </p>
+    </div>
+  </div>
+
+  <!-- Verse list -->
+  <div class="max-w-3xl mx-auto px-6 py-8">
+    {chapterData.verses.map((verse) => (
+      <VerseCard verse={verse} chapterNum={chapterNum} showAll={true} />
+    ))}
+  </div>
+
+  <!-- Chapter navigation -->
+  <div class="max-w-3xl mx-auto px-6 pb-16">
+    <div class="flex items-center justify-between pt-8 border-t border-cream-200">
+      {prevChapter ? (
+        <a
+          href={`/genesis/${prevChapter}`}
+          class="flex items-center gap-2 text-sm font-medium text-teal-600 hover:text-teal-700 transition-colors"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+          Chapter {prevChapter}
+        </a>
+      ) : (
+        <a href="/genesis" class="text-sm font-medium text-stone-400 hover:text-teal-600 transition-colors">
+          &larr; All chapters
+        </a>
+      )}
+
+      <a href="/genesis" class="text-xs text-stone-400 hover:text-teal-600 transition-colors">
+        Genesis index
+      </a>
+
+      {nextChapter ? (
+        <a
+          href={`/genesis/${nextChapter}`}
+          class="flex items-center gap-2 text-sm font-medium text-teal-600 hover:text-teal-700 transition-colors"
+        >
+          Chapter {nextChapter}
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      ) : (
+        <span class="text-sm text-stone-300">End of Genesis</span>
+      )}
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,130 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+}
+
+const {
+  title,
+  description = 'The Covenant Rendering — a free, open-source modern English Bible translation from the Hebrew (WLC). Scholarly, transparent, developer-friendly. CC-BY-4.0.',
+  canonical,
+} = Astro.props;
+
+const siteUrl = 'https://thecovenantrendering.com';
+const resolvedCanonical = canonical ? `${siteUrl}${canonical}` : siteUrl;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} | The Covenant Rendering</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={resolvedCanonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={`${title} | The Covenant Rendering`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={resolvedCanonical} />
+    <meta property="og:type" content="website" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Google Fonts: Cormorant Garamond + Inter + Noto Serif Hebrew -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&family=Noto+Serif+Hebrew:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="flex flex-col min-h-screen">
+    <!-- Navigation -->
+    <header class="border-b border-cream-200 bg-cream-50/95 backdrop-blur-sm sticky top-0 z-50">
+      <nav class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+        <a href="/" class="flex items-center gap-3 group">
+          <span class="text-teal-600 text-xl font-serif font-medium tracking-wide group-hover:text-teal-700 transition-colors">
+            The Covenant Rendering
+          </span>
+        </a>
+        <div class="flex items-center gap-1 text-sm font-medium">
+          <a href="/genesis" class="px-4 py-2 text-stone-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors">
+            Genesis
+          </a>
+          <a href="/about" class="px-4 py-2 text-stone-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors">
+            About
+          </a>
+          <a
+            href="https://github.com/bashonda2/the-covenant-rendering"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="ml-2 px-4 py-2 text-teal-600 border border-teal-600 rounded-lg hover:bg-teal-600 hover:text-white transition-colors"
+          >
+            GitHub
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Main content -->
+    <main class="flex-1">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-cream-200 mt-24">
+      <div class="max-w-5xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-10 text-sm text-stone-500">
+        <div>
+          <p class="font-serif text-base text-stone-700 mb-2">The Covenant Rendering</p>
+          <p class="leading-relaxed">
+            A free, modern English Bible translation from the Hebrew (WLC).
+            Released under CC-BY-4.0.
+          </p>
+        </div>
+        <div>
+          <p class="font-semibold text-stone-600 mb-3 uppercase tracking-wider text-xs">Browse</p>
+          <ul class="space-y-2">
+            <li><a href="/genesis" class="hover:text-teal-600 transition-colors">Genesis</a></li>
+            <li><a href="/about" class="hover:text-teal-600 transition-colors">About the Translation</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="font-semibold text-stone-600 mb-3 uppercase tracking-wider text-xs">Open Source</p>
+          <ul class="space-y-2">
+            <li>
+              <a
+                href="https://github.com/bashonda2/the-covenant-rendering"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hover:text-teal-600 transition-colors"
+              >
+                GitHub Repository
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://creativecommons.org/licenses/by/4.0/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hover:text-teal-600 transition-colors"
+              >
+                CC-BY-4.0 License
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-cream-200 py-5 text-center text-xs text-stone-400">
+        <p>
+          &copy; {new Date().getFullYear()} The Covenant Rendering. Source text: Westminster Leningrad Codex.
+          Translation generated with Claude (Anthropic) &mdash; methodology fully disclosed.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

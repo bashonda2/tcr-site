@@ -1,17 +1,251 @@
 ---
+import Layout from '../layouts/Layout.astro';
+import { loadChapter } from '../data/tcr';
 
+const ch1 = loadChapter(1);
+const verse1 = ch1.verses[0]; // Genesis 1:1
+const verse2 = ch1.verses[1]; // Genesis 1:2 — tohu vavohu
+
+// Pull bara (created) term from verse 1
+const baraTerm = verse1.key_terms.find(t => t.transliteration === 'bara') ?? verse1.key_terms[0];
+// Pull tohu vavohu from verse 2
+const tohuTerm = verse2.key_terms.find(t => t.transliteration === 'tohu vavohu') ?? verse2.key_terms[0];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="Home" canonical="/">
+  <!-- Hero -->
+  <section class="relative overflow-hidden bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
+    <div class="max-w-4xl mx-auto px-6 pt-20 pb-24 text-center">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-teal-100 text-teal-700 rounded-full text-xs font-semibold uppercase tracking-wider mb-8">
+        <span class="w-1.5 h-1.5 bg-teal-500 rounded-full"></span>
+        Open Source &bull; CC-BY-4.0 &bull; Free to Use
+      </div>
+
+      <h1 class="font-serif text-5xl md:text-6xl font-medium text-stone-800 leading-tight mb-6">
+        The Covenant<br />
+        <span class="text-teal-600">Rendering</span>
+      </h1>
+
+      <p class="text-xl text-stone-500 leading-relaxed max-w-2xl mx-auto mb-10 font-serif italic">
+        A modern English translation of the Hebrew Bible — formal equivalence,
+        translated directly from the Westminster Leningrad Codex,
+        with every decision documented.
+      </p>
+
+      <div class="flex flex-wrap justify-center gap-4">
+        <a
+          href="/genesis/1"
+          class="px-7 py-3 bg-teal-600 text-white rounded-xl font-medium hover:bg-teal-700 transition-colors shadow-sm"
+        >
+          Read Genesis 1
+        </a>
+        <a
+          href="/genesis"
+          class="px-7 py-3 bg-white text-teal-600 border border-teal-200 rounded-xl font-medium hover:bg-teal-50 hover:border-teal-300 transition-colors shadow-sm"
+        >
+          Browse Genesis
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live verse showcase — Genesis 1:1 -->
+  <section class="max-w-4xl mx-auto px-6 py-20">
+    <div class="text-center mb-12">
+      <p class="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-3">Live Example</p>
+      <h2 class="font-serif text-3xl font-medium text-stone-800">Genesis 1:1–2</h2>
+      <p class="text-stone-500 mt-2 text-sm">Every verse includes Hebrew, modern English, and full scholarly apparatus</p>
+    </div>
+
+    <div class="space-y-8">
+      <!-- Verse 1 -->
+      <div class="bg-white rounded-2xl border border-cream-200 shadow-sm overflow-hidden">
+        <div class="px-8 pt-7 pb-2">
+          <span class="text-xs font-semibold text-teal-600 uppercase tracking-widest">Genesis 1:1</span>
+        </div>
+
+        <!-- Hebrew -->
+        <div class="px-8 py-5 bg-teal-50/50 border-y border-teal-100 my-3">
+          <p class="text-hebrew text-right text-2xl">{verse1.text_hebrew}</p>
+        </div>
+
+        <div class="px-8 pb-7 pt-4">
+          <!-- Modern English -->
+          <p class="text-rendering text-xl mb-3">{verse1.rendering}</p>
+          <!-- KJV -->
+          <p class="text-sm text-stone-400 font-serif italic mb-6">
+            <span class="not-italic font-sans text-xs font-semibold text-stone-400 uppercase tracking-wider mr-2">KJV</span>
+            {verse1.text_kjv}
+          </p>
+
+          <!-- Key term callout: bara -->
+          {baraTerm && (
+            <div class="flex gap-5 p-5 bg-teal-50 rounded-xl border border-teal-100">
+              <div class="flex-shrink-0 text-right">
+                <span class="font-hebrew text-2xl text-stone-700 block leading-loose">{baraTerm.hebrew}</span>
+                <span class="text-xs text-stone-400 italic">{baraTerm.transliteration}</span>
+              </div>
+              <div class="border-l border-teal-200 pl-5">
+                <div class="flex flex-wrap items-center gap-2 mb-1">
+                  <span class="text-sm font-semibold text-stone-700">"{baraTerm.rendered_as}"</span>
+                  <span class="text-xs text-stone-400 italic">{baraTerm.semantic_range}</span>
+                </div>
+                <p class="text-sm text-stone-600 leading-relaxed">{baraTerm.note}</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <!-- Verse 2 -->
+      <div class="bg-white rounded-2xl border border-cream-200 shadow-sm overflow-hidden">
+        <div class="px-8 pt-7 pb-2">
+          <span class="text-xs font-semibold text-teal-600 uppercase tracking-widest">Genesis 1:2</span>
+        </div>
+
+        <div class="px-8 py-5 bg-teal-50/50 border-y border-teal-100 my-3">
+          <p class="text-hebrew text-right text-2xl">{verse2.text_hebrew}</p>
+        </div>
+
+        <div class="px-8 pb-7 pt-4">
+          <p class="text-rendering text-xl mb-3">{verse2.rendering}</p>
+          <p class="text-sm text-stone-400 font-serif italic mb-6">
+            <span class="not-italic font-sans text-xs font-semibold text-stone-400 uppercase tracking-wider mr-2">KJV</span>
+            {verse2.text_kjv}
+          </p>
+
+          {tohuTerm && (
+            <div class="flex gap-5 p-5 bg-teal-50 rounded-xl border border-teal-100">
+              <div class="flex-shrink-0 text-right">
+                <span class="font-hebrew text-xl text-stone-700 block leading-loose">{tohuTerm.hebrew}</span>
+                <span class="text-xs text-stone-400 italic">{tohuTerm.transliteration}</span>
+              </div>
+              <div class="border-l border-teal-200 pl-5">
+                <div class="flex flex-wrap items-center gap-2 mb-1">
+                  <span class="text-sm font-semibold text-stone-700">"{tohuTerm.rendered_as}"</span>
+                  <span class="text-xs text-stone-400 italic">{tohuTerm.semantic_range}</span>
+                </div>
+                <p class="text-sm text-stone-600 leading-relaxed">{tohuTerm.note}</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-10">
+      <a href="/genesis/1" class="text-sm font-medium text-teal-600 hover:text-teal-700 transition-colors">
+        Continue reading Genesis 1 &rarr;
+      </a>
+    </div>
+  </section>
+
+  <hr class="teal-rule max-w-4xl mx-auto" />
+
+  <!-- Why TCR exists -->
+  <section class="max-w-4xl mx-auto px-6 py-20">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-3">The Problem</p>
+        <h2 class="font-serif text-3xl font-medium text-stone-800 mb-6">
+          Every major modern translation is locked behind copyright
+        </h2>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          The NIV, ESV, and NASB — the translations most widely used in scholarship and study — cannot be displayed
+          on websites, in apps, or in educational materials without licensing fees or restrictive permission requirements.
+        </p>
+        <p class="text-stone-600 leading-relaxed">
+          Bible study apps, open-source tools, educators, and developers are left choosing between
+          the archaic KJV (public domain) and paying for the right to quote Scripture.
+        </p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-3">The Solution</p>
+        <h2 class="font-serif text-3xl font-medium text-stone-800 mb-6">
+          A scholarly, free rendering anyone can use
+        </h2>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          The Covenant Rendering is translated directly from the Westminster Leningrad Codex — the same
+          authoritative Hebrew source used by the ESV, NASB, and most modern translations.
+          Every decision is documented. Nothing is hidden.
+        </p>
+        <p class="text-stone-600 leading-relaxed">
+          Released under CC-BY-4.0: attribute the source, then do whatever you want with it.
+          Build apps, cite verses, distribute freely.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="teal-rule max-w-4xl mx-auto" />
+
+  <!-- Four pillars -->
+  <section class="max-w-4xl mx-auto px-6 py-20">
+    <div class="text-center mb-14">
+      <p class="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-3">Design Principles</p>
+      <h2 class="font-serif text-3xl font-medium text-stone-800">What makes TCR different</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {[
+        {
+          title: 'Formal Equivalence',
+          body: 'Word-for-word from the Hebrew wherever English allows. Reading level targets 9th–10th grade — comparable to the ESV — without sacrificing accuracy for accessibility.',
+          icon: '⬡',
+        },
+        {
+          title: 'Fully Transparent',
+          body: 'Every translation decision is documented. Translator notes explain why words were chosen, what alternatives were considered, and where interpretive tension exists.',
+          icon: '◎',
+        },
+        {
+          title: 'Developer Friendly',
+          body: 'Clean JSON with structured fields: Hebrew, KJV, modern English, notes, and key terms. Build Bible study tools, apps, or research utilities without licensing friction.',
+          icon: '{ }',
+        },
+        {
+          title: 'Ecumenical & Unaffiliated',
+          body: 'No denominational agenda. Translation decisions follow the text and scholarly consensus, not theological tradition. Every interpretive tension is noted openly.',
+          icon: '◈',
+        },
+      ].map(({ title, body, icon }) => (
+        <div class="p-7 bg-white rounded-2xl border border-cream-200 shadow-sm">
+          <div class="w-10 h-10 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center font-mono font-bold text-lg mb-5">
+            {icon}
+          </div>
+          <h3 class="font-serif text-xl font-medium text-stone-800 mb-3">{title}</h3>
+          <p class="text-stone-600 text-sm leading-relaxed">{body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <hr class="teal-rule max-w-4xl mx-auto" />
+
+  <!-- Current status -->
+  <section class="max-w-4xl mx-auto px-6 py-20">
+    <div class="bg-teal-600 rounded-2xl px-10 py-12 text-center text-white">
+      <p class="text-teal-200 text-sm font-semibold uppercase tracking-widest mb-4">Current Status</p>
+      <h2 class="font-serif text-3xl font-medium mb-4">Genesis — Complete</h2>
+      <p class="text-teal-100 text-lg mb-2">50 chapters &bull; 1,534 verses &bull; fully annotated</p>
+      <p class="text-teal-200 text-sm mb-8">Exodus and beyond in progress</p>
+
+      <div class="flex flex-wrap justify-center gap-4">
+        <a
+          href="/genesis"
+          class="px-7 py-3 bg-white text-teal-700 rounded-xl font-medium hover:bg-teal-50 transition-colors"
+        >
+          Browse Genesis
+        </a>
+        <a
+          href="https://github.com/bashonda2/the-covenant-rendering"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="px-7 py-3 border border-teal-400 text-white rounded-xl font-medium hover:bg-teal-700 transition-colors"
+        >
+          View on GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

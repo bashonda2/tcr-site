@@ -1,0 +1,231 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="About"
+  description="The translation philosophy, methodology, and license behind The Covenant Rendering — a free, open-source modern English Bible from the Hebrew (WLC)."
+  canonical="/about"
+>
+  <div class="bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
+    <div class="max-w-3xl mx-auto px-6 py-16">
+      <p class="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-3">About</p>
+      <h1 class="font-serif text-4xl font-medium text-stone-800 mb-4">
+        Translation Philosophy &amp; Methodology
+      </h1>
+      <p class="text-stone-500 text-lg font-serif italic leading-relaxed">
+        Every decision documented. Nothing hidden. Built for scholars, developers, and anyone who needs a free,
+        modern English Bible they can actually use.
+      </p>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 py-16 space-y-16">
+
+    <!-- Why TCR Exists -->
+    <section>
+      <h2 class="font-serif text-2xl font-medium text-stone-800 mb-5">Why This Exists</h2>
+      <div class="prose-style space-y-4 text-stone-600 leading-relaxed">
+        <p>
+          Modern English Bible translations &mdash; the NIV, ESV, NASB, NLT &mdash; are under active copyright.
+          Displaying them on websites, in apps, or in educational materials requires licensing fees or
+          explicit permission. For most independent developers, educators, and researchers, that's a wall.
+        </p>
+        <p>
+          The KJV is in the public domain, but its 17th-century English is a barrier for general readers
+          and unsuitable for modern study tools. For over 400 years, there has been no serious, free,
+          modern-English alternative that anyone can use without restriction.
+        </p>
+        <p>
+          The Covenant Rendering exists to fill that gap: a rigorous, formal-equivalence translation
+          from the original Hebrew, released under CC-BY-4.0 &mdash; free to use, quote, distribute,
+          and build on, with attribution.
+        </p>
+      </div>
+    </section>
+
+    <hr class="teal-rule" />
+
+    <!-- Source Text -->
+    <section>
+      <h2 class="font-serif text-2xl font-medium text-stone-800 mb-5">Source Text</h2>
+      <div class="space-y-4 text-stone-600 leading-relaxed">
+        <p>
+          The Covenant Rendering is translated from the
+          <strong class="text-stone-700">Westminster Leningrad Codex (WLC)</strong> &mdash;
+          the same authoritative Masoretic text used as the Hebrew source for the ESV, NASB, and most other
+          modern translations. The WLC preserves the full vowel pointing (niqqud) and cantillation marks
+          of the medieval Masoretic tradition, representing the most carefully transmitted form of the Hebrew text.
+        </p>
+        <p>
+          All Hebrew displayed on this site uses the WLC text with full Masoretic pointing. The KJV is provided
+          alongside each verse as a reference comparison &mdash; not as a translation source, but as a familiar
+          benchmark for readers who grew up with it.
+        </p>
+      </div>
+    </section>
+
+    <hr class="teal-rule" />
+
+    <!-- Translation Philosophy -->
+    <section>
+      <h2 class="font-serif text-2xl font-medium text-stone-800 mb-5">Translation Philosophy</h2>
+      <div class="space-y-6">
+        <div class="p-6 bg-white rounded-xl border border-cream-200">
+          <h3 class="font-serif text-lg font-medium text-stone-800 mb-2">Formal Equivalence</h3>
+          <p class="text-stone-600 leading-relaxed text-sm">
+            TCR prioritizes word-for-word correspondence to the Hebrew wherever natural English allows.
+            This approach preserves the structure of the original text and enables readers to trace
+            translation decisions back to specific Hebrew words. Where the Hebrew is ambiguous, TCR
+            renders the most defensible reading and documents alternatives in the translator notes.
+          </p>
+        </div>
+
+        <div class="p-6 bg-white rounded-xl border border-cream-200">
+          <h3 class="font-serif text-lg font-medium text-stone-800 mb-2">Reading Level</h3>
+          <p class="text-stone-600 leading-relaxed text-sm">
+            Target reading level is 9th&ndash;10th grade, comparable to the ESV. TCR does not simplify
+            to increase accessibility at the expense of precision. If a concept requires a specific term,
+            that term is used and explained in the key terms section. Readers should expect to learn,
+            not be protected from the text.
+          </p>
+        </div>
+
+        <div class="p-6 bg-white rounded-xl border border-cream-200">
+          <h3 class="font-serif text-lg font-medium text-stone-800 mb-2">Theological Neutrality</h3>
+          <p class="text-stone-600 leading-relaxed text-sm">
+            TCR is not affiliated with any denomination or theological tradition. Where the Hebrew text
+            is genuinely ambiguous &mdash; and in the Hebrew Bible, that is often &mdash; both readings
+            are presented and the tension is named. TCR does not resolve interpretive disputes in favor
+            of any confession; it documents them.
+          </p>
+        </div>
+
+        <div class="p-6 bg-white rounded-xl border border-cream-200">
+          <h3 class="font-serif text-lg font-medium text-stone-800 mb-2">Full Documentation</h3>
+          <p class="text-stone-600 leading-relaxed text-sm">
+            Every verse includes translator notes explaining significant lexical choices, grammatical
+            decisions, and points of scholarly debate. Key terms carry their Hebrew original,
+            transliteration, semantic range, and a note on how the word is used in context.
+            Nothing is assumed; nothing is hidden.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="teal-rule" />
+
+    <!-- AI Methodology -->
+    <section>
+      <h2 class="font-serif text-2xl font-medium text-stone-800 mb-5">AI Generation &amp; Methodology</h2>
+      <div class="p-6 bg-teal-50 rounded-xl border border-teal-100 mb-5">
+        <p class="text-sm font-semibold text-teal-700 mb-1">Full Disclosure</p>
+        <p class="text-stone-600 leading-relaxed text-sm">
+          The Covenant Rendering was generated using Claude (claude-opus-4-6, Anthropic) via a
+          carefully designed translation prompt. This is disclosed fully and without apology.
+          The prompt, methodology, and generation parameters are available in the
+          <a href="https://github.com/bashonda2/the-covenant-rendering" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:underline">GitHub repository</a>.
+        </p>
+      </div>
+      <div class="space-y-4 text-stone-600 leading-relaxed">
+        <p>
+          The use of AI does not diminish the scholarship. The translation was generated against the
+          Westminster Leningrad Codex with explicit instructions for formal equivalence, transparency
+          about interpretive decisions, and documentation of every significant lexical choice.
+          The output was reviewed and the methodology evaluated.
+        </p>
+        <p>
+          AI-assisted translation is a new frontier, and TCR is one of the first serious attempts to
+          apply it systematically to a biblical corpus with full methodological disclosure.
+          The precedent matters: scholarship requires transparency, not mystification.
+        </p>
+      </div>
+    </section>
+
+    <hr class="teal-rule" />
+
+    <!-- License -->
+    <section>
+      <h2 class="font-serif text-2xl font-medium text-stone-800 mb-5">License</h2>
+      <div class="p-6 bg-white rounded-xl border border-cream-200 mb-5">
+        <div class="flex items-start gap-4">
+          <div class="flex-shrink-0 w-12 h-12 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center font-bold text-sm">
+            CC
+          </div>
+          <div>
+            <p class="font-semibold text-stone-700 mb-1">Creative Commons Attribution 4.0 International</p>
+            <p class="text-sm text-stone-500 mb-3">
+              <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:underline">
+                creativecommons.org/licenses/by/4.0
+              </a>
+            </p>
+            <p class="text-sm text-stone-600 leading-relaxed">
+              You are free to share (copy and redistribute in any medium or format) and adapt
+              (remix, transform, and build upon the material) for any purpose, including commercial,
+              as long as you give appropriate credit to The Covenant Rendering and indicate if changes were made.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="space-y-3 text-stone-600 text-sm leading-relaxed">
+        <p>
+          <strong class="text-stone-700">Attribution requirement:</strong> "The Covenant Rendering,
+          thecovenantrendering.com, CC-BY-4.0" is sufficient. You may use any reasonable format.
+        </p>
+        <p>
+          <strong class="text-stone-700">Note on the source text:</strong> The Westminster Leningrad Codex
+          is in the public domain. The translation text (the English rendering, translator notes, and key term
+          analysis) is the original content licensed under CC-BY-4.0.
+        </p>
+      </div>
+    </section>
+
+    <hr class="teal-rule" />
+
+    <!-- Current Status & Roadmap -->
+    <section>
+      <h2 class="font-serif text-2xl font-medium text-stone-800 mb-5">Status &amp; Roadmap</h2>
+      <div class="space-y-3">
+        {[
+          { book: 'Genesis', chapters: 50, verses: 1534, status: 'complete' },
+          { book: 'Exodus', chapters: 40, verses: 1213, status: 'planned' },
+          { book: 'Leviticus', chapters: 27, verses: 859, status: 'planned' },
+          { book: 'Numbers', chapters: 36, verses: 1288, status: 'planned' },
+          { book: 'Deuteronomy', chapters: 34, verses: 959, status: 'planned' },
+        ].map(({ book, chapters, verses, status }) => (
+          <div class="flex items-center justify-between p-4 bg-white rounded-xl border border-cream-200">
+            <div>
+              <span class="font-medium text-stone-700">{book}</span>
+              <span class="text-stone-400 text-sm ml-3">{chapters} ch &bull; {verses} v</span>
+            </div>
+            <span class={`text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full ${
+              status === 'complete'
+                ? 'bg-teal-100 text-teal-700'
+                : 'bg-cream-200 text-stone-400'
+            }`}>
+              {status}
+            </span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- GitHub CTA -->
+    <div class="bg-teal-600 rounded-2xl px-8 py-10 text-center text-white">
+      <h3 class="font-serif text-2xl font-medium mb-3">Open Source</h3>
+      <p class="text-teal-100 mb-6 text-sm leading-relaxed max-w-lg mx-auto">
+        The full translation data (JSON), generation prompt, and methodology are available on GitHub.
+        Contributions, corrections, and forks are welcome.
+      </p>
+      <a
+        href="https://github.com/bashonda2/the-covenant-rendering"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 px-7 py-3 bg-white text-teal-700 rounded-xl font-medium hover:bg-teal-50 transition-colors"
+      >
+        View on GitHub &rarr;
+      </a>
+    </div>
+
+  </div>
+</Layout>

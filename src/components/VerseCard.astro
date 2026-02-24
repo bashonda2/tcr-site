@@ -1,0 +1,92 @@
+---
+import type { Verse } from '../data/tcr';
+
+interface Props {
+  verse: Verse;
+  chapterNum: number;
+  showAll?: boolean;
+}
+
+const { verse, chapterNum, showAll = true } = Astro.props;
+const hasNotes = verse.translator_notes?.length > 0;
+const hasTerms = verse.key_terms?.length > 0;
+const cardId = `gen-${chapterNum}-${verse.verse}`;
+---
+
+<article id={cardId} class="scroll-mt-24 py-8 border-b border-cream-200 last:border-0">
+  <!-- Verse header -->
+  <div class="flex items-baseline gap-3 mb-5">
+    <span class="font-sans text-xs font-semibold text-teal-600 tracking-widest uppercase">
+      Genesis {chapterNum}:{verse.verse}
+    </span>
+  </div>
+
+  <!-- Hebrew text -->
+  <div class="mb-4 p-4 bg-teal-50/50 rounded-xl border border-teal-100">
+    <p class="text-hebrew text-right leading-loose">{verse.text_hebrew}</p>
+  </div>
+
+  <!-- Modern English rendering -->
+  <p class="text-rendering mb-4">{verse.rendering}</p>
+
+  <!-- KJV comparison -->
+  <p class="text-sm text-stone-400 italic font-serif mb-5">
+    <span class="not-italic font-sans text-xs font-semibold text-stone-400 uppercase tracking-wider mr-2">KJV</span>
+    {verse.text_kjv}
+  </p>
+
+  {showAll && (hasTerms || hasNotes) && (
+    <details class="group">
+      <summary class="cursor-pointer list-none flex items-center gap-2 text-xs font-semibold text-teal-600 uppercase tracking-wider hover:text-teal-700 transition-colors">
+        <svg
+          class="w-4 h-4 transition-transform group-open:rotate-90"
+          fill="none" stroke="currentColor" stroke-width="2"
+          viewBox="0 0 24 24"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+        Notes &amp; Key Terms
+        {hasTerms && <span class="ml-1 px-2 py-0.5 bg-teal-100 text-teal-700 rounded-full font-normal normal-case tracking-normal">{verse.key_terms.length} term{verse.key_terms.length !== 1 ? 's' : ''}</span>}
+      </summary>
+
+      <div class="mt-4 space-y-5 pl-2">
+        <!-- Key Terms -->
+        {hasTerms && (
+          <div>
+            <h4 class="text-xs font-semibold uppercase tracking-wider text-stone-400 mb-3">Key Terms</h4>
+            <div class="space-y-4">
+              {verse.key_terms.map((term) => (
+                <div class="flex gap-4 p-4 bg-white rounded-xl border border-cream-200 shadow-sm">
+                  <div class="flex-shrink-0 text-right min-w-[80px]">
+                    <span class="font-hebrew text-xl text-stone-700 block leading-loose">{term.hebrew}</span>
+                    <span class="text-xs text-stone-400 italic">{term.transliteration}</span>
+                  </div>
+                  <div class="flex-1 border-l border-cream-200 pl-4">
+                    <div class="flex flex-wrap items-center gap-2 mb-1">
+                      <span class="text-sm font-medium text-stone-700">"{term.rendered_as}"</span>
+                      <span class="text-xs text-stone-400">&mdash;</span>
+                      <span class="text-xs text-stone-500 italic">{term.semantic_range}</span>
+                    </div>
+                    <p class="text-sm text-stone-600 leading-relaxed">{term.note}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <!-- Translator Notes -->
+        {hasNotes && (
+          <div>
+            <h4 class="text-xs font-semibold uppercase tracking-wider text-stone-400 mb-3">Translator Notes</h4>
+            <ol class="space-y-3 list-decimal list-outside ml-4">
+              {verse.translator_notes.map((note) => (
+                <li class="text-sm text-stone-600 leading-relaxed pl-1">{note}</li>
+              ))}
+            </ol>
+          </div>
+        )}
+      </div>
+    </details>
+  )}
+</article>
