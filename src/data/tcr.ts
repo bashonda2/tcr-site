@@ -38,22 +38,55 @@ export interface Chapter {
   verses: Verse[];
 }
 
-const dataDir = join(process.cwd(), 'src', 'data', 'genesis');
+export interface BookInfo {
+  slug: string;
+  name: string;
+  hebrewName: string;
+  transliteration: string;
+  meaning: string;
+  chapters: number;
+}
 
-export function loadChapter(num: number): Chapter {
-  const file = join(dataDir, `chapter-${String(num).padStart(2, '0')}.json`);
+export const BOOKS: BookInfo[] = [
+  {
+    slug: 'genesis',
+    name: 'Genesis',
+    hebrewName: 'בְּרֵאשִׁית',
+    transliteration: 'Bereshit',
+    meaning: 'In the beginning',
+    chapters: 50,
+  },
+  {
+    slug: 'exodus',
+    name: 'Exodus',
+    hebrewName: 'שְׁמוֹת',
+    transliteration: 'Shemot',
+    meaning: 'Names',
+    chapters: 40,
+  },
+];
+
+const dataRoot = join(process.cwd(), 'src', 'data');
+
+export function loadChapter(book: string, num: number): Chapter {
+  const file = join(dataRoot, book, `chapter-${String(num).padStart(2, '0')}.json`);
   return JSON.parse(readFileSync(file, 'utf-8'));
 }
 
-export function getAllChapterNums(): number[] {
-  return Array.from({ length: 50 }, (_, i) => i + 1);
+export function getBook(slug: string): BookInfo | undefined {
+  return BOOKS.find((b) => b.slug === slug);
 }
 
-export function getChapterVerseCounts(): Record<number, number> {
-  const counts: Record<number, number> = {};
-  for (const n of getAllChapterNums()) {
-    const ch = loadChapter(n);
-    counts[n] = ch.verses.length;
+export function getAllChapterNums(book: string): number[] {
+  const info = getBook(book);
+  if (!info) return [];
+  return Array.from({ length: info.chapters }, (_, i) => i + 1);
+}
+
+export function getBookVerseCount(book: string): number {
+  let total = 0;
+  for (const n of getAllChapterNums(book)) {
+    total += loadChapter(book, n).verses.length;
   }
-  return counts;
+  return total;
 }
