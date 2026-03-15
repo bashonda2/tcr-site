@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { BOOKS } from '../data/tcr';
 
 interface Props {
   title: string;
@@ -26,16 +27,13 @@ const resolvedCanonical = canonical ? `${siteUrl}${canonical}` : siteUrl;
     <meta name="description" content={description} />
     <link rel="canonical" href={resolvedCanonical} />
 
-    <!-- Open Graph -->
     <meta property="og:title" content={`${title} | The Covenant Rendering`} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={resolvedCanonical} />
     <meta property="og:type" content="website" />
 
-    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!-- Google Fonts: Cormorant Garamond + Inter + Noto Serif Hebrew -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -52,13 +50,32 @@ const resolvedCanonical = canonical ? `${siteUrl}${canonical}` : siteUrl;
             The Covenant Rendering
           </span>
         </a>
-        <div class="flex items-center gap-1 text-sm font-medium">
-          <a href="/genesis" class="px-4 py-2 text-stone-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors">
-            Genesis
-          </a>
-          <a href="/exodus" class="px-4 py-2 text-stone-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors">
-            Exodus
-          </a>
+
+        <!-- Desktop nav -->
+        <div class="hidden md:flex items-center gap-1 text-sm font-medium">
+          <!-- Books dropdown -->
+          <div class="relative group/books">
+            <button class="px-4 py-2 text-stone-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors flex items-center gap-1">
+              Books
+              <svg class="w-3.5 h-3.5 opacity-50 group-hover/books:opacity-100 transition-opacity" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="absolute left-0 top-full pt-1 opacity-0 invisible group-hover/books:opacity-100 group-hover/books:visible transition-all duration-150">
+              <div class="bg-white border border-cream-200 rounded-xl shadow-lg py-2 min-w-[220px]">
+                {BOOKS.map((b) => (
+                  <a
+                    href={`/${b.slug}`}
+                    class="flex items-center justify-between px-4 py-2.5 hover:bg-teal-50 transition-colors"
+                  >
+                    <span class="text-stone-700 font-medium">{b.name}</span>
+                    <span class="text-xs text-stone-400 font-serif">{b.hebrewName}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+
           <a href="/about" class="px-4 py-2 text-stone-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors">
             About
           </a>
@@ -71,7 +88,47 @@ const resolvedCanonical = canonical ? `${siteUrl}${canonical}` : siteUrl;
             GitHub
           </a>
         </div>
+
+        <!-- Mobile hamburger -->
+        <button
+          id="mobile-menu-btn"
+          class="md:hidden p-2 text-stone-600 hover:text-teal-600 transition-colors"
+          aria-label="Toggle menu"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
       </nav>
+
+      <!-- Mobile menu -->
+      <div id="mobile-menu" class="hidden md:hidden border-t border-cream-200 bg-cream-50">
+        <div class="px-6 py-4 space-y-1">
+          <p class="text-xs font-semibold uppercase tracking-wider text-stone-400 mb-2">Books</p>
+          {BOOKS.map((b) => (
+            <a
+              href={`/${b.slug}`}
+              class="flex items-center justify-between px-3 py-2.5 text-sm text-stone-700 hover:bg-teal-50 hover:text-teal-600 rounded-lg transition-colors"
+            >
+              <span class="font-medium">{b.name}</span>
+              <span class="text-xs text-stone-400 font-serif">{b.hebrewName}</span>
+            </a>
+          ))}
+          <div class="pt-3 mt-3 border-t border-cream-200 space-y-1">
+            <a href="/about" class="block px-3 py-2.5 text-sm text-stone-700 hover:bg-teal-50 hover:text-teal-600 rounded-lg transition-colors font-medium">
+              About
+            </a>
+            <a
+              href="https://github.com/bashonda2/the-covenant-rendering"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="block px-3 py-2.5 text-sm text-teal-600 hover:bg-teal-50 rounded-lg transition-colors font-medium"
+            >
+              GitHub
+            </a>
+          </div>
+        </div>
+      </div>
     </header>
 
     <!-- Main content -->
@@ -92,8 +149,9 @@ const resolvedCanonical = canonical ? `${siteUrl}${canonical}` : siteUrl;
         <div>
           <p class="font-semibold text-stone-600 mb-3 uppercase tracking-wider text-xs">Browse</p>
           <ul class="space-y-2">
-            <li><a href="/genesis" class="hover:text-teal-600 transition-colors">Genesis</a></li>
-            <li><a href="/exodus" class="hover:text-teal-600 transition-colors">Exodus</a></li>
+            {BOOKS.map((b) => (
+              <li><a href={`/${b.slug}`} class="hover:text-teal-600 transition-colors">{b.name}</a></li>
+            ))}
             <li><a href="/about" class="hover:text-teal-600 transition-colors">About the Translation</a></li>
           </ul>
         </div>
@@ -138,5 +196,13 @@ const resolvedCanonical = canonical ? `${siteUrl}${canonical}` : siteUrl;
         </p>
       </div>
     </footer>
+
+    <script>
+      const btn = document.getElementById('mobile-menu-btn');
+      const menu = document.getElementById('mobile-menu');
+      btn?.addEventListener('click', () => {
+        menu?.classList.toggle('hidden');
+      });
+    </script>
   </body>
 </html>

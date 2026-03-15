@@ -226,28 +226,24 @@ const tohuTerm = verse2.key_terms.find(t => t.transliteration === 'tohu vavohu')
   <section class="max-w-4xl mx-auto px-6 py-20">
     <div class="bg-teal-600 rounded-2xl px-10 py-12 text-center text-white">
       <p class="text-teal-200 text-sm font-semibold uppercase tracking-widest mb-4">Current Status</p>
-      <h2 class="font-serif text-3xl font-medium mb-4">Genesis &amp; Exodus — Complete</h2>
-      <p class="text-teal-100 text-lg mb-2">90 chapters &bull; 2,747 verses &bull; fully annotated</p>
-      <p class="text-teal-200 text-sm mb-8">Leviticus and beyond in progress</p>
+      <h2 class="font-serif text-3xl font-medium mb-4">The Pentateuch — Complete</h2>
+      <p class="text-teal-100 text-lg mb-2">187 chapters &bull; 5,852 verses &bull; fully annotated</p>
+      <p class="text-teal-200 text-sm mb-8">Genesis through Deuteronomy — the five books of Moses</p>
 
-      <div class="flex flex-wrap justify-center gap-4">
-        <a
-          href="/genesis"
-          class="px-7 py-3 bg-white text-teal-700 rounded-xl font-medium hover:bg-teal-50 transition-colors"
-        >
-          Browse Genesis
-        </a>
-        <a
-          href="/exodus"
-          class="px-7 py-3 bg-white text-teal-700 rounded-xl font-medium hover:bg-teal-50 transition-colors"
-        >
-          Browse Exodus
-        </a>
+      <div class="flex flex-wrap justify-center gap-3">
+        {BOOKS.map((b) => (
+          <a
+            href={`/${b.slug}`}
+            class="px-5 py-2.5 bg-white text-teal-700 rounded-xl font-medium hover:bg-teal-50 transition-colors text-sm"
+          >
+            {b.name}
+          </a>
+        ))}
         <a
           href="https://github.com/bashonda2/the-covenant-rendering"
           target="_blank"
           rel="noopener noreferrer"
-          class="px-7 py-3 border border-teal-400 text-white rounded-xl font-medium hover:bg-teal-700 transition-colors"
+          class="px-5 py-2.5 border border-teal-400 text-white rounded-xl font-medium hover:bg-teal-700 transition-colors text-sm"
         >
           View on GitHub
         </a>

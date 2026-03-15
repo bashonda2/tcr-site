@@ -64,6 +64,30 @@ export const BOOKS: BookInfo[] = [
     meaning: 'Names',
     chapters: 40,
   },
+  {
+    slug: 'leviticus',
+    name: 'Leviticus',
+    hebrewName: 'וַיִּקְרָא',
+    transliteration: 'Vayiqra',
+    meaning: 'And He called',
+    chapters: 27,
+  },
+  {
+    slug: 'numbers',
+    name: 'Numbers',
+    hebrewName: 'בְּמִדְבַּר',
+    transliteration: 'Bemidbar',
+    meaning: 'In the wilderness',
+    chapters: 36,
+  },
+  {
+    slug: 'deuteronomy',
+    name: 'Deuteronomy',
+    hebrewName: 'דְּבָרִים',
+    transliteration: 'Devarim',
+    meaning: 'Words',
+    chapters: 34,
+  },
 ];
 
 const dataRoot = join(process.cwd(), 'src', 'data');

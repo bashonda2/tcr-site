@@ -1,10 +1,17 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getAllChapterNums, loadChapter, getBook } from '../../data/tcr';
+import { BOOKS, getAllChapterNums, loadChapter, getBook } from '../../data/tcr';
 
-const book = getBook('exodus')!;
-const chapters = getAllChapterNums('exodus').map((n) => {
-  const ch = loadChapter('exodus', n);
+export async function getStaticPaths() {
+  return BOOKS.map((b) => ({
+    params: { book: b.slug },
+  }));
+}
+
+const { book: bookSlug } = Astro.params;
+const book = getBook(bookSlug!)!;
+const chapters = getAllChapterNums(bookSlug!).map((n) => {
+  const ch = loadChapter(bookSlug!, n);
   return {
     num: n,
     verseCount: ch.verses.length,
@@ -16,14 +23,14 @@ const totalVerses = chapters.reduce((sum, c) => sum + c.verseCount, 0);
 ---
 
 <Layout
-  title="Exodus"
-  description={`Browse all ${book.chapters} chapters of Exodus in The Covenant Rendering — modern English from the Hebrew (WLC) with translator notes and key terms.`}
-  canonical="/exodus"
+  title={book.name}
+  description={`Browse all ${book.chapters} chapters of ${book.name} in The Covenant Rendering — modern English from the Hebrew (WLC) with translator notes and key terms.`}
+  canonical={`/${bookSlug}`}
 >
   <div class="bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
     <div class="max-w-4xl mx-auto px-6 py-16">
       <p class="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-3">The Covenant Rendering</p>
-      <h1 class="font-serif text-4xl font-medium text-stone-800 mb-4">Exodus</h1>
+      <h1 class="font-serif text-4xl font-medium text-stone-800 mb-4">{book.name}</h1>
       <p class="text-stone-600 text-lg font-serif italic">
         {book.hebrewName} &mdash; <em>{book.transliteration}</em> &middot; "{book.meaning}"
       </p>
@@ -41,7 +48,7 @@ const totalVerses = chapters.reduce((sum, c) => sum + c.verseCount, 0);
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {chapters.map(({ num, verseCount, preview }) => (
         <a
-          href={`/exodus/${num}`}
+          href={`/${bookSlug}/${num}`}
           class="group p-5 bg-white rounded-xl border border-cream-200 shadow-sm hover:border-teal-200 hover:shadow-md transition-all"
         >
           <div class="flex items-center justify-between mb-3">
