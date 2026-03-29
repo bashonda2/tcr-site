@@ -244,7 +244,7 @@ export const BOOKS: BookInfo[] = [
     slug: '2-kings', name: '2 Kings',
     hebrewName: 'מְלָכִים ב', transliteration: 'Melakhim Bet', meaning: 'Kings',
     chapters: 25, testament: 'old', tier: 'standard', section: 'historical', order: 12,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
   },
   {
     slug: '1-chronicles', name: '1 Chronicles',
