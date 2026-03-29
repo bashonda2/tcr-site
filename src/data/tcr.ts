@@ -155,7 +155,7 @@ export const BOOKS: BookInfo[] = [
     slug: 'judges', name: 'Judges',
     hebrewName: 'שׁוֹפְטִים', transliteration: 'Shoftim', meaning: 'Judges',
     chapters: 21, testament: 'old', tier: 'standard', section: 'historical', order: 7,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
   },
   {
     slug: 'ruth', name: 'Ruth',
