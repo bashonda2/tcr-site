@@ -238,7 +238,7 @@ export const BOOKS: BookInfo[] = [
     slug: '1-kings', name: '1 Kings',
     hebrewName: 'מְלָכִים א', transliteration: 'Melakhim Alef', meaning: 'Kings',
     chapters: 22, testament: 'old', tier: 'standard', section: 'historical', order: 11,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
   },
   {
     slug: '2-kings', name: '2 Kings',
