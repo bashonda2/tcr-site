@@ -262,19 +262,19 @@ export const BOOKS: BookInfo[] = [
     slug: 'ezra', name: 'Ezra',
     hebrewName: 'עֶזְרָא', transliteration: 'Ezra', meaning: 'Help',
     chapters: 10, testament: 'old', tier: 'standard', section: 'historical', order: 15,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
   },
   {
     slug: 'nehemiah', name: 'Nehemiah',
     hebrewName: 'נְחֶמְיָה', transliteration: 'Nechemyah', meaning: 'The LORD comforts',
     chapters: 13, testament: 'old', tier: 'standard', section: 'historical', order: 16,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
   },
   {
     slug: 'esther', name: 'Esther',
     hebrewName: 'אֶסְתֵּר', transliteration: 'Ester', meaning: 'Star / Hidden',
     chapters: 10, testament: 'old', tier: 'standard', section: 'historical', order: 17,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
     alternateEditions: [
       { slug: 'esther-lxx', label: 'Greek Esther (LXX, with additions)', sourceText: 'lxx', status: 'not-started',
         tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '2nd–1st c. BCE', preNicaea: true, scope: 'full', description: '107 added verses not in the Hebrew text.', license: 'public-domain' },
