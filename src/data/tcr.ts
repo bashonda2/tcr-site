@@ -220,7 +220,7 @@ export const BOOKS: BookInfo[] = [
     slug: 'ruth', name: 'Ruth',
     hebrewName: 'רוּת', transliteration: 'Rut', meaning: 'Friend / Companion',
     chapters: 4, testament: 'old', tier: 'standard', section: 'historical', order: 8,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
   },
   {
     slug: '1-samuel', name: '1 Samuel',
