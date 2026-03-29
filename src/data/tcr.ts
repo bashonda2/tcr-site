@@ -6,18 +6,28 @@ import { join } from 'path';
 export type Testament = 'old' | 'new';
 export type Tier = 'standard' | 'extended';
 export type BookStatus = 'complete' | 'in-progress' | 'not-started';
-export type SourceText = 'wlc' | 'sblgnt' | 'lxx' | 'dss' | 'samaritan' | 'ethiopic';
+export type SourceText = 'wlc' | 'sblgnt' | 'lxx' | 'dss' | 'samaritan' | 'ethiopic' | 'targum' | 'jst';
+
+export type EditionTier = 'manuscript' | 'pre-nicaea-canon' | 'interpretive';
 
 export type Section =
   | 'pentateuch' | 'historical' | 'wisdom' | 'major-prophets' | 'minor-prophets'
   | 'gospels' | 'acts' | 'pauline-epistles' | 'general-epistles' | 'apocalyptic'
-  | 'deuterocanonical' | 'orthodox-additions' | 'ethiopian-canon' | 'dead-sea-scrolls';
+  | 'deuterocanonical' | 'orthodox-additions' | 'ethiopian-canon' | 'dead-sea-scrolls'
+  | 'pre-nicaea-canon' | 'interpretive-traditions';
 
 export interface AlternateEdition {
   slug: string;
   label: string;
   sourceText: SourceText;
   status: BookStatus;
+  tier?: EditionTier;
+  uiLabel?: string;
+  date?: string;
+  preNicaea?: boolean;
+  scope?: 'full' | 'partial' | 'fragments';
+  description?: string;
+  license?: string;
 }
 
 export interface KeyTerm {
@@ -100,6 +110,8 @@ export const SECTIONS: SectionInfo[] = [
   { id: 'orthodox-additions', name: 'Orthodox Canon', testament: 'old', tier: 'extended', order: 12 },
   { id: 'ethiopian-canon', name: 'Ethiopian Canon', testament: 'old', tier: 'extended', order: 13 },
   { id: 'dead-sea-scrolls', name: 'Dead Sea Scrolls', testament: 'old', tier: 'extended', order: 14 },
+  { id: 'pre-nicaea-canon', name: 'Pre-Nicaea Canon', testament: 'old', tier: 'extended', order: 15 },
+  { id: 'interpretive-traditions', name: 'Interpretive Traditions', testament: 'old', tier: 'extended', order: 16 },
 ];
 
 // ── Books ──────────────────────────────────────────────────────────────────
@@ -114,8 +126,14 @@ export const BOOKS: BookInfo[] = [
     chapters: 50, testament: 'old', tier: 'standard', section: 'pentateuch', order: 1,
     canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
     alternateEditions: [
-      { slug: 'genesis-lxx', label: 'Septuagint (LXX)', sourceText: 'lxx', status: 'not-started' },
-      { slug: 'genesis-sam', label: 'Samaritan Pentateuch', sourceText: 'samaritan', status: 'not-started' },
+      { slug: 'genesis-lxx', label: 'Septuagint (LXX)', sourceText: 'lxx', status: 'not-started',
+        tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '3rd–2nd c. BCE', preNicaea: true, scope: 'full', license: 'public-domain' },
+      { slug: 'genesis-sam', label: 'Samaritan Pentateuch', sourceText: 'samaritan', status: 'not-started',
+        tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '4th c. BCE divergence', preNicaea: true, scope: 'full', description: '~6,000 variant readings vs. MT. Theologically significant: 10th commandment designates Mt. Gerizim.', license: 'public-domain' },
+      { slug: 'genesis-targum', label: 'Targum Onkelos', sourceText: 'targum', status: 'not-started',
+        tier: 'interpretive', uiLabel: 'How traditions read this passage', date: '1st c. BCE – 5th c. CE', preNicaea: true, scope: 'full', description: 'Aramaic interpretive paraphrase used in synagogue worship.', license: 'public-domain' },
+      { slug: 'genesis-jst', label: 'Joseph Smith Translation (Book of Moses)', sourceText: 'jst', status: 'not-started',
+        tier: 'interpretive', uiLabel: 'How traditions read this passage', date: '1830s CE', preNicaea: false, scope: 'partial', description: 'Revelatory revision of Genesis 1-24. Not a translation from original languages.', license: 'research-required' },
     ],
   },
   {
@@ -123,24 +141,56 @@ export const BOOKS: BookInfo[] = [
     hebrewName: 'שְׁמוֹת', transliteration: 'Shemot', meaning: 'Names',
     chapters: 40, testament: 'old', tier: 'standard', section: 'pentateuch', order: 2,
     canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
+    alternateEditions: [
+      { slug: 'exodus-lxx', label: 'Septuagint (LXX)', sourceText: 'lxx', status: 'not-started',
+        tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '3rd–2nd c. BCE', preNicaea: true, scope: 'full', license: 'public-domain' },
+      { slug: 'exodus-sam', label: 'Samaritan Pentateuch', sourceText: 'samaritan', status: 'not-started',
+        tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '4th c. BCE divergence', preNicaea: true, scope: 'full', license: 'public-domain' },
+      { slug: 'exodus-targum', label: 'Targum Onkelos', sourceText: 'targum', status: 'not-started',
+        tier: 'interpretive', uiLabel: 'How traditions read this passage', date: '1st c. BCE – 5th c. CE', preNicaea: true, scope: 'full', license: 'public-domain' },
+    ],
   },
   {
     slug: 'leviticus', name: 'Leviticus',
     hebrewName: 'וַיִּקְרָא', transliteration: 'Vayiqra', meaning: 'And He called',
     chapters: 27, testament: 'old', tier: 'standard', section: 'pentateuch', order: 3,
     canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
+    alternateEditions: [
+      { slug: 'leviticus-lxx', label: 'Septuagint (LXX)', sourceText: 'lxx', status: 'not-started',
+        tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '3rd–2nd c. BCE', preNicaea: true, scope: 'full', license: 'public-domain' },
+      { slug: 'leviticus-sam', label: 'Samaritan Pentateuch', sourceText: 'samaritan', status: 'not-started',
+        tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '4th c. BCE divergence', preNicaea: true, scope: 'full', license: 'public-domain' },
+      { slug: 'leviticus-targum', label: 'Targum Onkelos', sourceText: 'targum', status: 'not-started',
+        tier: 'interpretive', uiLabel: 'How traditions read this passage', date: '1st c. BCE – 5th c. CE', preNicaea: true, scope: 'full', license: 'public-domain' },
+    ],
   },
   {
     slug: 'numbers', name: 'Numbers',
     hebrewName: 'בְּמִדְבַּר', transliteration: 'Bemidbar', meaning: 'In the wilderness',
     chapters: 36, testament: 'old', tier: 'standard', section: 'pentateuch', order: 4,
     canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
+    alternateEditions: [
+      { slug: 'numbers-lxx', label: 'Septuagint (LXX)', sourceText: 'lxx', status: 'not-started',
+        tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '3rd–2nd c. BCE', preNicaea: true, scope: 'full', license: 'public-domain' },
+      { slug: 'numbers-sam', label: 'Samaritan Pentateuch', sourceText: 'samaritan', status: 'not-started',
+        tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '4th c. BCE divergence', preNicaea: true, scope: 'full', license: 'public-domain' },
+      { slug: 'numbers-targum', label: 'Targum Onkelos', sourceText: 'targum', status: 'not-started',
+        tier: 'interpretive', uiLabel: 'How traditions read this passage', date: '1st c. BCE – 5th c. CE', preNicaea: true, scope: 'full', license: 'public-domain' },
+    ],
   },
   {
     slug: 'deuteronomy', name: 'Deuteronomy',
     hebrewName: 'דְּבָרִים', transliteration: 'Devarim', meaning: 'Words',
     chapters: 34, testament: 'old', tier: 'standard', section: 'pentateuch', order: 5,
     canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
+    alternateEditions: [
+      { slug: 'deuteronomy-lxx', label: 'Septuagint (LXX)', sourceText: 'lxx', status: 'not-started',
+        tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '3rd–2nd c. BCE', preNicaea: true, scope: 'full', license: 'public-domain' },
+      { slug: 'deuteronomy-sam', label: 'Samaritan Pentateuch', sourceText: 'samaritan', status: 'not-started',
+        tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '4th c. BCE divergence', preNicaea: true, scope: 'full', license: 'public-domain' },
+      { slug: 'deuteronomy-targum', label: 'Targum Onkelos', sourceText: 'targum', status: 'not-started',
+        tier: 'interpretive', uiLabel: 'How traditions read this passage', date: '1st c. BCE – 5th c. CE', preNicaea: true, scope: 'full', license: 'public-domain' },
+    ],
   },
 
   // ─── OLD TESTAMENT: Historical Books ─────────────────────────────────────
@@ -217,7 +267,8 @@ export const BOOKS: BookInfo[] = [
     chapters: 10, testament: 'old', tier: 'standard', section: 'historical', order: 17,
     canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'not-started',
     alternateEditions: [
-      { slug: 'esther-lxx', label: 'Greek Esther (LXX, with additions)', sourceText: 'lxx', status: 'not-started' },
+      { slug: 'esther-lxx', label: 'Greek Esther (LXX, with additions)', sourceText: 'lxx', status: 'not-started',
+        tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '2nd–1st c. BCE', preNicaea: true, scope: 'full', description: '107 added verses not in the Hebrew text.', license: 'public-domain' },
     ],
   },
 
@@ -235,8 +286,10 @@ export const BOOKS: BookInfo[] = [
     chapters: 150, testament: 'old', tier: 'standard', section: 'wisdom', order: 19,
     canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'not-started',
     alternateEditions: [
-      { slug: 'psalms-dss', label: 'Psalms Scroll (11QPsᵃ)', sourceText: 'dss', status: 'not-started' },
-      { slug: 'psalms-lxx', label: 'Septuagint Psalter (LXX)', sourceText: 'lxx', status: 'not-started' },
+      { slug: 'psalms-dss', label: 'Psalms Scroll (11QPsᵃ)', sourceText: 'dss', status: 'not-started',
+        tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '1st c. CE', preNicaea: true, scope: 'partial', description: 'Includes extra psalms and different ordering. Major DSS psalms witness.', license: 'public-domain' },
+      { slug: 'psalms-lxx', label: 'Septuagint Psalter (LXX)', sourceText: 'lxx', status: 'not-started',
+        tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '3rd–2nd c. BCE', preNicaea: true, scope: 'full', description: 'Includes Psalm 151 and different numbering system.', license: 'public-domain' },
     ],
   },
   {
@@ -266,8 +319,12 @@ export const BOOKS: BookInfo[] = [
     chapters: 66, testament: 'old', tier: 'standard', section: 'major-prophets', order: 23,
     canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'not-started',
     alternateEditions: [
-      { slug: 'isaiah-dss', label: 'Great Isaiah Scroll (1QIsaᵃ)', sourceText: 'dss', status: 'not-started' },
-      { slug: 'isaiah-lxx', label: 'Septuagint Isaiah (LXX)', sourceText: 'lxx', status: 'not-started' },
+      { slug: 'isaiah-dss', label: 'Great Isaiah Scroll (1QIsaᵃ)', sourceText: 'dss', status: 'not-started',
+        tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '150–100 BCE', preNicaea: true, scope: 'full', description: 'The oldest complete manuscript of any biblical book. All 66 chapters preserved.', license: 'public-domain' },
+      { slug: 'isaiah-lxx', label: 'Septuagint Isaiah (LXX)', sourceText: 'lxx', status: 'not-started',
+        tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '3rd–2nd c. BCE', preNicaea: true, scope: 'full', license: 'public-domain' },
+      { slug: 'isaiah-targum', label: 'Targum Jonathan', sourceText: 'targum', status: 'not-started',
+        tier: 'interpretive', uiLabel: 'How traditions read this passage', date: '1st c. BCE – 5th c. CE', preNicaea: true, scope: 'full', description: 'Aramaic interpretive paraphrase of the Prophets.', license: 'public-domain' },
     ],
   },
   {
@@ -276,7 +333,10 @@ export const BOOKS: BookInfo[] = [
     chapters: 52, testament: 'old', tier: 'standard', section: 'major-prophets', order: 24,
     canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'not-started',
     alternateEditions: [
-      { slug: 'jeremiah-lxx', label: 'Septuagint Jeremiah (LXX, shorter text)', sourceText: 'lxx', status: 'not-started' },
+      { slug: 'jeremiah-lxx', label: 'Septuagint Jeremiah (LXX, shorter text)', sourceText: 'lxx', status: 'not-started',
+        tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '3rd–2nd c. BCE', preNicaea: true, scope: 'full', description: 'Significantly shorter than the MT (~1/8 less text) with different chapter arrangement.', license: 'public-domain' },
+      { slug: 'jeremiah-targum', label: 'Targum Jonathan', sourceText: 'targum', status: 'not-started',
+        tier: 'interpretive', uiLabel: 'How traditions read this passage', date: '1st c. BCE – 5th c. CE', preNicaea: true, scope: 'full', license: 'public-domain' },
     ],
   },
   {
@@ -297,7 +357,8 @@ export const BOOKS: BookInfo[] = [
     chapters: 12, testament: 'old', tier: 'standard', section: 'major-prophets', order: 27,
     canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'not-started',
     alternateEditions: [
-      { slug: 'daniel-lxx', label: 'Greek Daniel (LXX, with additions)', sourceText: 'lxx', status: 'not-started' },
+      { slug: 'daniel-lxx', label: 'Greek Daniel (LXX, with additions)', sourceText: 'lxx', status: 'not-started',
+        tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '2nd c. BCE', preNicaea: true, scope: 'full', description: 'Includes additions: Prayer of Azariah, Susanna, Bel and the Dragon.', license: 'public-domain' },
     ],
   },
 
@@ -637,18 +698,20 @@ export const BOOKS: BookInfo[] = [
     canons: ['orthodox'], sourceText: 'lxx', status: 'not-started',
   },
 
-  // ─── EXTENDED: Ethiopian Canon ───────────────────────────────────────────
+  // ─── EXTENDED: Pre-Nicaea Canon ──────────────────────────────────────────
+  // Books widely read by Second Temple Jewish communities and/or early Christians
+  // before canon formalization at Nicaea (325 CE). See extended-library-direction.md.
 
   {
     slug: '1-enoch', name: '1 Enoch',
     transliteration: 'Henok', meaning: 'Book of Enoch',
-    chapters: 108, testament: 'old', tier: 'extended', section: 'ethiopian-canon', order: 80,
+    chapters: 108, testament: 'old', tier: 'extended', section: 'pre-nicaea-canon', order: 80,
     canons: ['ethiopian'], sourceText: 'ethiopic', status: 'not-started',
   },
   {
     slug: 'jubilees', name: 'Jubilees',
     transliteration: 'Kufale', meaning: 'Book of Jubilees',
-    chapters: 50, testament: 'old', tier: 'extended', section: 'ethiopian-canon', order: 81,
+    chapters: 50, testament: 'old', tier: 'extended', section: 'pre-nicaea-canon', order: 81,
     canons: ['ethiopian'], sourceText: 'ethiopic', status: 'not-started',
   },
 
@@ -656,7 +719,7 @@ export const BOOKS: BookInfo[] = [
 
   {
     slug: 'great-isaiah-scroll', name: 'Great Isaiah Scroll',
-    hebrewName: '1QIsaᵃ', transliteration: '1QIsa-a', meaning: 'Complete Isaiah manuscript from Qumran',
+    hebrewName: '1QIsaᵃ', transliteration: '1QIsa-a', meaning: 'The oldest complete manuscript of any biblical book',
     chapters: 66, testament: 'old', tier: 'extended', section: 'dead-sea-scrolls', order: 82,
     canons: [], sourceText: 'dss', status: 'not-started',
   },
@@ -761,4 +824,12 @@ export const SOURCE_TEXT_LABELS: Record<SourceText, string> = {
   dss: 'Dead Sea Scrolls',
   samaritan: 'Samaritan Pentateuch',
   ethiopic: 'Ge\'ez (Ethiopic)',
+  targum: 'Targum (Aramaic)',
+  jst: 'Joseph Smith Translation',
+};
+
+export const EDITION_TIER_LABELS: Record<EditionTier, string> = {
+  manuscript: 'Other manuscript traditions',
+  'pre-nicaea-canon': 'Books read before the councils',
+  interpretive: 'How traditions read this passage',
 };
