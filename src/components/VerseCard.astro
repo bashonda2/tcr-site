@@ -22,9 +22,13 @@ const cardId = `${bookName.toLowerCase().slice(0,3)}-${chapterNum}-${verse.verse
     </span>
   </div>
 
-  <!-- Hebrew text -->
+  <!-- Source text (Hebrew or Aramaic) -->
   <div class="mb-4 p-4 bg-teal-50/50 rounded-xl border border-teal-100">
-    <p class="text-hebrew text-right leading-loose">{verse.text_hebrew}</p>
+    {verse.text_aramaic ? (
+      <p class="text-hebrew text-right leading-loose">{verse.text_aramaic}</p>
+    ) : (
+      <p class="text-hebrew text-right leading-loose">{verse.text_hebrew}</p>
+    )}
   </div>
 
   <!-- Modern English rendering -->

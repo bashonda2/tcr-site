@@ -6,7 +6,7 @@ import { join } from 'path';
 export type Testament = 'old' | 'new';
 export type Tier = 'standard' | 'extended';
 export type BookStatus = 'complete' | 'in-progress' | 'not-started';
-export type SourceText = 'wlc' | 'sblgnt' | 'lxx' | 'dss' | 'samaritan' | 'ethiopic' | 'targum' | 'jst';
+export type SourceText = 'wlc' | 'sblgnt' | 'lxx' | 'dss' | 'samaritan' | 'ethiopic' | 'targum' | 'jst' | 'vulgate' | 'peshitta';
 
 export type EditionTier = 'manuscript' | 'pre-nicaea-canon' | 'interpretive';
 
@@ -41,6 +41,7 @@ export interface KeyTerm {
 export interface Verse {
   verse: number;
   text_hebrew: string;
+  text_aramaic?: string;
   text_kjv: string;
   rendering: string;
   translator_notes: string[];
@@ -834,6 +835,8 @@ export const SOURCE_TEXT_LABELS: Record<SourceText, string> = {
   ethiopic: 'Ge\'ez (Ethiopic)',
   targum: 'Targum (Aramaic)',
   jst: 'Joseph Smith Translation',
+  vulgate: 'Latin Vulgate (Jerome)',
+  peshitta: 'Peshitta (Syriac)',
 };
 
 export const EDITION_TIER_LABELS: Record<EditionTier, string> = {
