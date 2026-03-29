@@ -256,7 +256,7 @@ export const BOOKS: BookInfo[] = [
     slug: '2-chronicles', name: '2 Chronicles',
     hebrewName: 'דִּבְרֵי הַיָּמִים ב', transliteration: 'Divrei HaYamim Bet', meaning: 'Events of the days',
     chapters: 36, testament: 'old', tier: 'standard', section: 'historical', order: 14,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
   },
   {
     slug: 'ezra', name: 'Ezra',
