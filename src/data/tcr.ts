@@ -232,7 +232,7 @@ export const BOOKS: BookInfo[] = [
     slug: '2-samuel', name: '2 Samuel',
     hebrewName: 'שְׁמוּאֵל ב', transliteration: 'Shemu\'el Bet', meaning: 'Heard by God',
     chapters: 24, testament: 'old', tier: 'standard', section: 'historical', order: 10,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
   },
   {
     slug: '1-kings', name: '1 Kings',
