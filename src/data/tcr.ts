@@ -62,8 +62,16 @@ export interface ChapterMeta {
   license: string;
 }
 
+export interface Preamble {
+  summary: string;
+  remarkable: string;
+  friction: string;
+  connections: string;
+}
+
 export interface Chapter {
   meta: ChapterMeta;
+  preamble?: Preamble;
   verses: Verse[];
 }
 

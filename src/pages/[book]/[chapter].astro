@@ -48,6 +48,36 @@ const sourceLabel = SOURCE_TEXT_LABELS[book.sourceText];
   </div>
 
   <div class="max-w-3xl mx-auto px-6 py-8">
+
+    {chapterData.preamble && (
+      <details class="mb-10 group" open>
+        <summary class="cursor-pointer select-none flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-teal-600 mb-4 hover:text-teal-700 transition-colors">
+          <svg class="w-3.5 h-3.5 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+          Translator's Introduction
+        </summary>
+        <div class="bg-cream-50 border border-cream-200 rounded-xl p-6 sm:p-8 space-y-5 text-[15px] leading-relaxed text-stone-600">
+          <div>
+            <h3 class="text-xs font-semibold uppercase tracking-wider text-stone-400 mb-1.5">What This Chapter Is About</h3>
+            <p class="font-serif italic">{chapterData.preamble.summary}</p>
+          </div>
+          <div>
+            <h3 class="text-xs font-semibold uppercase tracking-wider text-stone-400 mb-1.5">What Makes This Chapter Remarkable</h3>
+            <p>{chapterData.preamble.remarkable}</p>
+          </div>
+          <div>
+            <h3 class="text-xs font-semibold uppercase tracking-wider text-stone-400 mb-1.5">Translation Friction</h3>
+            <p>{chapterData.preamble.friction}</p>
+          </div>
+          <div>
+            <h3 class="text-xs font-semibold uppercase tracking-wider text-stone-400 mb-1.5">Connections</h3>
+            <p>{chapterData.preamble.connections}</p>
+          </div>
+        </div>
+      </details>
+    )}
+
     {chapterData.verses.map((verse) => (
       <VerseCard verse={verse} chapterNum={chapterNum} bookName={book.name} showAll={true} />
     ))}
