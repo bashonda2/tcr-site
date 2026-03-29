@@ -1,15 +1,28 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { loadChapter, BOOKS, getBookVerseCount } from '../data/tcr';
+import { loadChapter, getCompletedBooks, getCompletedChapters, getSection, type BookInfo } from '../data/tcr';
 
 const ch1 = loadChapter('genesis', 1);
-const verse1 = ch1.verses[0]; // Genesis 1:1
-const verse2 = ch1.verses[1]; // Genesis 1:2 — tohu vavohu
+const verse1 = ch1.verses[0];
+const verse2 = ch1.verses[1];
 
-// Pull bara (created) term from verse 1
 const baraTerm = verse1.key_terms.find(t => t.transliteration === 'bara') ?? verse1.key_terms[0];
-// Pull tohu vavohu from verse 2
 const tohuTerm = verse2.key_terms.find(t => t.transliteration === 'tohu vavohu') ?? verse2.key_terms[0];
+
+const completedBooks = getCompletedBooks();
+const completedChapters = getCompletedChapters();
+const completedVerseEstimate = completedBooks.reduce((sum, b) => {
+  const verseCounts: Record<string, number> = {
+    genesis: 1534, exodus: 1213, leviticus: 859, numbers: 1288, deuteronomy: 956, joshua: 658,
+  };
+  return sum + (verseCounts[b.slug] ?? 0);
+}, 0);
+
+const completedSections = [...new Set(completedBooks.map(b => b.section))];
+const sectionGroups = completedSections.map(sId => ({
+  section: getSection(sId)!,
+  books: completedBooks.filter(b => b.section === sId),
+}));
 ---
 
 <Layout title="Home" canonical="/">
@@ -27,8 +40,8 @@ const tohuTerm = verse2.key_terms.find(t => t.transliteration === 'tohu vavohu')
       </h1>
 
       <p class="text-xl text-stone-700 leading-relaxed max-w-2xl mx-auto mb-10 font-serif italic">
-        A modern English translation of the Hebrew Bible — formal equivalence,
-        translated directly from the Westminster Leningrad Codex,
+        A modern English translation of the Bible — Old Testament and New Testament —
+        translated directly from the original Hebrew and Greek,
         with every decision documented.
       </p>
 
@@ -40,16 +53,16 @@ const tohuTerm = verse2.key_terms.find(t => t.transliteration === 'tohu vavohu')
           Read Genesis 1
         </a>
         <a
-          href="/genesis"
+          href="/books"
           class="px-7 py-3 bg-white text-teal-600 border border-teal-200 rounded-xl font-medium hover:bg-teal-50 hover:border-teal-300 transition-colors shadow-sm"
         >
-          Browse Genesis
+          Browse the Full Bible
         </a>
       </div>
     </div>
   </section>
 
-  <!-- Live verse showcase — Genesis 1:1 -->
+  <!-- Live verse showcase -->
   <section class="max-w-4xl mx-auto px-6 py-20">
     <div class="text-center mb-12">
       <p class="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-3">Live Example</p>
@@ -58,27 +71,19 @@ const tohuTerm = verse2.key_terms.find(t => t.transliteration === 'tohu vavohu')
     </div>
 
     <div class="space-y-8">
-      <!-- Verse 1 -->
       <div class="bg-white rounded-2xl border border-cream-200 shadow-sm overflow-hidden">
         <div class="px-8 pt-7 pb-2">
           <span class="text-xs font-semibold text-teal-600 uppercase tracking-widest">Genesis 1:1</span>
         </div>
-
-        <!-- Hebrew -->
         <div class="px-8 py-5 bg-teal-50/50 border-y border-teal-100 my-3">
           <p class="text-hebrew text-right text-2xl">{verse1.text_hebrew}</p>
         </div>
-
         <div class="px-8 pb-7 pt-4">
-          <!-- Modern English -->
           <p class="text-rendering text-xl mb-3">{verse1.rendering}</p>
-          <!-- KJV -->
           <p class="text-base text-stone-600 font-serif italic mb-6">
             <span class="not-italic font-sans text-xs font-semibold text-stone-500 uppercase tracking-wider mr-2">KJV</span>
             {verse1.text_kjv}
           </p>
-
-          <!-- Key term callout: bara -->
           {baraTerm && (
             <div class="flex gap-5 p-5 bg-teal-50 rounded-xl border border-teal-100">
               <div class="flex-shrink-0 text-right">
@@ -97,23 +102,19 @@ const tohuTerm = verse2.key_terms.find(t => t.transliteration === 'tohu vavohu')
         </div>
       </div>
 
-      <!-- Verse 2 -->
       <div class="bg-white rounded-2xl border border-cream-200 shadow-sm overflow-hidden">
         <div class="px-8 pt-7 pb-2">
           <span class="text-xs font-semibold text-teal-600 uppercase tracking-widest">Genesis 1:2</span>
         </div>
-
         <div class="px-8 py-5 bg-teal-50/50 border-y border-teal-100 my-3">
           <p class="text-hebrew text-right text-2xl">{verse2.text_hebrew}</p>
         </div>
-
         <div class="px-8 pb-7 pt-4">
           <p class="text-rendering text-xl mb-3">{verse2.rendering}</p>
           <p class="text-base text-stone-600 font-serif italic mb-6">
             <span class="not-italic font-sans text-xs font-semibold text-stone-500 uppercase tracking-wider mr-2">KJV</span>
             {verse2.text_kjv}
           </p>
-
           {tohuTerm && (
             <div class="flex gap-5 p-5 bg-teal-50 rounded-xl border border-teal-100">
               <div class="flex-shrink-0 text-right">
@@ -222,16 +223,22 @@ const tohuTerm = verse2.key_terms.find(t => t.transliteration === 'tohu vavohu')
 
   <hr class="teal-rule max-w-4xl mx-auto" />
 
-  <!-- Current status -->
+  <!-- Current status — data-driven -->
   <section class="max-w-4xl mx-auto px-6 py-20">
     <div class="bg-teal-600 rounded-2xl px-10 py-12 text-center text-white">
       <p class="text-teal-200 text-sm font-semibold uppercase tracking-widest mb-4">Current Status</p>
-      <h2 class="font-serif text-3xl font-medium mb-4">The Pentateuch — Complete</h2>
-      <p class="text-teal-100 text-lg mb-2">187 chapters &bull; 5,852 verses &bull; fully annotated</p>
-      <p class="text-teal-200 text-sm mb-8">Genesis through Deuteronomy — the five books of Moses</p>
+      <h2 class="font-serif text-3xl font-medium mb-4">
+        {completedBooks.length} Books Complete
+      </h2>
+      <p class="text-teal-100 text-lg mb-2">
+        {completedChapters} chapters &bull; {completedVerseEstimate.toLocaleString()} verses &bull; fully annotated
+      </p>
+      <p class="text-teal-200 text-sm mb-8">
+        {sectionGroups.map(g => g.section.name).join(' + ')}
+      </p>
 
       <div class="flex flex-wrap justify-center gap-3">
-        {BOOKS.map((b) => (
+        {completedBooks.map((b: BookInfo) => (
           <a
             href={`/${b.slug}`}
             class="px-5 py-2.5 bg-white text-teal-700 rounded-xl font-medium hover:bg-teal-50 transition-colors text-sm"
@@ -240,12 +247,10 @@ const tohuTerm = verse2.key_terms.find(t => t.transliteration === 'tohu vavohu')
           </a>
         ))}
         <a
-          href="https://github.com/bashonda2/the-covenant-rendering"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/books"
           class="px-5 py-2.5 border border-teal-400 text-white rounded-xl font-medium hover:bg-teal-700 transition-colors text-sm"
         >
-          View on GitHub
+          Full Library &rarr;
         </a>
       </div>
     </div>

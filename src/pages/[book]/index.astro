@@ -1,9 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { BOOKS, getAllChapterNums, loadChapter, getBook } from '../../data/tcr';
+import { getAvailableBooks, getAllChapterNums, loadChapter, getBook, SOURCE_TEXT_LABELS } from '../../data/tcr';
 
 export async function getStaticPaths() {
-  return BOOKS.map((b) => ({
+  return getAvailableBooks().map((b) => ({
     params: { book: b.slug },
   }));
 }
@@ -20,26 +20,31 @@ const chapters = getAllChapterNums(bookSlug!).map((n) => {
 });
 
 const totalVerses = chapters.reduce((sum, c) => sum + c.verseCount, 0);
+const sourceLabel = SOURCE_TEXT_LABELS[book.sourceText];
+const displayName = book.hebrewName || book.greekName || '';
 ---
 
 <Layout
   title={book.name}
-  description={`Browse all ${book.chapters} chapters of ${book.name} in The Covenant Rendering — modern English from the Hebrew (WLC) with translator notes and key terms.`}
+  description={`Browse all ${book.chapters} chapters of ${book.name} in The Covenant Rendering — modern English from the ${sourceLabel} with translator notes and key terms.`}
   canonical={`/${bookSlug}`}
 >
   <div class="bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
     <div class="max-w-4xl mx-auto px-6 py-16">
       <p class="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-3">The Covenant Rendering</p>
       <h1 class="font-serif text-4xl font-medium text-stone-800 mb-4">{book.name}</h1>
-      <p class="text-stone-600 text-lg font-serif italic">
-        {book.hebrewName} &mdash; <em>{book.transliteration}</em> &middot; "{book.meaning}"
-      </p>
+      {displayName && book.transliteration && (
+        <p class="text-stone-600 text-lg font-serif italic">
+          {displayName} &mdash; <em>{book.transliteration}</em>
+          {book.meaning && <Fragment> &middot; "{book.meaning}"</Fragment>}
+        </p>
+      )}
       <div class="flex items-center gap-4 mt-6 text-sm text-stone-600">
         <span>{book.chapters} chapters</span>
         <span class="text-stone-300">&bull;</span>
         <span>{totalVerses.toLocaleString()} verses</span>
         <span class="text-stone-300">&bull;</span>
-        <span>Translated from the Westminster Leningrad Codex</span>
+        <span>Translated from the {sourceLabel}</span>
       </div>
     </div>
   </div>

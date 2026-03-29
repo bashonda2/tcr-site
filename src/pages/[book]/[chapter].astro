@@ -1,11 +1,11 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import VerseCard from '../../components/VerseCard.astro';
-import { BOOKS, getAllChapterNums, loadChapter, getBook } from '../../data/tcr';
+import { getAvailableBooks, getAllChapterNums, loadChapter, getBook, SOURCE_TEXT_LABELS } from '../../data/tcr';
 
 export async function getStaticPaths() {
   const paths: { params: { book: string; chapter: string } }[] = [];
-  for (const b of BOOKS) {
+  for (const b of getAvailableBooks()) {
     for (const n of getAllChapterNums(b.slug)) {
       paths.push({ params: { book: b.slug, chapter: String(n) } });
     }
@@ -22,11 +22,12 @@ const prevChapter = chapterNum > 1 ? chapterNum - 1 : null;
 const nextChapter = chapterNum < book.chapters ? chapterNum + 1 : null;
 
 const firstVersePreview = chapterData.verses[0]?.rendering?.slice(0, 120) + '…';
+const sourceLabel = SOURCE_TEXT_LABELS[book.sourceText];
 ---
 
 <Layout
   title={`${book.name} ${chapterNum}`}
-  description={`${book.name} chapter ${chapterNum} — The Covenant Rendering: modern English from Hebrew (WLC). ${firstVersePreview}`}
+  description={`${book.name} chapter ${chapterNum} — The Covenant Rendering: modern English from the ${sourceLabel}. ${firstVersePreview}`}
   canonical={`/${bookSlug}/${chapterNum}`}
 >
   <div class="bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
@@ -41,7 +42,7 @@ const firstVersePreview = chapterData.verses[0]?.rendering?.slice(0, 120) + '…
         {book.name} {chapterNum}
       </h1>
       <p class="text-stone-600 text-sm">
-        {chapterData.verses.length} verses &bull; {chapterData.meta.source_text}
+        {chapterData.verses.length} verses &bull; {sourceLabel}
       </p>
     </div>
   </div>

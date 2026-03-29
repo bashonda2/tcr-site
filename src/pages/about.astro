@@ -1,5 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getCompletedBooks, getBookVerseCount, getCompletedChapters, BOOKS, getBooksByTier, type BookInfo } from '../data/tcr';
+
+const completedBooks = getCompletedBooks();
+const bookStats = completedBooks.map((b: BookInfo) => ({
+  name: b.name,
+  chapters: b.chapters,
+  verses: getBookVerseCount(b.slug),
+  status: b.status,
+}));
+const standardBooks = getBooksByTier('standard');
+const completedChapters = getCompletedChapters();
+const totalStandard = standardBooks.reduce((sum, b) => sum + b.chapters, 0);
 ---
 
 <Layout
@@ -185,28 +197,27 @@ import Layout from '../layouts/Layout.astro';
     <!-- Current Status & Roadmap -->
     <section>
       <h2 class="font-serif text-2xl font-medium text-stone-800 mb-5">Status &amp; Roadmap</h2>
+      <p class="text-stone-600 text-sm mb-4">
+        {completedBooks.length} of 66 standard Bible books complete ({completedChapters} of {totalStandard.toLocaleString()} chapters).
+        Extended Library (Apocrypha, Dead Sea Scrolls, Ethiopian canon) planned.
+      </p>
       <div class="space-y-3">
-        {[
-          { book: 'Genesis', chapters: 50, verses: 1534, status: 'complete' },
-          { book: 'Exodus', chapters: 40, verses: 1213, status: 'complete' },
-          { book: 'Leviticus', chapters: 27, verses: 859, status: 'complete' },
-          { book: 'Numbers', chapters: 36, verses: 1288, status: 'complete' },
-          { book: 'Deuteronomy', chapters: 34, verses: 959, status: 'complete' },
-        ].map(({ book, chapters, verses, status }) => (
+        {bookStats.map(({ name, chapters, verses, status }) => (
           <div class="flex items-center justify-between p-4 bg-white rounded-xl border border-cream-200">
             <div>
-              <span class="font-medium text-stone-700">{book}</span>
-              <span class="text-stone-400 text-sm ml-3">{chapters} ch &bull; {verses} v</span>
+              <span class="font-medium text-stone-700">{name}</span>
+              <span class="text-stone-400 text-sm ml-3">{chapters} ch &bull; {verses.toLocaleString()} v</span>
             </div>
-            <span class={`text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full ${
-              status === 'complete'
-                ? 'bg-teal-100 text-teal-700'
-                : 'bg-cream-200 text-stone-400'
-            }`}>
+            <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full bg-teal-100 text-teal-700">
               {status}
             </span>
           </div>
         ))}
+      </div>
+      <div class="mt-4 text-center">
+        <a href="/books" class="text-sm font-medium text-teal-600 hover:text-teal-700 transition-colors">
+          View full library with all 66+ books &rarr;
+        </a>
       </div>
     </section>
 

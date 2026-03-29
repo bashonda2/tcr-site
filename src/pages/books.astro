@@ -1,0 +1,157 @@
+---
+import Layout from '../layouts/Layout.astro';
+import {
+  BOOKS, getSections, getBooksBySection, getCompletedChapters, getTotalChapters,
+  getBooksByTier, type BookInfo, type SectionInfo,
+} from '../data/tcr';
+
+const standardBooks = getBooksByTier('standard');
+const extendedBooks = getBooksByTier('extended');
+
+const completedChapters = getCompletedChapters();
+const totalStandard = getTotalChapters(standardBooks);
+const totalAll = getTotalChapters();
+const completedBooks = standardBooks.filter(b => b.status === 'complete');
+const pctComplete = Math.round((completedChapters / totalStandard) * 100);
+
+const standardSections = getSections('standard');
+const extendedSections = getSections('extended');
+---
+
+<Layout
+  title="Library"
+  description="Browse the full Bible and Extended Library in The Covenant Rendering — every book from Genesis to Revelation, plus Apocrypha, Dead Sea Scrolls, and Ethiopian canon."
+  canonical="/books"
+>
+  <div class="bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
+    <div class="max-w-5xl mx-auto px-6 py-16">
+      <p class="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-3">The Covenant Rendering</p>
+      <h1 class="font-serif text-4xl font-medium text-stone-800 mb-4">Library</h1>
+      <p class="text-stone-600 text-lg font-serif italic max-w-2xl">
+        The full Bible — Old Testament and New Testament — plus the Extended Library:
+        Apocrypha, Dead Sea Scrolls, Ethiopian canon, and more.
+      </p>
+
+      <!-- Progress bar -->
+      <div class="mt-8 max-w-md">
+        <div class="flex items-center justify-between text-sm mb-2">
+          <span class="text-stone-600 font-medium">
+            {completedBooks.length} of 66 books complete
+          </span>
+          <span class="text-teal-600 font-semibold">{pctComplete}%</span>
+        </div>
+        <div class="h-2.5 bg-cream-200 rounded-full overflow-hidden">
+          <div class="h-full bg-teal-500 rounded-full transition-all" style={`width: ${pctComplete}%`}></div>
+        </div>
+        <p class="text-xs text-stone-400 mt-2">
+          {completedChapters.toLocaleString()} of {totalStandard.toLocaleString()} chapters &bull;
+          Standard Bible (66 books)
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-5xl mx-auto px-6 py-14 space-y-20">
+
+    <!-- Standard Bible -->
+    {standardSections.map((sec: SectionInfo) => {
+      const books = getBooksBySection(sec.id);
+      const testamentLabel = sec.testament === 'old' ? 'Old Testament' : 'New Testament';
+      return (
+        <section>
+          <div class="flex items-center gap-3 mb-6">
+            <h2 class="font-serif text-2xl font-medium text-stone-800">{sec.name}</h2>
+            <span class="text-xs font-semibold uppercase tracking-wider text-stone-400 bg-cream-100 px-2.5 py-1 rounded-full">
+              {testamentLabel}
+            </span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {books.map((b: BookInfo) => {
+              const isComplete = b.status === 'complete';
+              const displayName = b.hebrewName || b.greekName || '';
+              return isComplete ? (
+                <a
+                  href={`/${b.slug}`}
+                  class="group p-5 bg-white rounded-xl border border-cream-200 shadow-sm hover:border-teal-200 hover:shadow-md transition-all"
+                >
+                  <div class="flex items-center justify-between mb-2">
+                    <h3 class="font-serif text-lg font-medium text-stone-800 group-hover:text-teal-600 transition-colors">{b.name}</h3>
+                    <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-teal-100 text-teal-700">
+                      Complete
+                    </span>
+                  </div>
+                  {displayName && (
+                    <p class="text-xs text-stone-400 font-serif mb-3">{displayName}</p>
+                  )}
+                  <p class="text-xs text-stone-500">
+                    {b.chapters} chapters
+                  </p>
+                </a>
+              ) : (
+                <div class="p-5 bg-cream-50 rounded-xl border border-cream-100">
+                  <div class="flex items-center justify-between mb-2">
+                    <h3 class="font-serif text-lg font-medium text-stone-400">{b.name}</h3>
+                    <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-cream-200 text-stone-400">
+                      Coming Soon
+                    </span>
+                  </div>
+                  {displayName && (
+                    <p class="text-xs text-stone-300 font-serif mb-3">{displayName}</p>
+                  )}
+                  <p class="text-xs text-stone-400">
+                    {b.chapters} chapters
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      );
+    })}
+
+    <!-- Extended Library -->
+    <div class="pt-8 border-t-2 border-teal-200">
+      <div class="mb-10">
+        <p class="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-3">Beyond the 66 Books</p>
+        <h2 class="font-serif text-3xl font-medium text-stone-800 mb-4">Extended Library</h2>
+        <p class="text-stone-600 max-w-2xl leading-relaxed">
+          Ancient texts included in the Catholic, Orthodox, and Ethiopian canons, plus the Dead Sea Scrolls.
+          When a text overlaps with a standard Bible book, both versions will appear side by side for comparison.
+        </p>
+      </div>
+
+      {extendedSections.map((sec: SectionInfo) => {
+        const books = getBooksBySection(sec.id);
+        return (
+          <section class="mb-12">
+            <h3 class="font-serif text-xl font-medium text-stone-800 mb-4">{sec.name}</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {books.map((b: BookInfo) => {
+                const displayName = b.greekName || b.hebrewName || '';
+                const canonLabel = b.canons.length > 0
+                  ? b.canons.map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(', ')
+                  : 'Non-canonical manuscript';
+                return (
+                  <div class="p-5 bg-cream-50 rounded-xl border border-cream-100">
+                    <div class="flex items-center justify-between mb-2">
+                      <h4 class="font-serif text-lg font-medium text-stone-400">{b.name}</h4>
+                      <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-cream-200 text-stone-400">
+                        Coming Soon
+                      </span>
+                    </div>
+                    {displayName && (
+                      <p class="text-xs text-stone-300 font-serif mb-2">{displayName}</p>
+                    )}
+                    <p class="text-xs text-stone-400">
+                      {b.chapters} {b.chapters === 1 ? 'section' : 'chapters'} &bull; {canonLabel}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        );
+      })}
+    </div>
+  </div>
+</Layout>
