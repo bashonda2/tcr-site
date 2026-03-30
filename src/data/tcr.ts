@@ -305,19 +305,19 @@ export const BOOKS: BookInfo[] = [
     slug: 'proverbs', name: 'Proverbs',
     hebrewName: 'מִשְׁלֵי', transliteration: 'Mishlei', meaning: 'Proverbs / Parables',
     chapters: 31, testament: 'old', tier: 'standard', section: 'wisdom', order: 20,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
   },
   {
     slug: 'ecclesiastes', name: 'Ecclesiastes',
     hebrewName: 'קֹהֶלֶת', transliteration: 'Qohelet', meaning: 'The Preacher / Assembler',
     chapters: 12, testament: 'old', tier: 'standard', section: 'wisdom', order: 21,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
   },
   {
     slug: 'song-of-solomon', name: 'Song of Solomon',
     hebrewName: 'שִׁיר הַשִּׁירִים', transliteration: 'Shir HaShirim', meaning: 'Song of Songs',
     chapters: 8, testament: 'old', tier: 'standard', section: 'wisdom', order: 22,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
   },
 
   // ─── OLD TESTAMENT: Major Prophets ───────────────────────────────────────
