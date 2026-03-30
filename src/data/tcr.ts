@@ -287,7 +287,7 @@ export const BOOKS: BookInfo[] = [
     slug: 'job', name: 'Job',
     hebrewName: 'אִיּוֹב', transliteration: 'Iyyov', meaning: 'Persecuted',
     chapters: 42, testament: 'old', tier: 'standard', section: 'wisdom', order: 18,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
   },
   {
     slug: 'psalms', name: 'Psalms',
