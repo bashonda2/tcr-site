@@ -293,7 +293,7 @@ export const BOOKS: BookInfo[] = [
     slug: 'psalms', name: 'Psalms',
     hebrewName: 'תְּהִלִּים', transliteration: 'Tehillim', meaning: 'Praises',
     chapters: 150, testament: 'old', tier: 'standard', section: 'wisdom', order: 19,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
     alternateEditions: [
       { slug: 'psalms-dss', label: 'Psalms Scroll (11QPsᵃ)', sourceText: 'dss', status: 'not-started',
         tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '1st c. CE', preNicaea: true, scope: 'partial', description: 'Includes extra psalms and different ordering. Major DSS psalms witness.', license: 'public-domain' },
