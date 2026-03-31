@@ -6,10 +6,15 @@
     "chapter": 6,
     "source_text": "Westminster Leningrad Codex (WLC)",
     "reference_text": "KJV",
-    "model": "claude-opus-4-6",
     "generated_at": "2026-02-23T00:00:00Z",
-    "prompt_version": "1.0",
+    "prompt_version": "1.3",
     "license": "CC-BY-4.0"
+  },
+  "preamble": {
+    "summary": "The 'sons of God' take human wives, producing the Nephilim. God sees that human wickedness is total and resolves to blot out life from the earth. But Noah finds favor in God's eyes. God instructs Noah to build an ark, announces the coming flood, and establishes his covenant with Noah.",
+    "remarkable": "This chapter introduces three theologically foundational words for the first time: chen ('favor/grace,' v. 8), berit ('covenant,' v. 18), and chamas ('violence,' v. 11). The statement that 'every inclination of the thoughts of his heart was only evil all the time' (v. 5) uses five terms of totality — the most comprehensive indictment of the human condition in the Hebrew Bible. God's response is not cold judgment but grief: 'he was grieved to his heart' (v. 6).",
+    "friction": "The identity of the benei ha'Elohim ('sons of God,' v. 2) has generated centuries of debate: angelic beings, royal figures, or the Sethite line. The Hebrew phrase is used elsewhere exclusively for heavenly beings (Job 1:6; 2:1; 38:7), but we preserved the literal wording and noted the ambiguity. The word tevah ('ark,' v. 14) is not a ship but a sealed container — its only other occurrence is for Moses' basket (Exodus 2:3). We also noted that the verb kaphar ('to coat with pitch,' v. 14) shares the root of kippur ('atonement').",
+    "connections": "The corruption of 'all flesh' (6:12) inverts the 'very good' of 1:31. The first occurrence of berit ('covenant,' 6:18) launches the Bible's central relational concept, developed with Abraham (ch. 15, 17), at Sinai (Exodus 19-24), and with David (2 Samuel 7). The Nephilim reappear in Numbers 13:33 in the spies' terrified report."
   },
   "verses": [
     {
@@ -178,7 +183,7 @@
       "verse": 11,
       "text_hebrew": "וַתִּשָּׁחֵ֥ת הָאָ֖רֶץ לִפְנֵ֣י הָֽאֱלֹהִ֑ים וַתִּמָּלֵ֥א הָאָ֖רֶץ חָמָֽס׃",
       "text_kjv": "The earth also was corrupt before God, and the earth was filled with violence.",
-      "rendering": "Now the earth was corrupt before God, and the earth was filled with violence.",
+      "rendering": "The earth had become morally ruined in God's sight, and it overflowed with violence.",
       "translator_notes": [
         "'Corrupt' translates vattishshachet (וַתִּשָּׁחֵת), from shachat (שָׁחַת, 'to corrupt, to ruin, to destroy'). The same root will appear in verse 13 and 17 for God's intention to 'destroy' — the earth corrupted itself, and God will complete the corruption/destruction. There is a grim wordplay: humanity's self-corruption leads to God's destruction using the same verb.",
         "'Violence' translates chamas (חָמָס), meaning 'violence, injustice, wrong, cruelty.' Chamas is a broader term than simple physical violence — it encompasses oppression, injustice, and the violation of others' rights and dignity. The earth is full of it."

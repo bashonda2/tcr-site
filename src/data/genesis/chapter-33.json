@@ -6,10 +6,15 @@
     "chapter": 33,
     "source_text": "Westminster Leningrad Codex (WLC)",
     "reference_text": "KJV",
-    "model": "claude-opus-4-6",
     "generated_at": "2026-02-23T00:00:00Z",
-    "prompt_version": "1.0",
+    "prompt_version": "1.3",
     "license": "CC-BY-4.0"
+  },
+  "preamble": {
+    "summary": "Jacob sees Esau approaching with 400 men and arranges his family in order of vulnerability. He bows seven times. Esau runs to embrace him, and they weep together. After introductions and a respectful exchange of gifts, the brothers part ways. Esau returns to Seir; Jacob travels to Succoth and then to Shechem, where he buys land and builds an altar called El-Elohe-Israel ('God, the God of Israel').",
+    "remarkable": "Esau's embrace — running, falling on Jacob's neck, kissing, weeping (v. 4) — is among the most emotionally powerful moments in Genesis. Jacob's words 'seeing your face is like seeing the face of God' (v. 10) connect this reunion directly to the Peniel encounter of the previous chapter: both faces — divine and fraternal — evoke awe. The altar name El-Elohe-Israel (v. 20) is the first time Jacob uses his new name to make a theological claim: the God of the universe is the God of Israel.",
+    "friction": "The Masoretic tradition places dots above the word vayyishshaqehu ('and he kissed him,' v. 4), a scribal notation of uncertain meaning — some ancient interpreters read it as marking sincerity, others as suspicion. We rendered the verb straightforwardly and noted the scribal tradition. Jacob's gift is called both minchah ('tribute/offering,' v. 10) and berakhah ('blessing,' v. 11) — the same word Esau lost in chapter 27, now returned. This wordplay is central but difficult to reproduce.",
+    "connections": "The reunion resolves the conflict that began in chapter 27 and was promised in 33:4's embrace. Jacob's purchase of land at Shechem (33:19) parallels Abraham's purchase of Machpelah (23:16-18) — the second piece of the promised land acquired by a patriarch. Shechem will become the site of crisis in chapter 34 and of covenant renewal under Joshua (Joshua 24:1)."
   },
   "verses": [
     {
@@ -268,7 +273,7 @@
       "verse": 16,
       "text_hebrew": "וַיָּשָׁב֩ בַּיּ֨וֹם הַה֥וּא עֵשָׂ֛ו לְדַרְכּ֖וֹ שֵׂעִֽירָה׃",
       "text_kjv": "So Esau returned that day on his way unto Seir.",
-      "rendering": "So Esau returned that day on his way to Seir.",
+      "rendering": "That same day, Esau headed back toward Seir.",
       "translator_notes": [
         "Esau departs alone, returning to Seir. The brevity is striking — one verse for the end of a twenty-year estrangement. The brothers part ways, and the narrative follows Jacob, not Esau. Esau returns to his territory; Jacob goes in a different direction entirely (v. 17). The reconciliation is complete but not a reunion: the brothers forgive but do not merge households. They will meet again only to bury their father Isaac (35:29)."
       ],

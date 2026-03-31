@@ -6,10 +6,15 @@
     "chapter": 38,
     "source_text": "Westminster Leningrad Codex (WLC)",
     "reference_text": "KJV",
-    "model": "claude-opus-4-6",
     "generated_at": "2026-02-23T00:00:00Z",
-    "prompt_version": "1.0",
+    "prompt_version": "1.3",
     "license": "CC-BY-4.0"
+  },
+  "preamble": {
+    "summary": "Judah separates from his brothers, marries a Canaanite woman, and fathers three sons. After God kills the eldest two for wickedness, Judah withholds the third from Tamar. Tamar disguises herself, conceives twins by Judah, and presents his seal and staff as proof. Judah declares, 'She is more righteous than I.' Perez and Zerah are born.",
+    "remarkable": "This chapter interrupts the Joseph narrative at its most suspenseful moment — Joseph has just been sold into Egypt. The interruption is theologically deliberate: Judah's story runs parallel to Joseph's, and both involve deception, garments, and goats. Tamar's scheme with Judah's signet, cord, and staff (v. 18) mirrors the brothers' scheme with Joseph's bloodied robe. Judah's confession tsadeqah mimmeni ('she is more righteous than I,' v. 26) marks the beginning of his moral transformation, which will culminate in his self-sacrificial speech in chapter 44.",
+    "friction": "The Hebrew distinguishes between zonah ('prostitute,' v. 15, Judah's perception) and qedeshah ('cult prostitute,' v. 21, Hirah's inquiry) — two different social categories conflated by the disguise. We preserved this distinction. The phrase 'he did not know her again' (v. 26) uses yada in its sexual sense, and the negative statement separates the episode from ongoing relationship. Tamar's act of justice through deception challenges simple moral categories, and we let the text present it without editorial resolution.",
+    "connections": "Perez, born through this unlikely union, enters the lineage of David (Ruth 4:18-22) and of Jesus (Matthew 1:3). Tamar is one of four women named in Matthew's genealogy — all with irregular circumstances that God uses to advance his purposes. The levirate duty Onan violates (38:8) is later codified in Deuteronomy 25:5-10. Judah's moral arc — from callous patriarch here to self-sacrificing brother in chapter 44 — is one of Genesis's most significant character developments."
   },
   "verses": [
     {
@@ -64,7 +69,7 @@
       "verse": 3,
       "text_hebrew": "וַתַּ֖הַר וַתֵּ֣לֶד בֵּ֑ן וַיִּקְרָ֥א אֶת־שְׁמ֖וֹ עֵֽר׃",
       "text_kjv": "And she conceived, and bare a son; and he called his name Er.",
-      "rendering": "She conceived and bore a son, and he called his name Er.",
+      "rendering": "She conceived and bore a son, and he then called his name Er.",
       "translator_notes": [
         "'Er' — the name may derive from the root 'ur ('to be awake, alert') or from 'ir ('city'). The brevity of the naming — no etymology is given — contrasts with the elaborate naming narratives elsewhere in Genesis. The lack of explanation may itself be significant: Er's story will be equally brief and unexplained."
       ],
@@ -74,7 +79,7 @@
       "verse": 4,
       "text_hebrew": "וַתַּ֥הַר ע֖וֹד וַתֵּ֣לֶד בֵּ֑ן וַתִּקְרָ֥א אֶת־שְׁמ֖וֹ אוֹנָֽן׃",
       "text_kjv": "And she conceived again, and bare a son; and she called his name Onan.",
-      "rendering": "She conceived again and bore a son, and she called his name Onan.",
+      "rendering": "She conceived again and bore a son. she called his name Onan.",
       "translator_notes": [
         "'Onan' — possibly from on ('vigor, strength') or aven ('sorrow, trouble'). The mother names this child (contrast v. 3 where the father names Er), a subtle shift in agency. The name's potential connection to 'sorrow' may foreshadow his fate."
       ],

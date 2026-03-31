@@ -6,10 +6,15 @@
     "chapter": 14,
     "source_text": "Westminster Leningrad Codex (WLC)",
     "reference_text": "KJV",
-    "model": "claude-opus-4-6",
     "generated_at": "2026-03-04T00:00:00Z",
     "prompt_version": "1.3",
     "license": "CC-BY-4.0"
+  },
+  "preamble": {
+    "summary": "God leads Israel into an apparent trap between the sea and the wilderness. Pharaoh pursues with his full army. God parts the sea, Israel crosses on dry ground, and the returning waters destroy the Egyptian army. Israel sees and believes.",
+    "remarkable": "The verb kavad ('gain glory') in v4 is the same root as Pharaoh's hardened (kaved) heart — God's glory is displayed through the destruction of the one whose heart was heavy with stubbornness. The wordplay is devastating and intentional. Moses's command 'Stand firm and see the salvation of the LORD' (v13) introduces yeshu'ah into the narrative vocabulary — the same root that gives its name to Joshua and Jesus. The final verse states that Israel 'believed in the LORD and in His servant Moses' — the sea-crossing produces faith.",
+    "friction": "We rendered ve'ikkavdah bePar'oh as 'I will gain glory through Pharaoh,' preserving the kavad root connection rather than using a different English word. The geographic names Pi-hahiroth, Migdol, and Baal-zephon are retained untranslated since they function as proper nouns, though Baal-zephon ('Lord of the North') may carry polemical overtones. The phrase ruach qadim azzah ('a strong east wind,' v21) we rendered literally, noting that natural mechanism and divine miracle are not opposed in the Hebrew worldview.",
+    "connections": "The sea-crossing is the defining salvation event, referenced in Psalms 66:6; 106:9-12; 136:13-15; Isaiah 43:16-17; and 1 Corinthians 10:1-2. The dry ground (yabbashah) echoes creation's dry ground in Genesis 1:9. Pharaoh's chariots sinking into the sea reverses his military might, fulfilling the judgment announced in 14:4."
   },
   "verses": [
     {
@@ -274,7 +279,7 @@
       "verse": 23,
       "text_hebrew": "וַיִּרְדְּפ֤וּ מִצְרַ֙יִם֙ וַיָּבֹ֣אוּ אַחֲרֵיהֶ֔ם כֹּ֚ל ס֣וּס פַּרְעֹ֔ה רִכְבּ֖וֹ וּפָרָשָׁ֑יו אֶל־תּ֖וֹךְ הַיָּֽם׃",
       "text_kjv": "And the Egyptians pursued, and went in after them to the midst of the sea, even all Pharaoh’s horses, his chariots, and his horsemen.",
-      "rendering": "The Egyptians pursued and went in after them into the midst of the sea — all Pharaoh's horses, his chariots, and his horsemen.",
+      "rendering": "The Egyptians gave chase and followed them into the middle of the sea — every one of Pharaoh's horses, chariots, and cavalry.",
       "translator_notes": [
         "The Egyptians follow into the divided sea — a decision that requires either supreme confidence or supreme blindness. They enter the space God opened for Israel, not recognizing that what saves Israel will judge Egypt."
       ],
@@ -344,7 +349,7 @@
       "verse": 30,
       "text_hebrew": "וַיּ֨וֹשַׁע יְהֹוָ֜ה בַּיּ֥וֹם הַה֛וּא אֶת־יִשְׂרָאֵ֖ל מִיַּ֣ד מִצְרָ֑יִם וַיַּ֤רְא יִשְׂרָאֵל֙ אֶת־מִצְרַ֔יִם מֵ֖ת עַל־שְׂפַ֥ת הַיָּֽם׃",
       "text_kjv": "Thus the LORD saved Israel that day out of the hand of the Egyptians; and Israel saw the Egyptians dead upon the sea shore.",
-      "rendering": "Thus the LORD saved Israel that day from the hand of the Egyptians, and Israel saw the Egyptians dead on the seashore.",
+      "rendering": "In this way the LORD rescued Israel that day from Egyptian power, and the Israelites saw Egyptian soldiers lying dead along the shore.",
       "translator_notes": [
         "'The LORD saved Israel that day' (vayyosha YHWH bayyom hahu et-Yisra'el) — the verb yasha ('save') gives its name to yeshu'ah (salvation) and to Yeshua/Joshua/Jesus. The root meaning is to make spacious, to deliver from constriction. The dead Egyptians on the shore are the visible proof of completed deliverance."
       ],

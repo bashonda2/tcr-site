@@ -6,10 +6,15 @@
     "chapter": 19,
     "source_text": "Westminster Leningrad Codex (WLC)",
     "reference_text": "KJV",
-    "model": "claude-opus-4-6",
     "generated_at": "2026-03-04T00:00:00Z",
     "prompt_version": "1.3",
     "license": "CC-BY-4.0"
+  },
+  "preamble": {
+    "summary": "Israel arrives at Sinai in the third month. God declares them a 'kingdom of priests and a holy nation,' the people consecrate themselves, and on the third day God descends on the mountain in fire, smoke, and thunder. Boundaries are set; only Moses may approach.",
+    "remarkable": "The singular verb vayyichan ('he camped') for the plural subject 'Israel' (v2) is grammatically striking — at Sinai, Israel becomes one entity. Rashi noted: 'like one man with one heart.' The eagle-wing image (v4) combines power with nurture: the nesher (griffon vulture) is the largest soaring bird in the region. The destination is not land but God Himself: 'I brought you to Myself.' The covenant offer in v5-6 — 'kingdom of priests, holy nation' (mamlekhet kohanim vegoy qadosh) — defines Israel's identity for all subsequent Scripture.",
+    "friction": "We rendered mamlekhet kohanim as 'kingdom of priests' rather than 'priestly kingdom,' preserving the construct-chain order and the implication that every member of the nation has priestly access. The word segullah ('treasured possession,' v5) has no exact English equivalent — it denotes a king's personal treasure, distinct from general crown property. We used 'treasured possession' and expanded in notes. The theophany vocabulary (thunder, lightning, thick cloud, trumpet blast) required careful handling to avoid making it sound like mere weather.",
+    "connections": "The 'kingdom of priests' declaration is cited in 1 Peter 2:9 and Revelation 1:6; 5:10. The theophany imagery recurs at Elijah's Horeb experience (1 Kings 19:11-12), in Isaiah 6, and in Hebrews 12:18-21. The three-day preparation anticipates other three-day patterns: Jonah 1:17, Hosea 6:2, and the resurrection narratives."
   },
   "verses": [
     {
@@ -115,7 +120,7 @@
       "verse": 8,
       "text_hebrew": "וַיַּעֲנ֨וּ כׇל־הָעָ֤ם יַחְדָּו֙ וַיֹּ֣אמְר֔וּ כֹּ֛ל אֲשֶׁר־דִּבֶּ֥ר יְהֹוָ֖ה נַעֲשֶׂ֑ה וַיָּ֧שֶׁב מֹשֶׁ֛ה אֶת־דִּבְרֵ֥י הָעָ֖ם אֶל־יְהֹוָֽה׃",
       "text_kjv": "And all the people answered together, and said, All that the LORD hath spoken we will do. And Moses returned the words of the people unto the LORD.",
-      "rendering": "All the people answered together and said, \"All that the LORD has spoken we will do.\" And Moses reported the words of the people to the LORD.",
+      "rendering": "The entire people responded in unison, \"Everything the LORD has spoken, we will do.\" Then Moses brought the people's answer back to the LORD.",
       "translator_notes": [
         "'All that the LORD has spoken we will do' (kol asher-dibber YHWH na'aseh) — Israel's collective acceptance of the covenant before hearing its terms. The verb na'aseh ('we will do') precedes the giving of the law. Commitment comes before content — a pattern that will be repeated and intensified in 24:7 ('we will do and we will hear')."
       ],
@@ -244,7 +249,7 @@
       "verse": 20,
       "text_hebrew": "וַיֵּ֧רֶד יְהֹוָ֛ה עַל־הַ֥ר סִינַ֖י אֶל־רֹ֣אשׁ הָהָ֑ר וַיִּקְרָ֨א יְהֹוָ֧ה לְמֹשֶׁ֛ה אֶל־רֹ֥אשׁ הָהָ֖ר וַיַּ֥עַל מֹשֶֽׁה׃",
       "text_kjv": "And the LORD came down upon mount Sinai, on the top of the mount: and the LORD called Moses up to the top of the mount; and Moses went up.",
-      "rendering": "The LORD came down on Mount Sinai, to the top of the mountain, and the LORD called Moses to the top of the mountain, and Moses went up.",
+      "rendering": "The LORD came down on Mount Sinai, to the top of the mountain. the LORD called Moses to the top of the mountain, and Moses went up.",
       "translator_notes": [
         "God descends to the mountaintop and summons Moses upward. The spatial drama is precise: God comes down; Moses goes up. They meet at the summit. The mountain becomes the axis between heaven and earth."
       ],

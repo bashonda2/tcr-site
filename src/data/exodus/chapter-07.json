@@ -6,10 +6,15 @@
     "chapter": 7,
     "source_text": "Westminster Leningrad Codex (WLC)",
     "reference_text": "KJV",
-    "model": "claude-opus-4-6",
     "generated_at": "2026-03-04T00:00:00Z",
     "prompt_version": "1.3",
     "license": "CC-BY-4.0"
+  },
+  "preamble": {
+    "summary": "God makes Moses 'like God to Pharaoh' with Aaron as his prophet, announces the hardening of Pharaoh's heart, and initiates the plague sequence. Aaron's staff swallows the magicians' staffs, the Nile turns to blood, but Pharaoh's heart remains hard.",
+    "remarkable": "The chapter introduces three theologically dense elements at once: the knowledge formula ('the Egyptians shall know that I am the LORD,' v5), the hardening motif using three different Hebrew verbs (chazaq, qasheh, kaved), and the recognition that Israel's enslaved workers are reidentified as God's tseva'ot ('hosts/armies,' v4). The magicians can replicate the blood-plague but cannot reverse it — imitation is not mastery.",
+    "friction": "The hardening vocabulary required careful handling: chazaq ('strengthen/make firm'), qasheh ('make hard'), and kaved ('make heavy') each carry distinct nuances. We preserved these distinctions across our renderings rather than flattening them into a single English word. The phrase netatikha Elohim lePar'oh ('I have made you like God to Pharaoh,' v1) we rendered with 'like God' rather than simply 'a god,' because the Hebrew establishes Moses as God's authorized representative, not a deity.",
+    "connections": "Moses as 'God to Pharaoh' fulfills the arrangement previewed in 4:16. The knowledge formula ('they shall know that I am the LORD') will recur throughout Ezekiel (e.g., Ezekiel 6:7; 12:15). The staff-swallowing contest in v12 inverts the serpent's power from Genesis 3. The Nile-to-blood targets Egypt's source of life and worship."
   },
   "verses": [
     {
@@ -36,7 +41,7 @@
       "verse": 3,
       "text_hebrew": "וַאֲנִ֥י אַקְשֶׁ֖ה אֶת־לֵ֣ב פַּרְעֹ֑ה וְהִרְבֵּיתִ֧י אֶת־אֹתֹתַ֛י וְאֶת־מוֹפְתַ֖י בְּאֶ֥רֶץ מִצְרָֽיִם׃",
       "text_kjv": "And I will harden Pharaoh’s heart, and multiply my signs and my wonders in the land of Egypt.",
-      "rendering": "But I will harden Pharaoh's heart, and I will multiply My signs and My wonders in the land of Egypt.",
+      "rendering": "But I will harden Pharaoh's heart. I will multiply My signs and My wonders in the land of Egypt.",
       "expanded_rendering": "The Hebrew chazaq/qasheh ('harden') does not mean God forces Pharaoh to rebel against his will. The hardening language describes God confirming the direction Pharaoh has already chosen — strengthening his existing stubbornness into irrevocable commitment. The purpose is to extend the confrontation long enough for God's full power to be revealed: 'that I may multiply My signs.' Every plague is a new revelation of who YHWH is, addressed to both Egypt and Israel.",
       "translator_notes": [
         "'I will harden Pharaoh's heart' (va'ani aqsheh et-lev Par'oh) — the verb qasheh means 'make hard, make stubborn.' God's hardening does not create rebellion from nothing but confirms and solidifies Pharaoh's own resistance. The purpose is to multiply signs — to demonstrate God's sovereignty so thoroughly that neither Egypt nor Israel can mistake who controls history."

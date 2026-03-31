@@ -6,10 +6,15 @@
     "chapter": 35,
     "source_text": "Westminster Leningrad Codex (WLC)",
     "reference_text": "KJV",
-    "model": "claude-opus-4-6",
     "generated_at": "2026-02-23T00:00:00Z",
-    "prompt_version": "1.0",
+    "prompt_version": "1.3",
     "license": "CC-BY-4.0"
+  },
+  "preamble": {
+    "summary": "God sends Jacob back to Bethel. The household purges its foreign gods. At Bethel, God confirms Jacob's name as Israel and renews the Abrahamic promises. Rachel dies giving birth to Benjamin on the road to Bethlehem. Reuben sleeps with Bilhah, Jacob's concubine. The twelve sons are listed. Jacob reaches Isaac at Hebron; Isaac dies and is buried by Esau and Jacob together.",
+    "remarkable": "The chapter is a catalogue of endings and transitions. Rachel names her last son Ben-Oni ('son of my sorrow'), but Jacob renames him Benjamin ('son of the right hand,' v. 18) — father overrides mother, reframing grief as honor. Reuben's violation of Bilhah (v. 22) is reported in a single devastating sentence with no narratorial comment; Israel 'heard of it,' and the consequences will not surface until Jacob's deathbed (49:3-4). The burial of foreign gods under the oak at Shechem (v. 4) is a decisive act of religious purification.",
+    "friction": "Rachel's dying word Ben-Oni (v. 18) embeds her suffering in the child's name. The father's renaming to Benjamin overrides the maternal voice — a dynamic we rendered without editorial comment, as the Hebrew presents it. The phrase vayyigva vayyeasef el-ammav ('he breathed his last and was gathered to his people,' v. 29) for Isaac's death implies continuation beyond death — the gathering is to a community of ancestors, not merely to a tomb.",
+    "connections": "The Bethel return fulfills Jacob's vow from 28:20-22. The list of twelve sons (35:23-26) becomes the template for the tribal structure of Israel. Rachel's burial on the road to Bethlehem (35:19) is recalled by Jeremiah (31:15) and Matthew (2:18). Isaac's burial by both sons (35:29) mirrors Abraham's burial by Isaac and Ishmael (25:9)."
   },
   "verses": [
     {
@@ -131,7 +136,7 @@
       "verse": 6,
       "text_hebrew": "וַיָּבֹ֨א יַעֲקֹ֜ב לוּ֗זָה אֲשֶׁר֙ בְּאֶ֣רֶץ כְּנַ֔עַן הִ֖וא בֵּֽית־אֵ֑ל ה֖וּא וְכָל־הָעָ֥ם אֲשֶׁר־עִמּֽוֹ׃",
       "text_kjv": "So Jacob came to Luz, which is in the land of Canaan, that is, Bethel, he and all the people that were with him.",
-      "rendering": "Jacob came to Luz, which is in the land of Canaan — that is, Bethel — he and all the people who were with him.",
+      "rendering": "Jacob arrived at Luz — also known as Bethel — in the land of Canaan, along with everyone who accompanied him.",
       "translator_notes": [
         "'Luz, that is Bethel' — the narrator provides the older Canaanite name (Luz) alongside the name Jacob gave it (Bethel, 28:19). This editorial note anchors the site geographically for readers who may know it by either name. The identification pattern 'X, that is Y' appears frequently in Genesis to connect ancient place names with later designations."
       ],
@@ -477,7 +482,7 @@
       "verse": 24,
       "text_hebrew": "בְּנֵ֣י רָחֵ֔ל יוֹסֵ֖ף וּבִנְיָמִֽן׃",
       "text_kjv": "The sons of Rachel; Joseph, and Benjamin:",
-      "rendering": "The sons of Rachel: Joseph and Benjamin.",
+      "rendering": "Rachel's sons were Joseph and Benjamin.",
       "translator_notes": [
         "Rachel bore only two sons, the fewest of any of Jacob's wives, yet her sons hold outsized narrative significance. Joseph will dominate Genesis 37-50; Benjamin will become the tribe of Israel's first king (Saul). The brevity of this entry — just two names — contrasts with the lengthy narrative devoted to Rachel's story."
       ],

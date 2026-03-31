@@ -6,10 +6,15 @@
     "chapter": 21,
     "source_text": "Westminster Leningrad Codex (WLC)",
     "reference_text": "KJV",
-    "model": "claude-opus-4-6",
     "generated_at": "2026-03-04T00:00:00Z",
     "prompt_version": "1.3",
     "license": "CC-BY-4.0"
+  },
+  "preamble": {
+    "summary": "The Book of the Covenant begins with case-law (mishpatim) governing servitude, personal injury, property damage, and the rights of the vulnerable. A Hebrew bonded worker goes free in the seventh year. The lex talionis ('eye for eye') establishes proportional justice.",
+    "remarkable": "The very first case-law concerns the eved ivri ('Hebrew bonded worker'), embedding liberation at the foundation of Israel's legal code — a people freed from slavery must regulate power over others. The six-year servitude limit with seventh-year release mirrors the Sabbath pattern; even labor relationships carry a built-in horizon of freedom. The lex talionis (vv23-25) is not a license for vengeance but a ceiling on punishment: the penalty must not exceed the injury.",
+    "friction": "We rendered mishpatim as 'case-rulings' rather than 'judgments' or 'ordinances' to distinguish these casuistic laws ('if... then...') from the apodictic commands ('you shall not...') of the Decalogue. The word eved ('servant/slave') covers a wide semantic range; we chose 'bonded worker' for the Hebrew context of debt-servitude, distinguishing it from chattel slavery. The phrase 'eye for eye' (ayin tachat ayin, v24) we retained literally, noting in our translator notes that it establishes proportionality, not mandatory mutilation.",
+    "connections": "The seventh-year release connects to Deuteronomy 15:12-18 and Jeremiah 34:8-22. Jesus cites the lex talionis in Matthew 5:38-39. The goring ox laws (vv28-32) establish precedent for negligence liability throughout biblical and later legal traditions. The protection of the vulnerable (vv20-21, 26-27) operationalizes the exodus principle: because God freed you, you must not crush others."
   },
   "verses": [
     {
@@ -111,7 +116,7 @@
     },
     {
       "verse": 8,
-      "text_hebrew": "אִם־רָעָ֞ה בְּעֵינֵ֧י אֲדֹנֶ֛יהָ אֲשֶׁר־[ל֥וֹ] (לא) יְעָדָ֖הּ וְהֶפְדָּ֑הּ לְעַ֥ם נׇכְרִ֛י לֹא־יִמְשֹׁ֥ל לְמׇכְרָ֖הּ בְּבִגְדוֹ־בָֽהּ׃",
+      "text_hebrew": "אִם־רָעָ֞ה בְּעֵינֵ֧י אֲדֹנֶ֛יהָ אֲשֶׁר־[לא] (ל֥וֹ) יְעָדָ֖הּ וְהֶפְדָּ֑הּ לְעַ֥ם נׇכְרִ֛י לֹא־יִמְשֹׁ֥ל לְמׇכְרָ֖הּ בְּבִגְדוֹ־בָֽהּ׃",
       "text_kjv": "If she please not her master, who hath betrothed her to himself, then shall he let her be redeemed: to sell her unto a strange nation he shall have no power, seeing he hath dealt deceitfully with her.",
       "rendering": "If she is displeasing to her master who designated her for himself, he must allow her to be redeemed. He has no authority to sell her to a foreign people, since he has broken faith with her.",
       "translator_notes": [
@@ -291,7 +296,7 @@
       "verse": 24,
       "text_hebrew": "עַ֚יִן תַּ֣חַת עַ֔יִן שֵׁ֖ן תַּ֣חַת שֵׁ֑ן יָ֚ד תַּ֣חַת יָ֔ד רֶ֖גֶל תַּ֥חַת רָֽגֶל׃",
       "text_kjv": "Eye for eye, tooth for tooth, hand for hand, foot for foot,",
-      "rendering": "eye for eye, tooth for tooth, hand for hand, foot for foot,",
+      "rendering": "an eye in place of an eye, a tooth in place of a tooth, a hand in place of a hand, a foot in place of a foot,",
       "translator_notes": [
         "The talionic formula establishes strict proportionality: an eye — not a life — for an eye. Far from endorsing brutality, this principle limits revenge. In surrounding cultures, a powerful man who lost an eye might kill the offender's entire family. Here, the injury itself sets the maximum penalty. The Talmud (Bava Kamma 83b–84a) interprets this as requiring monetary compensation equal to the injury."
       ],
