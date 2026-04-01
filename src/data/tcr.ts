@@ -326,7 +326,7 @@ export const BOOKS: BookInfo[] = [
     slug: 'isaiah', name: 'Isaiah',
     hebrewName: 'יְשַׁעְיָהוּ', transliteration: 'Yesha\'yahu', meaning: 'The LORD is salvation',
     chapters: 66, testament: 'old', tier: 'standard', section: 'major-prophets', order: 23,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
     alternateEditions: [
       { slug: 'isaiah-dss', label: 'Great Isaiah Scroll (1QIsaᵃ)', sourceText: 'dss', status: 'not-started',
         tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '150–100 BCE', preNicaea: true, scope: 'full', description: 'The oldest complete manuscript of any biblical book. All 66 chapters preserved.', license: 'public-domain' },
