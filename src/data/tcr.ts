@@ -340,7 +340,7 @@ export const BOOKS: BookInfo[] = [
     slug: 'jeremiah', name: 'Jeremiah',
     hebrewName: 'יִרְמְיָהוּ', transliteration: 'Yirmeyahu', meaning: 'The LORD exalts',
     chapters: 52, testament: 'old', tier: 'standard', section: 'major-prophets', order: 24,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
     alternateEditions: [
       { slug: 'jeremiah-lxx', label: 'Septuagint Jeremiah (LXX, shorter text)', sourceText: 'lxx', status: 'not-started',
         tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '3rd–2nd c. BCE', preNicaea: true, scope: 'full', description: 'Significantly shorter than the MT (~1/8 less text) with different chapter arrangement.', license: 'public-domain' },
