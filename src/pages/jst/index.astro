@@ -1,0 +1,214 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+const dataRoot = join(process.cwd(), 'src', 'data', 'jst');
+
+function loadFile(filename: string): any {
+  return JSON.parse(readFileSync(join(dataRoot, filename), 'utf-8'));
+}
+
+const mosesChapters = Array.from({ length: 8 }, (_, i) => {
+  const ch = loadFile(`moses-${String(i + 1).padStart(2, '0')}.json`);
+  return {
+    num: i + 1,
+    title: ch.meta.book,
+    verses: ch.verses.length,
+    summary: ch.preamble?.summary || '',
+  };
+});
+
+const jsMatthew = loadFile('js-matthew.json');
+const appendix = loadFile('jst-appendix.json');
+const footnotes = loadFile('jst-footnotes.json');
+
+const totalMosesVerses = mosesChapters.reduce((s, c) => s + c.verses, 0);
+const totalAppendixPassages = appendix.passages.length;
+const totalFootnotes = footnotes.footnotes.length;
+---
+
+<Layout
+  title="Joseph Smith Translation (JST)"
+  description="The Joseph Smith Translation rendered within TCR's Extended Library. Book of Moses, Joseph Smith-Matthew, JST Appendix, and JST Footnotes."
+  canonical="/jst"
+>
+  <div class="bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
+    <div class="max-w-3xl mx-auto px-6 py-12">
+      <div class="flex items-center gap-2 text-base text-stone-400 mb-5">
+        <a href="/books" class="hover:text-teal-600 transition-colors">Library</a>
+        <span>/</span>
+        <span class="text-stone-600">Interpretive Traditions</span>
+      </div>
+
+      <h1 class="font-serif text-4xl font-medium text-stone-800 mb-2">
+        Joseph Smith Translation
+      </h1>
+      <p class="text-lg text-stone-500 mb-4">Revelatory revision of the King James Bible (1830s CE)</p>
+
+      <div class="flex flex-wrap gap-4 text-base text-stone-500">
+        <span>{totalMosesVerses} Moses verses</span>
+        <span>&bull;</span>
+        <span>{jsMatthew.verses.length} JS-Matthew verses</span>
+        <span>&bull;</span>
+        <span>{totalAppendixPassages} appendix passages</span>
+        <span>&bull;</span>
+        <span>{totalFootnotes} footnotes</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 py-8">
+    <div class="bg-cream-50 border border-cream-200 rounded-xl p-6 mb-10 text-lg leading-relaxed text-stone-600">
+      <h2 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-3">About This Tradition</h2>
+      <p class="mb-3">
+        The Joseph Smith Translation (JST) is a revision of the King James Bible produced by Joseph Smith between
+        1830 and 1844. It is not a translation from Hebrew or Greek manuscripts but a revelatory reworking of the
+        English text. The JST ranges from minor word changes (published as footnotes in the LDS Bible) to entirely
+        new chapters (the Book of Moses) and restructured discourses (Joseph Smith&mdash;Matthew).
+      </p>
+      <p>
+        TCR presents the JST as an interpretive tradition alongside the Masoretic Text, Septuagint, Dead Sea Scrolls,
+        Targumim, and Samaritan Pentateuch. It is catalogued in the Extended Library under "How traditions read this
+        passage" and is not treated as a manuscript witness.
+      </p>
+    </div>
+
+    <!-- Book of Moses -->
+    <h2 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-4">Book of Moses (8 Chapters)</h2>
+    <div class="space-y-2 mb-10">
+      {mosesChapters.map((ch) => (
+        <a
+          href={`/jst/moses-${ch.num}`}
+          class="block p-4 rounded-lg border border-cream-200 hover:border-teal-200 hover:bg-cream-50 transition-colors"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="font-serif text-lg text-stone-800">Moses {ch.num}</span>
+              <span class="text-base text-stone-400 ml-3">{ch.verses} verses</span>
+            </div>
+          </div>
+          {ch.summary && (
+            <p class="text-lg text-stone-500 mt-1 line-clamp-2">{ch.summary}</p>
+          )}
+        </a>
+      ))}
+    </div>
+
+    <!-- Joseph Smith-Matthew -->
+    <h2 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-4">Joseph Smith&mdash;Matthew</h2>
+    <div class="space-y-2 mb-10">
+      <a
+        href="/jst/js-matthew"
+        class="block p-4 rounded-lg border border-cream-200 hover:border-teal-200 hover:bg-cream-50 transition-colors"
+      >
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="font-serif text-lg text-stone-800">Joseph Smith&mdash;Matthew</span>
+            <span class="text-base text-stone-400 ml-3">{jsMatthew.verses.length} verses</span>
+          </div>
+          <span class="text-base text-stone-400">JST of Matthew 24</span>
+        </div>
+        {jsMatthew.preamble?.summary && (
+          <p class="text-lg text-stone-500 mt-1 line-clamp-2">{jsMatthew.preamble.summary}</p>
+        )}
+      </a>
+    </div>
+
+    <!-- JST Appendix -->
+    <h2 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-4">JST Appendix ({totalAppendixPassages} passages)</h2>
+    <div class="bg-cream-50 border border-cream-200 rounded-xl p-4 mb-4 text-base text-stone-600">
+      <p>{appendix.preamble.summary}</p>
+    </div>
+    <div class="space-y-3 mb-10">
+      {appendix.passages.map((p: any) => (
+        <details class="group border border-cream-200 rounded-lg overflow-hidden">
+          <summary class="cursor-pointer select-none p-4 hover:bg-cream-50 transition-colors flex items-center justify-between">
+            <div>
+              <span class="font-serif text-stone-800">{p.reference}</span>
+              <span class="text-base text-stone-500 ml-2">&mdash; {p.title}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              {p.significance && (
+                <span class={`text-base px-2 py-0.5 rounded-full font-medium ${
+                  p.significance === 'theological' ? 'bg-amber-100 text-amber-700' :
+                  p.significance === 'messianic' ? 'bg-purple-100 text-purple-700' :
+                  'bg-stone-100 text-stone-500'
+                }`}>
+                  {p.significance}
+                </span>
+              )}
+              <svg class="w-4 h-4 text-stone-400 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </summary>
+          <div class="px-4 pb-4 space-y-3 border-t border-cream-200 pt-3">
+            <div>
+              <h4 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1">JST Reading</h4>
+              <p class="text-lg text-stone-700 leading-relaxed">{p.jst_summary}</p>
+            </div>
+            <div>
+              <h4 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1">KJV Reading</h4>
+              <p class="text-lg text-stone-500 leading-relaxed">{p.kjv_summary}</p>
+            </div>
+            {p.notes && p.notes.length > 0 && (
+              <div>
+                <h4 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1">Notes</h4>
+                <div class="space-y-1.5">
+                  {p.notes.map((note: string) => (
+                    <p class="text-lg text-stone-500 leading-relaxed">{note}</p>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </details>
+      ))}
+    </div>
+
+    <!-- JST Footnotes -->
+    <h2 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-4">JST Footnotes ({totalFootnotes} entries)</h2>
+    <div class="bg-cream-50 border border-cream-200 rounded-xl p-4 mb-4 text-base text-stone-600">
+      <p>{footnotes.preamble.summary}</p>
+    </div>
+    <div class="space-y-3 mb-10">
+      {footnotes.footnotes.map((f: any) => (
+        <details class="group border border-cream-200 rounded-lg overflow-hidden">
+          <summary class="cursor-pointer select-none p-4 hover:bg-cream-50 transition-colors flex items-center justify-between">
+            <div>
+              <span class="font-serif text-stone-800">{f.reference}</span>
+              <span class="text-lg text-stone-500 ml-2">&mdash; {f.change_summary}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              {f.significance && (
+                <span class={`text-base px-2 py-0.5 rounded-full font-medium ${
+                  f.significance === 'theological' ? 'bg-amber-100 text-amber-700' :
+                  f.significance === 'christological' ? 'bg-purple-100 text-purple-700' :
+                  f.significance === 'soteriological' ? 'bg-blue-100 text-blue-700' :
+                  f.significance === 'eschatological' ? 'bg-orange-100 text-orange-700' :
+                  f.significance === 'covenantal' ? 'bg-teal-100 text-teal-700' :
+                  'bg-stone-100 text-stone-500'
+                }`}>
+                  {f.significance}
+                </span>
+              )}
+              <svg class="w-4 h-4 text-stone-400 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </summary>
+          <div class="px-4 pb-4 border-t border-cream-200 pt-3">
+            {f.notes && f.notes.length > 0 && (
+              <div class="space-y-1.5">
+                {f.notes.map((note: string) => (
+                  <p class="text-lg text-stone-500 leading-relaxed">{note}</p>
+                ))}
+              </div>
+            )}
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</Layout>

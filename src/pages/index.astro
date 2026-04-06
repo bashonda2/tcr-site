@@ -1,21 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { loadChapter, getCompletedBooks, getCompletedChapters, getSection, type BookInfo } from '../data/tcr';
+import { loadChapter, getCompletedBooks, getCompletedChapters, getBookVerseCount, getSection, type BookInfo } from '../data/tcr';
+import AISearch from '../components/AISearch.astro';
 
-const ch1 = loadChapter('genesis', 1);
-const verse1 = ch1.verses[0];
-const verse2 = ch1.verses[1];
-
-const baraTerm = verse1.key_terms.find(t => t.transliteration === 'bara') ?? verse1.key_terms[0];
-const tohuTerm = verse2.key_terms.find(t => t.transliteration === 'tohu vavohu') ?? verse2.key_terms[0];
+// Isaiah 9:6 — the showcase verse with full stacking
+const isa9 = loadChapter('isaiah', 9);
+const isa9v6 = isa9.verses.find(v => v.verse === 6)!;
 
 const completedBooks = getCompletedBooks();
 const completedChapters = getCompletedChapters();
 const completedVerseEstimate = completedBooks.reduce((sum, b) => {
-  const verseCounts: Record<string, number> = {
-    genesis: 1534, exodus: 1213, leviticus: 859, numbers: 1288, deuteronomy: 956, joshua: 658,
-  };
-  return sum + (verseCounts[b.slug] ?? 0);
+  return sum + getBookVerseCount(b.slug);
 }, 0);
 
 const completedSections = [...new Set(completedBooks.map(b => b.section))];
@@ -29,7 +24,7 @@ const sectionGroups = completedSections.map(sId => ({
   <!-- Hero -->
   <section class="relative overflow-hidden bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
     <div class="max-w-4xl mx-auto px-6 pt-20 pb-24 text-center">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-teal-100 text-teal-700 rounded-full text-xs font-semibold uppercase tracking-wider mb-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-teal-100 text-teal-700 rounded-full text-base font-semibold uppercase tracking-wider mb-8">
         <span class="w-1.5 h-1.5 bg-teal-500 rounded-full"></span>
         Open Source &bull; CC-BY-4.0 &bull; Free to Use
       </div>
@@ -62,81 +57,107 @@ const sectionGroups = completedSections.map(sId => ({
     </div>
   </section>
 
-  <!-- Live verse showcase -->
+  <hr class="teal-rule max-w-4xl mx-auto" />
+
+  <!-- AI Search -->
+  <AISearch />
+
+  <hr class="teal-rule max-w-4xl mx-auto" />
+
+  <!-- Verse stacking showcase — Isaiah 9:6 -->
   <section class="max-w-4xl mx-auto px-6 py-20">
     <div class="text-center mb-12">
-      <p class="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-3">Live Example</p>
-      <h2 class="font-serif text-3xl font-medium text-stone-800">Genesis 1:1–2</h2>
-      <p class="text-stone-600 mt-2 text-sm">Every verse includes Hebrew, modern English, and full scholarly apparatus</p>
+      <p class="text-base font-semibold uppercase tracking-widest text-teal-600 mb-3">See It In Action</p>
+      <h2 class="font-serif text-3xl font-medium text-stone-800">One verse. Three traditions. 2,300 years of reading.</h2>
+      <p class="text-stone-600 mt-3 text-base max-w-2xl mx-auto">
+        TCR shows you the Hebrew, the modern rendering, and how ancient communities
+        read the same passage &mdash; the Dead Sea Scrolls, the Aramaic Targum, and
+        Jerome's Latin Vulgate, all in one place.
+      </p>
     </div>
 
-    <div class="space-y-8">
-      <div class="bg-white rounded-2xl border border-cream-200 shadow-sm overflow-hidden">
-        <div class="px-8 pt-7 pb-2">
-          <span class="text-xs font-semibold text-teal-600 uppercase tracking-widest">Genesis 1:1</span>
-        </div>
-        <div class="px-8 py-5 bg-teal-50/50 border-y border-teal-100 my-3">
-          <p class="text-hebrew text-right text-2xl">{verse1.text_hebrew}</p>
-        </div>
-        <div class="px-8 pb-7 pt-4">
-          <p class="text-rendering text-xl mb-3">{verse1.rendering}</p>
-          <p class="text-base text-stone-600 font-serif italic mb-6">
-            <span class="not-italic font-sans text-xs font-semibold text-stone-500 uppercase tracking-wider mr-2">KJV</span>
-            {verse1.text_kjv}
-          </p>
-          {baraTerm && (
-            <div class="flex gap-5 p-5 bg-teal-50 rounded-xl border border-teal-100">
-              <div class="flex-shrink-0 text-right">
-                <span class="font-hebrew text-2xl text-stone-700 block leading-loose">{baraTerm.hebrew}</span>
-                <span class="text-xs text-stone-500 italic">{baraTerm.transliteration}</span>
-              </div>
-              <div class="border-l border-teal-200 pl-5">
-                <div class="flex flex-wrap items-center gap-2 mb-1">
-                  <span class="text-sm font-semibold text-stone-700">"{baraTerm.rendered_as}"</span>
-                  <span class="text-xs text-stone-600 italic">{baraTerm.semantic_range}</span>
-                </div>
-                <p class="text-sm text-stone-600 leading-relaxed">{baraTerm.note}</p>
-              </div>
-            </div>
-          )}
-        </div>
+    <div class="bg-white rounded-2xl border border-cream-200 shadow-sm overflow-hidden">
+      <!-- Hebrew source -->
+      <div class="px-8 pt-7 pb-2">
+        <span class="text-base font-semibold text-teal-600 uppercase tracking-widest">Isaiah 9:6</span>
+        <span class="text-base text-stone-400 ml-2">from the Hebrew (Westminster Leningrad Codex)</span>
+      </div>
+      <div class="px-8 py-5 bg-teal-50/50 border-y border-teal-100 my-3">
+        <p class="text-hebrew text-right text-2xl leading-loose">{isa9v6.text_hebrew}</p>
       </div>
 
-      <div class="bg-white rounded-2xl border border-cream-200 shadow-sm overflow-hidden">
-        <div class="px-8 pt-7 pb-2">
-          <span class="text-xs font-semibold text-teal-600 uppercase tracking-widest">Genesis 1:2</span>
-        </div>
-        <div class="px-8 py-5 bg-teal-50/50 border-y border-teal-100 my-3">
-          <p class="text-hebrew text-right text-2xl">{verse2.text_hebrew}</p>
-        </div>
-        <div class="px-8 pb-7 pt-4">
-          <p class="text-rendering text-xl mb-3">{verse2.rendering}</p>
-          <p class="text-base text-stone-600 font-serif italic mb-6">
-            <span class="not-italic font-sans text-xs font-semibold text-stone-500 uppercase tracking-wider mr-2">KJV</span>
-            {verse2.text_kjv}
-          </p>
-          {tohuTerm && (
-            <div class="flex gap-5 p-5 bg-teal-50 rounded-xl border border-teal-100">
-              <div class="flex-shrink-0 text-right">
-                <span class="font-hebrew text-xl text-stone-700 block leading-loose">{tohuTerm.hebrew}</span>
-                <span class="text-xs text-stone-500 italic">{tohuTerm.transliteration}</span>
-              </div>
-              <div class="border-l border-teal-200 pl-5">
-                <div class="flex flex-wrap items-center gap-2 mb-1">
-                  <span class="text-sm font-semibold text-stone-700">"{tohuTerm.rendered_as}"</span>
-                  <span class="text-xs text-stone-600 italic">{tohuTerm.semantic_range}</span>
-                </div>
-                <p class="text-sm text-stone-600 leading-relaxed">{tohuTerm.note}</p>
-              </div>
-            </div>
-          )}
+      <!-- TCR rendering -->
+      <div class="px-8 pt-4 pb-5">
+        <p class="text-rendering text-lg leading-relaxed whitespace-pre-line">{isa9v6.rendering}</p>
+      </div>
+
+      <!-- KJV comparison -->
+      <div class="px-8 pb-5">
+        <p class="text-lg text-stone-500 font-serif italic">
+          <span class="not-italic font-sans text-base font-semibold text-stone-400 uppercase tracking-wider mr-2">KJV</span>
+          {isa9v6.text_kjv}
+        </p>
+      </div>
+
+      <!-- Stacked traditions -->
+      <div class="px-8 pb-8">
+        <p class="text-base font-semibold uppercase tracking-widest text-stone-400 mb-4">How other traditions read this verse</p>
+
+        <div class="space-y-3">
+          <!-- Dead Sea Scrolls -->
+          <div class="border-l-4 border-amber-300 pl-4 py-3 bg-amber-50/30 rounded-r-lg">
+            <p class="text-base font-semibold uppercase tracking-wider text-amber-700 mb-1">
+              Dead Sea Scrolls (1QIsaiah-a, 125 BCE)
+              <span class="ml-2 px-1.5 py-0.5 rounded text-sm bg-amber-100 text-amber-600">theological</span>
+            </p>
+            <p class="text-stone-700 text-lg leading-relaxed">
+              The four throne names read identically in the scroll and the medieval Masoretic text.
+              This confirms that "Wonderful Counselor, Mighty God, Father of Eternity, Prince of Peace"
+              is not a late addition &mdash; the text was stable over a thousand years before the oldest
+              Masoretic manuscript.
+            </p>
+          </div>
+
+          <!-- Targum Jonathan -->
+          <div class="border-l-4 border-purple-300 pl-4 py-3 bg-purple-50/30 rounded-r-lg">
+            <p class="text-base font-semibold uppercase tracking-wider text-purple-700 mb-1">
+              Targum Jonathan (Aramaic, 1st&ndash;5th c. CE)
+              <span class="ml-2 px-1.5 py-0.5 rounded text-sm bg-purple-100 text-purple-600">messianic</span>
+            </p>
+            <p class="text-stone-700 text-lg leading-relaxed font-serif italic">
+              "...and he has taken the Torah upon himself to keep it; and his name is called
+              from before the Wonderful Counselor, the Mighty God, who lives forever:
+              the Messiah, in whose days peace shall increase upon us."
+            </p>
+            <p class="text-stone-500 text-base mt-1">
+              The Aramaic synagogue tradition explicitly identifies this child as the Messiah &mdash;
+              but attributes the divine names to God speaking <em>about</em> the child, rather than
+              as names <em>of</em> the child.
+            </p>
+          </div>
+
+          <!-- Latin Vulgate -->
+          <div class="border-l-4 border-blue-300 pl-4 py-3 bg-blue-50/30 rounded-r-lg">
+            <p class="text-base font-semibold uppercase tracking-wider text-blue-700 mb-1">
+              Latin Vulgate (Jerome, 405 CE)
+            </p>
+            <p class="text-stone-700 text-lg leading-relaxed font-serif italic">
+              "...et vocabitur nomen eius Admirabilis Consiliarius Deus Fortis Pater futuri saeculi Princeps pacis"
+            </p>
+            <p class="text-stone-500 text-base mt-1">
+              Jerome's Latin gave Western Christianity its theological vocabulary for this verse.
+              <em>Deus Fortis</em> ("Mighty God") became a key text for affirming Christ's divinity.
+              <em>Princeps pacis</em> ("Prince of Peace") entered the liturgical tradition and has been
+              sung for sixteen centuries.
+            </p>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="text-center mt-10">
-      <a href="/genesis/1" class="text-sm font-medium text-teal-600 hover:text-teal-700 transition-colors">
-        Continue reading Genesis 1 &rarr;
+      <a href="/isaiah/9" class="text-base font-medium text-teal-600 hover:text-teal-700 transition-colors">
+        Read full chapter with all traditions &rarr;
       </a>
     </div>
   </section>
@@ -147,32 +168,31 @@ const sectionGroups = completedSections.map(sId => ({
   <section class="max-w-4xl mx-auto px-6 py-20">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
       <div>
-        <p class="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-3">The Problem</p>
+        <p class="text-base font-semibold uppercase tracking-widest text-teal-600 mb-3">The Challenge</p>
         <h2 class="font-serif text-3xl font-medium text-stone-800 mb-6">
-          Every major modern translation is locked behind copyright
+          Many modern translations are under copyright
         </h2>
         <p class="text-stone-600 leading-relaxed mb-4">
-          The NIV, ESV, and NASB — the translations most widely used in scholarship and study — cannot be displayed
-          on websites, in apps, or in educational materials without licensing fees or restrictive permission requirements.
+          Popular translations like the NIV, ESV, and NASB require licensing fees or permission
+          to display on websites, in apps, or in educational materials.
         </p>
         <p class="text-stone-600 leading-relaxed">
-          Bible study apps, open-source tools, educators, and developers are left choosing between
-          the archaic KJV (public domain) and paying for the right to quote Scripture.
+          Developers, educators, and Bible study builders often have limited options &mdash;
+          especially when they need modern English with open licensing.
         </p>
       </div>
       <div>
-        <p class="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-3">The Solution</p>
+        <p class="text-base font-semibold uppercase tracking-widest text-teal-600 mb-3">The Solution</p>
         <h2 class="font-serif text-3xl font-medium text-stone-800 mb-6">
           A scholarly, free rendering anyone can use
         </h2>
         <p class="text-stone-600 leading-relaxed mb-4">
-          The Covenant Rendering is translated directly from the Westminster Leningrad Codex — the same
-          authoritative Hebrew source used by the ESV, NASB, and most modern translations.
-          Every decision is documented. Nothing is hidden.
+          The Covenant Rendering is translated directly from the Westminster Leningrad Codex (Old Testament)
+          and the SBL Greek New Testament (New Testament) &mdash; the same authoritative source texts used by
+          the ESV, NASB, and most modern translations. Every translation decision is documented in the notes.
         </p>
         <p class="text-stone-600 leading-relaxed">
-          Released under CC-BY-4.0: attribute the source, then do whatever you want with it.
-          Build apps, cite verses, distribute freely.
+          Released under CC-BY-4.0 &mdash; free to use, share, and build upon with attribution.
         </p>
       </div>
     </div>
@@ -183,7 +203,7 @@ const sectionGroups = completedSections.map(sId => ({
   <!-- Four pillars -->
   <section class="max-w-4xl mx-auto px-6 py-20">
     <div class="text-center mb-14">
-      <p class="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-3">Design Principles</p>
+      <p class="text-base font-semibold uppercase tracking-widest text-teal-600 mb-3">Design Principles</p>
       <h2 class="font-serif text-3xl font-medium text-stone-800">What makes TCR different</h2>
     </div>
 
@@ -191,7 +211,7 @@ const sectionGroups = completedSections.map(sId => ({
       {[
         {
           title: 'Formal Equivalence',
-          body: 'Word-for-word from the Hebrew wherever English allows. Reading level targets 9th–10th grade — comparable to the ESV — without sacrificing accuracy for accessibility.',
+          body: 'Word-for-word from the Hebrew and Greek wherever English allows. Reading level targets 9th–10th grade — comparable to the ESV — without sacrificing accuracy for accessibility.',
           icon: '⬡',
         },
         {
@@ -215,7 +235,7 @@ const sectionGroups = completedSections.map(sId => ({
             {icon}
           </div>
           <h3 class="font-serif text-xl font-medium text-stone-800 mb-3">{title}</h3>
-          <p class="text-stone-600 text-sm leading-relaxed">{body}</p>
+          <p class="text-stone-600 text-lg leading-relaxed">{body}</p>
         </div>
       ))}
     </div>
@@ -223,32 +243,25 @@ const sectionGroups = completedSections.map(sId => ({
 
   <hr class="teal-rule max-w-4xl mx-auto" />
 
-  <!-- Current status — data-driven -->
+  <!-- Browse the Bible -->
   <section class="max-w-4xl mx-auto px-6 py-20">
     <div class="bg-teal-600 rounded-2xl px-10 py-12 text-center text-white">
-      <p class="text-teal-200 text-sm font-semibold uppercase tracking-widest mb-4">Current Status</p>
-      <h2 class="font-serif text-3xl font-medium mb-4">
-        {completedBooks.length} Books Complete
+      <h2 class="font-serif text-3xl font-medium mb-8">
+        Browse the Bible
       </h2>
-      <p class="text-teal-100 text-lg mb-2">
-        {completedChapters} chapters &bull; {completedVerseEstimate.toLocaleString()} verses &bull; fully annotated
-      </p>
-      <p class="text-teal-200 text-sm mb-8">
-        {sectionGroups.map(g => g.section.name).join(' + ')}
-      </p>
 
       <div class="flex flex-wrap justify-center gap-3">
-        {completedBooks.map((b: BookInfo) => (
+        {completedBooks.filter((b: BookInfo) => b.tier === 'standard').map((b: BookInfo) => (
           <a
             href={`/${b.slug}`}
-            class="px-5 py-2.5 bg-white text-teal-700 rounded-xl font-medium hover:bg-teal-50 transition-colors text-sm"
+            class="px-5 py-2.5 bg-white text-teal-700 rounded-xl font-medium hover:bg-teal-50 transition-colors text-base"
           >
             {b.name}
           </a>
         ))}
         <a
           href="/books"
-          class="px-5 py-2.5 border border-teal-400 text-white rounded-xl font-medium hover:bg-teal-700 transition-colors text-sm"
+          class="px-5 py-2.5 border border-teal-400 text-white rounded-xl font-medium hover:bg-teal-700 transition-colors text-base"
         >
           Full Library &rarr;
         </a>

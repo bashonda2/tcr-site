@@ -16,6 +16,62 @@ const pctComplete = Math.round((completedChapters / totalStandard) * 100);
 
 const standardSections = getSections('standard');
 const extendedSections = getSections('extended');
+
+// URL overrides for extended books whose page URL differs from their slug
+const extendedSlugToUrl: Record<string, string> = {
+  'great-isaiah-scroll': '/dss-isaiah',
+};
+
+function getExtendedBookUrl(b: BookInfo): string {
+  return extendedSlugToUrl[b.slug] || `/${b.slug}`;
+}
+
+// Collect completed alternate editions that have dedicated pages
+interface TraditionComparison {
+  name: string;
+  description: string;
+  url: string;
+  parentBook: string;
+  sourceLabel: string;
+  date: string;
+}
+const traditionComparisons: TraditionComparison[] = [];
+
+// Map of alternate-edition slug prefixes to their dedicated page URLs
+const altEditionPages: Record<string, (slug: string) => string> = {
+  'lxx': (slug) => {
+    if (slug === 'jeremiah-lxx') return '/lxx-jeremiah';
+    if (slug === 'daniel-lxx') return '/lxx-daniel';
+    if (slug === 'esther-lxx') return '/lxx-esther';
+    return '';
+  },
+  'sam': (_slug) => '/samaritan-pentateuch',
+  'targum': (_slug) => '/targum',
+  'jst': (_slug) => '/jst',
+};
+
+for (const book of BOOKS) {
+  if (!book.alternateEditions) continue;
+  for (const alt of book.alternateEditions) {
+    if (alt.status !== 'complete') continue;
+    const suffix = alt.slug.split('-').pop() || '';
+    const resolver = altEditionPages[suffix];
+    if (!resolver) continue;
+    const url = resolver(alt.slug);
+    if (!url) continue;
+    // Avoid duplicates (e.g., multiple Samaritan books all point to /samaritan-pentateuch)
+    if (!traditionComparisons.find(t => t.url === url)) {
+      traditionComparisons.push({
+        name: alt.label.replace(/ \(.*/, ''),  // strip parenthetical
+        description: alt.description || '',
+        url,
+        parentBook: book.name,
+        sourceLabel: alt.uiLabel || '',
+        date: alt.date || '',
+      });
+    }
+  }
+}
 ---
 
 <Layout
@@ -25,29 +81,13 @@ const extendedSections = getSections('extended');
 >
   <div class="bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
     <div class="max-w-5xl mx-auto px-6 py-16">
-      <p class="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-3">The Covenant Rendering</p>
+      <p class="text-base font-semibold uppercase tracking-widest text-teal-600 mb-3">The Covenant Rendering</p>
       <h1 class="font-serif text-4xl font-medium text-stone-800 mb-4">Library</h1>
       <p class="text-stone-600 text-lg font-serif italic max-w-2xl">
         The full Bible — Old Testament and New Testament — plus the Extended Library:
         Apocrypha, Dead Sea Scrolls, Ethiopian canon, and more.
       </p>
 
-      <!-- Progress bar -->
-      <div class="mt-8 max-w-md">
-        <div class="flex items-center justify-between text-sm mb-2">
-          <span class="text-stone-600 font-medium">
-            {completedBooks.length} of 66 books complete
-          </span>
-          <span class="text-teal-600 font-semibold">{pctComplete}%</span>
-        </div>
-        <div class="h-2.5 bg-cream-200 rounded-full overflow-hidden">
-          <div class="h-full bg-teal-500 rounded-full transition-all" style={`width: ${pctComplete}%`}></div>
-        </div>
-        <p class="text-xs text-stone-400 mt-2">
-          {completedChapters.toLocaleString()} of {totalStandard.toLocaleString()} chapters &bull;
-          Standard Bible (66 books)
-        </p>
-      </div>
     </div>
   </div>
 
@@ -61,7 +101,7 @@ const extendedSections = getSections('extended');
         <section>
           <div class="flex items-center gap-3 mb-6">
             <h2 class="font-serif text-2xl font-medium text-stone-800">{sec.name}</h2>
-            <span class="text-xs font-semibold uppercase tracking-wider text-stone-400 bg-cream-100 px-2.5 py-1 rounded-full">
+            <span class="text-base font-semibold uppercase tracking-wider text-stone-400 bg-cream-100 px-2.5 py-1 rounded-full">
               {testamentLabel}
             </span>
           </div>
@@ -76,14 +116,14 @@ const extendedSections = getSections('extended');
                 >
                   <div class="flex items-center justify-between mb-2">
                     <h3 class="font-serif text-lg font-medium text-stone-800 group-hover:text-teal-600 transition-colors">{b.name}</h3>
-                    <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-teal-100 text-teal-700">
+                    <span class="text-sm font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-teal-100 text-teal-700">
                       Complete
                     </span>
                   </div>
                   {displayName && (
-                    <p class="text-xs text-stone-400 font-serif mb-3">{displayName}</p>
+                    <p class="text-base text-stone-400 font-serif mb-3">{displayName}</p>
                   )}
-                  <p class="text-xs text-stone-500">
+                  <p class="text-base text-stone-500">
                     {b.chapters} chapters
                   </p>
                 </a>
@@ -91,14 +131,14 @@ const extendedSections = getSections('extended');
                 <div class="p-5 bg-cream-50 rounded-xl border border-cream-100">
                   <div class="flex items-center justify-between mb-2">
                     <h3 class="font-serif text-lg font-medium text-stone-400">{b.name}</h3>
-                    <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-cream-200 text-stone-400">
+                    <span class="text-sm font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-cream-200 text-stone-400">
                       Coming Soon
                     </span>
                   </div>
                   {displayName && (
-                    <p class="text-xs text-stone-300 font-serif mb-3">{displayName}</p>
+                    <p class="text-base text-stone-300 font-serif mb-3">{displayName}</p>
                   )}
-                  <p class="text-xs text-stone-400">
+                  <p class="text-base text-stone-400">
                     {b.chapters} chapters
                   </p>
                 </div>
@@ -112,7 +152,7 @@ const extendedSections = getSections('extended');
     <!-- Extended Library -->
     <div class="pt-8 border-t-2 border-teal-200">
       <div class="mb-10">
-        <p class="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-3">Beyond the 66 Books</p>
+        <p class="text-base font-semibold uppercase tracking-widest text-teal-600 mb-3">Beyond the 66 Books</p>
         <h2 class="font-serif text-3xl font-medium text-stone-800 mb-4">Extended Library</h2>
         <p class="text-stone-600 max-w-2xl leading-relaxed">
           How communities across 2,300 years have read the same passages — from the Dead Sea caves to the Restoration — side by side, with documented translation decisions at every verse.
@@ -127,22 +167,41 @@ const extendedSections = getSections('extended');
             <h3 class="font-serif text-xl font-medium text-stone-800 mb-4">{sec.name}</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {books.map((b: BookInfo) => {
+                const isComplete = b.status === 'complete';
                 const displayName = b.greekName || b.hebrewName || '';
                 const canonLabel = b.canons.length > 0
                   ? b.canons.map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(', ')
                   : 'Non-canonical manuscript';
-                return (
+                return isComplete ? (
+                  <a
+                    href={getExtendedBookUrl(b)}
+                    class="group p-5 bg-white rounded-xl border border-cream-200 shadow-sm hover:border-teal-200 hover:shadow-md transition-all"
+                  >
+                    <div class="flex items-center justify-between mb-2">
+                      <h4 class="font-serif text-lg font-medium text-stone-800 group-hover:text-teal-600 transition-colors">{b.name}</h4>
+                      <span class="text-sm font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-teal-100 text-teal-700">
+                        Complete
+                      </span>
+                    </div>
+                    {displayName && (
+                      <p class="text-base text-stone-400 font-serif mb-2">{displayName}</p>
+                    )}
+                    <p class="text-base text-stone-500">
+                      {b.chapters} {b.chapters === 1 ? 'section' : 'chapters'} &bull; {canonLabel}
+                    </p>
+                  </a>
+                ) : (
                   <div class="p-5 bg-cream-50 rounded-xl border border-cream-100">
                     <div class="flex items-center justify-between mb-2">
                       <h4 class="font-serif text-lg font-medium text-stone-400">{b.name}</h4>
-                      <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-cream-200 text-stone-400">
+                      <span class="text-sm font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-cream-200 text-stone-400">
                         Coming Soon
                       </span>
                     </div>
                     {displayName && (
-                      <p class="text-xs text-stone-300 font-serif mb-2">{displayName}</p>
+                      <p class="text-base text-stone-300 font-serif mb-2">{displayName}</p>
                     )}
-                    <p class="text-xs text-stone-400">
+                    <p class="text-base text-stone-400">
                       {b.chapters} {b.chapters === 1 ? 'section' : 'chapters'} &bull; {canonLabel}
                     </p>
                   </div>
@@ -152,6 +211,62 @@ const extendedSections = getSections('extended');
           </section>
         );
       })}
+
+      <!-- Manuscript Tradition Comparisons -->
+      {traditionComparisons.length > 0 && (
+        <section class="mb-12">
+          <h3 class="font-serif text-xl font-medium text-stone-800 mb-2">Manuscript Tradition Comparisons</h3>
+          <p class="text-base text-stone-500 mb-4">
+            Side-by-side comparisons of alternate manuscript traditions against the Masoretic Text.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {traditionComparisons.map((t) => (
+              <a
+                href={t.url}
+                class="group p-5 bg-white rounded-xl border border-cream-200 shadow-sm hover:border-teal-200 hover:shadow-md transition-all"
+              >
+                <div class="flex items-center justify-between mb-2">
+                  <h4 class="font-serif text-lg font-medium text-stone-800 group-hover:text-teal-600 transition-colors">{t.name}</h4>
+                  <span class="text-sm font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-teal-100 text-teal-700">
+                    Complete
+                  </span>
+                </div>
+                {t.date && (
+                  <p class="text-base text-stone-400 font-serif mb-2">{t.date}</p>
+                )}
+                {t.description && (
+                  <p class="text-base text-stone-500">{t.description}</p>
+                )}
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <!-- Interpretive Traditions -->
+      <section class="mb-12">
+        <h3 class="font-serif text-xl font-medium text-stone-800 mb-2">Interpretive Traditions</h3>
+        <p class="text-base text-stone-500 mb-4">
+          How major translation traditions reshaped the biblical text &mdash; theological paraphrases, liturgical renderings, and interpretive choices that defined entire branches of faith.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <a
+            href="/vulgate"
+            class="group p-5 bg-white rounded-xl border border-cream-200 shadow-sm hover:border-teal-200 hover:shadow-md transition-all"
+          >
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="font-serif text-lg font-medium text-stone-800 group-hover:text-teal-600 transition-colors">Latin Vulgate</h4>
+              <span class="text-sm font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-teal-100 text-teal-700">
+                Complete
+              </span>
+            </div>
+            <p class="text-base text-stone-400 font-serif mb-2">382&ndash;405 CE</p>
+            <p class="text-base text-stone-500">
+              Jerome&rsquo;s Latin translation that defined Western Christian theology for over a millennium. 9 books compared.
+            </p>
+          </a>
+        </div>
+      </section>
     </div>
   </div>
 </Layout>

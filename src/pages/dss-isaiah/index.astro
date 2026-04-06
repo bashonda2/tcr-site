@@ -1,0 +1,101 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { loadVariantChapter } from '../../data/tcr';
+
+const chapters = Array.from({ length: 66 }, (_, i) => {
+  const ch = loadVariantChapter('dss-isaiah', i + 1);
+  const variants = ch.verses.filter((v: any) => v.has_variant).length;
+  const theological = ch.verses.filter((v: any) => v.significance === 'theological').length;
+  const major = ch.verses.filter((v: any) => v.significance === 'major').length;
+  return {
+    num: i + 1,
+    verses: ch.verses.length,
+    variants,
+    theological,
+    major,
+    summary: ch.preamble?.summary || '',
+  };
+});
+
+const totalVerses = chapters.reduce((s, c) => s + c.verses, 0);
+const totalVariants = chapters.reduce((s, c) => s + c.variants, 0);
+const totalTheological = chapters.reduce((s, c) => s + c.theological, 0);
+---
+
+<Layout
+  title="Great Isaiah Scroll (1QIsaiah-a) — Dead Sea Scrolls"
+  description="The Great Isaiah Scroll compared verse-by-verse against the Masoretic Text. 66 chapters, 1,292 verses, every variant documented."
+  canonical="/dss-isaiah"
+>
+  <div class="bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
+    <div class="max-w-3xl mx-auto px-6 py-12">
+      <div class="flex items-center gap-2 text-base text-stone-400 mb-5">
+        <a href="/books" class="hover:text-teal-600 transition-colors">Library</a>
+        <span>/</span>
+        <span class="text-stone-600">Dead Sea Scrolls</span>
+      </div>
+
+      <h1 class="font-serif text-4xl font-medium text-stone-800 mb-2">
+        Great Isaiah Scroll
+      </h1>
+      <p class="text-lg text-stone-500 mb-4">1QIsaiah-a &mdash; The oldest complete manuscript of any biblical book</p>
+
+      <div class="flex flex-wrap gap-4 text-base text-stone-500">
+        <span>{totalVerses.toLocaleString()} verses</span>
+        <span>&bull;</span>
+        <span>{totalVariants} variants documented</span>
+        <span>&bull;</span>
+        <span>{totalTheological} theologically significant</span>
+        <span>&bull;</span>
+        <span>c. 125 BCE</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 py-8">
+    <div class="bg-cream-50 border border-cream-200 rounded-xl p-6 mb-10 text-lg leading-relaxed text-stone-600">
+      <h2 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-3">About This Scroll</h2>
+      <p class="mb-3">
+        Discovered in 1947 in Qumran Cave 1, the Great Isaiah Scroll (1QIsaiah-a) is the oldest complete
+        manuscript of any book of the Hebrew Bible. Written approximately 125 BCE on 17 sheets of parchment
+        across 54 columns, it preserves the text of Isaiah roughly 1,000 years before the Leningrad Codex
+        (1008 CE) &mdash; the manuscript behind TCR's standard rendering.
+      </p>
+      <p>
+        What you see below is a verse-by-verse comparison: where does the scroll agree with the medieval
+        Masoretic tradition, and where does it differ? Most differences are orthographic (spelling conventions).
+        But some variants are theologically significant &mdash; and a few have changed how modern translators
+        render the text. Every variant is documented. Nothing is hidden.
+      </p>
+    </div>
+
+    <div class="space-y-2">
+      {chapters.map((ch) => (
+        <a
+          href={`/dss-isaiah/${ch.num}`}
+          class="block p-4 rounded-lg border border-cream-200 hover:border-teal-200 hover:bg-cream-50 transition-colors"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="font-serif text-lg text-stone-800">Chapter {ch.num}</span>
+              <span class="text-base text-stone-400 ml-3">{ch.verses} verses</span>
+            </div>
+            <div class="flex items-center gap-3 text-base">
+              {ch.theological > 0 && (
+                <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-medium">
+                  {ch.theological} theological
+                </span>
+              )}
+              {ch.major > 0 && (
+                <span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-medium">
+                  {ch.major} major
+                </span>
+              )}
+              <span class="text-stone-400">{ch.variants} variant{ch.variants !== 1 ? 's' : ''}</span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,138 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+const dataRoot = join(process.cwd(), 'src', 'data');
+
+function loadTargumFile(tradition: string, book: string): any {
+  return JSON.parse(readFileSync(join(dataRoot, tradition, `${book}.json`), 'utf-8'));
+}
+
+const onkelosBooks = ['genesis', 'exodus', 'leviticus', 'numbers', 'deuteronomy'];
+const jonathanBooks = ['isaiah', 'jeremiah', 'ezekiel', 'former-prophets', 'minor-prophets'];
+
+const bookNames: Record<string, string> = {
+  genesis: 'Genesis',
+  exodus: 'Exodus',
+  leviticus: 'Leviticus',
+  numbers: 'Numbers',
+  deuteronomy: 'Deuteronomy',
+  isaiah: 'Isaiah',
+  jeremiah: 'Jeremiah',
+  ezekiel: 'Ezekiel',
+  'former-prophets': 'Former Prophets',
+  'minor-prophets': 'Minor Prophets',
+};
+
+const onkelos = onkelosBooks.map((book) => {
+  const data = loadTargumFile('targum-onkelos', book);
+  return {
+    slug: `onkelos-${book}`,
+    name: bookNames[book],
+    renderings: data.renderings.length,
+    summary: data.preamble?.summary || '',
+  };
+});
+
+const jonathan = jonathanBooks.map((book) => {
+  const data = loadTargumFile('targum-jonathan', book);
+  return {
+    slug: `jonathan-${book}`,
+    name: bookNames[book],
+    renderings: data.renderings.length,
+    summary: data.preamble?.summary || '',
+  };
+});
+
+const totalOnkelos = onkelos.reduce((s, b) => s + b.renderings, 0);
+const totalJonathan = jonathan.reduce((s, b) => s + b.renderings, 0);
+---
+
+<Layout
+  title="Targumim (Aramaic Interpretive Translations)"
+  description="Targum Onkelos (Torah) and Targum Jonathan (Prophets) rendered within TCR's Extended Library. Aramaic interpretive translations documenting anti-anthropomorphism, Memra theology, and Messianic readings."
+  canonical="/targum"
+>
+  <div class="bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
+    <div class="max-w-3xl mx-auto px-6 py-12">
+      <div class="flex items-center gap-2 text-base text-stone-400 mb-5">
+        <a href="/books" class="hover:text-teal-600 transition-colors">Library</a>
+        <span>/</span>
+        <span class="text-stone-600">Interpretive Traditions</span>
+      </div>
+
+      <h1 class="font-serif text-4xl font-medium text-stone-800 mb-2">
+        Targumim
+      </h1>
+      <p class="text-lg text-stone-500 mb-4">Aramaic interpretive translations used in synagogue worship (1st c. BCE &ndash; 5th c. CE)</p>
+
+      <div class="flex flex-wrap gap-4 text-base text-stone-500">
+        <span>{totalOnkelos} Onkelos renderings</span>
+        <span>&bull;</span>
+        <span>{totalJonathan} Jonathan renderings</span>
+        <span>&bull;</span>
+        <span>10 books</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 py-8">
+    <div class="bg-cream-50 border border-cream-200 rounded-xl p-6 mb-10 text-lg leading-relaxed text-stone-600">
+      <h2 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-3">About the Targumim</h2>
+      <p class="mb-3">
+        The Targumim are Aramaic interpretive translations of the Hebrew Bible, produced for communities
+        that spoke Aramaic rather than Hebrew. They are not literal translations but theological paraphrases
+        that systematically reshape the text &mdash; guarding divine transcendence (anti-anthropomorphism),
+        introducing the Memra ("Word") as an intermediary, and developing Messianic readings of key passages.
+      </p>
+      <p>
+        <strong>Targum Onkelos</strong> covers the Torah (Pentateuch) and is the most literal of the major targumim.
+        <strong>Targum Jonathan</strong> covers the Prophets (Nevi'im) and is more expansive and theologically
+        interpretive, with dense Messianic and Shekinah theology.
+      </p>
+    </div>
+
+    <!-- Targum Onkelos -->
+    <h2 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-4">Targum Onkelos &mdash; Torah ({totalOnkelos} renderings)</h2>
+    <div class="space-y-2 mb-10">
+      {onkelos.map((book) => (
+        <a
+          href={`/targum/${book.slug}`}
+          class="block p-4 rounded-lg border border-cream-200 hover:border-teal-200 hover:bg-cream-50 transition-colors"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="font-serif text-lg text-stone-800">{book.name}</span>
+              <span class="text-base text-stone-400 ml-3">{book.renderings} renderings</span>
+            </div>
+          </div>
+          {book.summary && (
+            <p class="text-lg text-stone-500 mt-1 line-clamp-2">{book.summary}</p>
+          )}
+        </a>
+      ))}
+    </div>
+
+    <!-- Targum Jonathan -->
+    <h2 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-4">Targum Jonathan &mdash; Prophets ({totalJonathan} renderings)</h2>
+    <div class="space-y-2">
+      {jonathan.map((book) => (
+        <a
+          href={`/targum/${book.slug}`}
+          class="block p-4 rounded-lg border border-cream-200 hover:border-teal-200 hover:bg-cream-50 transition-colors"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="font-serif text-lg text-stone-800">{book.name}</span>
+              <span class="text-base text-stone-400 ml-3">{book.renderings} renderings</span>
+            </div>
+          </div>
+          {book.summary && (
+            <p class="text-lg text-stone-500 mt-1 line-clamp-2">{book.summary}</p>
+          )}
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>

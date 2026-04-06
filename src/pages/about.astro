@@ -16,18 +16,18 @@ const totalStandard = standardBooks.reduce((sum, b) => sum + b.chapters, 0);
 
 <Layout
   title="About"
-  description="The translation philosophy, methodology, and license behind The Covenant Rendering — a free, open-source modern English Bible from the Hebrew (WLC)."
+  description="The translation philosophy, methodology, and license behind The Covenant Rendering — a free, open-source modern English Bible from the Hebrew (WLC) and Greek (SBLGNT)."
   canonical="/about"
 >
   <div class="bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
     <div class="max-w-3xl mx-auto px-6 py-16">
-      <p class="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-3">About</p>
+      <p class="text-base font-semibold uppercase tracking-widest text-teal-600 mb-3">About</p>
       <h1 class="font-serif text-4xl font-medium text-stone-800 mb-4">
         Translation Philosophy &amp; Methodology
       </h1>
       <p class="text-stone-500 text-lg font-serif italic leading-relaxed">
-        Every decision documented. Nothing hidden. Built for scholars, developers, and anyone who needs a free,
-        modern English Bible they can actually use.
+        A free, modern English Bible translated from the original Hebrew and Greek &mdash;
+        with every decision documented and every tradition compared.
       </p>
     </div>
   </div>
@@ -39,14 +39,14 @@ const totalStandard = standardBooks.reduce((sum, b) => sum + b.chapters, 0);
       <h2 class="font-serif text-2xl font-medium text-stone-800 mb-5">Why This Exists</h2>
       <div class="prose-style space-y-4 text-stone-600 leading-relaxed">
         <p>
-          Modern English Bible translations &mdash; the NIV, ESV, NASB, NLT &mdash; are under active copyright.
+          Many modern English Bible translations &mdash; the NIV, ESV, NASB, NLT &mdash; are under active copyright.
           Displaying them on websites, in apps, or in educational materials requires licensing fees or
           explicit permission. For most independent developers, educators, and researchers, that's a wall.
         </p>
         <p>
-          The KJV is in the public domain, but its 17th-century English is a barrier for general readers
-          and unsuitable for modern study tools. For over 400 years, there has been no serious, free,
-          modern-English alternative that anyone can use without restriction.
+          The KJV is in the public domain, but its 17th-century English can be a barrier for general readers
+          and difficult to use in modern study tools. There are few free, modern-English alternatives
+          that anyone can use without restriction.
         </p>
         <p>
           The Covenant Rendering exists to fill that gap: a rigorous, formal-equivalence translation
@@ -85,7 +85,7 @@ const totalStandard = standardBooks.reduce((sum, b) => sum + b.chapters, 0);
       <div class="space-y-6">
         <div class="p-6 bg-white rounded-xl border border-cream-200">
           <h3 class="font-serif text-lg font-medium text-stone-800 mb-2">Formal Equivalence</h3>
-          <p class="text-stone-600 leading-relaxed text-sm">
+          <p class="text-stone-600 leading-relaxed text-lg">
             TCR prioritizes word-for-word correspondence to the Hebrew wherever natural English allows.
             This approach preserves the structure of the original text and enables readers to trace
             translation decisions back to specific Hebrew words. Where the Hebrew is ambiguous, TCR
@@ -95,17 +95,15 @@ const totalStandard = standardBooks.reduce((sum, b) => sum + b.chapters, 0);
 
         <div class="p-6 bg-white rounded-xl border border-cream-200">
           <h3 class="font-serif text-lg font-medium text-stone-800 mb-2">Reading Level</h3>
-          <p class="text-stone-600 leading-relaxed text-sm">
-            Target reading level is 9th&ndash;10th grade, comparable to the ESV. TCR does not simplify
-            to increase accessibility at the expense of precision. If a concept requires a specific term,
-            that term is used and explained in the key terms section. Readers should expect to learn,
-            not be protected from the text.
+          <p class="text-stone-600 leading-relaxed text-lg">
+            Target reading level is 9th&ndash;10th grade, comparable to the ESV. Where a concept requires
+            a specific term, that term is used and explained in the key terms section.
           </p>
         </div>
 
         <div class="p-6 bg-white rounded-xl border border-cream-200">
           <h3 class="font-serif text-lg font-medium text-stone-800 mb-2">Theological Neutrality</h3>
-          <p class="text-stone-600 leading-relaxed text-sm">
+          <p class="text-stone-600 leading-relaxed text-lg">
             TCR is not affiliated with any denomination or theological tradition. Where the Hebrew text
             is genuinely ambiguous &mdash; and in the Hebrew Bible, that is often &mdash; both readings
             are presented and the tension is named. TCR does not resolve interpretive disputes in favor
@@ -115,11 +113,10 @@ const totalStandard = standardBooks.reduce((sum, b) => sum + b.chapters, 0);
 
         <div class="p-6 bg-white rounded-xl border border-cream-200">
           <h3 class="font-serif text-lg font-medium text-stone-800 mb-2">Full Documentation</h3>
-          <p class="text-stone-600 leading-relaxed text-sm">
+          <p class="text-stone-600 leading-relaxed text-lg">
             Every verse includes translator notes explaining significant lexical choices, grammatical
-            decisions, and points of scholarly debate. Key terms carry their Hebrew original,
+            decisions, and points of scholarly debate. Key terms carry their Hebrew or Greek original,
             transliteration, semantic range, and a note on how the word is used in context.
-            Nothing is assumed; nothing is hidden.
           </p>
         </div>
       </div>
@@ -127,29 +124,57 @@ const totalStandard = standardBooks.reduce((sum, b) => sum + b.chapters, 0);
 
     <hr class="teal-rule" />
 
-    <!-- AI Methodology -->
+    <!-- How It Was Made -->
     <section>
-      <h2 class="font-serif text-2xl font-medium text-stone-800 mb-5">AI Generation &amp; Methodology</h2>
-      <div class="p-6 bg-teal-50 rounded-xl border border-teal-100 mb-5">
-        <p class="text-sm font-semibold text-teal-700 mb-1">Full Disclosure</p>
-        <p class="text-stone-600 leading-relaxed text-sm">
-          The Covenant Rendering was generated using Claude (claude-opus-4-6, Anthropic) via a
-          carefully designed translation prompt. This is disclosed fully and without apology.
-          The prompt, methodology, and generation parameters are available in the
-          <a href="https://github.com/bashonda2/the-covenant-rendering" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:underline">GitHub repository</a>.
-        </p>
-      </div>
+      <h2 class="font-serif text-2xl font-medium text-stone-800 mb-5">How It Was Made</h2>
       <div class="space-y-4 text-stone-600 leading-relaxed">
         <p>
-          The use of AI does not diminish the scholarship. The translation was generated against the
-          Westminster Leningrad Codex with explicit instructions for formal equivalence, transparency
-          about interpretive decisions, and documentation of every significant lexical choice.
-          The output was reviewed and the methodology evaluated.
+          The Covenant Rendering was generated using AI language models (Claude, by Anthropic) operating against
+          the Hebrew and Greek source texts under carefully designed translation prompts.
         </p>
         <p>
-          AI-assisted translation is a new frontier, and TCR is one of the first serious attempts to
-          apply it systematically to a biblical corpus with full methodological disclosure.
-          The precedent matters: scholarship requires transparency, not mystification.
+          Every chapter was produced through a two-stage pipeline: a generation agent translates from the source
+          text following formal-equivalence principles, and a separate QA agent validates the output against
+          18 automated checks and 8 judgment-based quality standards. The result is 1,189 chapters that pass
+          automated validation for JSON integrity, verse numbering, required fields, KJV independence,
+          translator note specificity, archaic language absence, term consistency, and schema compliance.
+        </p>
+        <p>
+          The Old Testament was translated from the Westminster Leningrad Codex (WLC) and the
+          New Testament from the SBL Greek New Testament (SBLGNT) &mdash; the same authoritative source
+          texts used by the ESV, NASB, and most modern translations.
+        </p>
+        <p>
+          The translation prompts, quality contract, validation scripts, and every chapter of structured
+          data are available in the
+          <a href="https://github.com/bashonda2/the-covenant-rendering" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:underline">GitHub repository</a>.
+          We believe transparency strengthens the work.
+        </p>
+      </div>
+    </section>
+
+    <hr class="teal-rule" />
+
+    <!-- Who We Are -->
+    <section>
+      <h2 class="font-serif text-2xl font-medium text-stone-800 mb-5">Who We Are</h2>
+      <div class="space-y-4 text-stone-600 leading-relaxed">
+        <p>
+          The Covenant Rendering was created by <strong class="text-stone-700">Aaron Blonquist</strong> &mdash;
+          a program manager and technologist. This is not a committee-produced translation and does not
+          claim to be one.
+        </p>
+        <p>
+          What this project offers is full transparency. Every translation decision is documented.
+          Every Hebrew and Greek word is visible alongside the rendering. The source texts, prompts,
+          and validation pipeline are public. A reader with a Hebrew lexicon can verify any verse
+          against the source.
+        </p>
+        <p>
+          This project exists to provide a free, modern, open alternative for anyone who wants to
+          read, study, or build with the biblical text. If you find an error,
+          <a href="https://github.com/bashonda2/the-covenant-rendering/issues" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:underline">please report it</a> &mdash;
+          the work improves through feedback.
         </p>
       </div>
     </section>
@@ -161,17 +186,17 @@ const totalStandard = standardBooks.reduce((sum, b) => sum + b.chapters, 0);
       <h2 class="font-serif text-2xl font-medium text-stone-800 mb-5">License</h2>
       <div class="p-6 bg-white rounded-xl border border-cream-200 mb-5">
         <div class="flex items-start gap-4">
-          <div class="flex-shrink-0 w-12 h-12 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center font-bold text-sm">
+          <div class="flex-shrink-0 w-12 h-12 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center font-bold text-base">
             CC
           </div>
           <div>
             <p class="font-semibold text-stone-700 mb-1">Creative Commons Attribution 4.0 International</p>
-            <p class="text-sm text-stone-500 mb-3">
+            <p class="text-base text-stone-500 mb-3">
               <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:underline">
                 creativecommons.org/licenses/by/4.0
               </a>
             </p>
-            <p class="text-sm text-stone-600 leading-relaxed">
+            <p class="text-lg text-stone-600 leading-relaxed">
               You are free to share (copy and redistribute in any medium or format) and adapt
               (remix, transform, and build upon the material) for any purpose, including commercial,
               as long as you give appropriate credit to The Covenant Rendering and indicate if changes were made.
@@ -179,7 +204,7 @@ const totalStandard = standardBooks.reduce((sum, b) => sum + b.chapters, 0);
           </div>
         </div>
       </div>
-      <div class="space-y-3 text-stone-600 text-sm leading-relaxed">
+      <div class="space-y-3 text-stone-600 text-lg leading-relaxed">
         <p>
           <strong class="text-stone-700">Attribution requirement:</strong> "The Covenant Rendering,
           thecovenantrendering.com, CC-BY-4.0" is sufficient. You may use any reasonable format.
@@ -194,37 +219,37 @@ const totalStandard = standardBooks.reduce((sum, b) => sum + b.chapters, 0);
 
     <hr class="teal-rule" />
 
-    <!-- Current Status & Roadmap -->
+    <!-- Report Errors -->
     <section>
-      <h2 class="font-serif text-2xl font-medium text-stone-800 mb-5">Status &amp; Roadmap</h2>
-      <p class="text-stone-600 text-sm mb-4">
-        {completedBooks.length} of 66 standard Bible books complete ({completedChapters} of {totalStandard.toLocaleString()} chapters).
-        Extended Library (Apocrypha, Dead Sea Scrolls, Ethiopian canon) planned.
-      </p>
-      <div class="space-y-3">
-        {bookStats.map(({ name, chapters, verses, status }) => (
-          <div class="flex items-center justify-between p-4 bg-white rounded-xl border border-cream-200">
-            <div>
-              <span class="font-medium text-stone-700">{name}</span>
-              <span class="text-stone-400 text-sm ml-3">{chapters} ch &bull; {verses.toLocaleString()} v</span>
-            </div>
-            <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full bg-teal-100 text-teal-700">
-              {status}
-            </span>
-          </div>
-        ))}
-      </div>
-      <div class="mt-4 text-center">
-        <a href="/books" class="text-sm font-medium text-teal-600 hover:text-teal-700 transition-colors">
-          View full library with all 66+ books &rarr;
-        </a>
+      <h2 class="font-serif text-2xl font-medium text-stone-800 mb-5">Found an Error?</h2>
+      <div class="p-6 bg-white rounded-xl border border-cream-200">
+        <p class="text-stone-600 leading-relaxed mb-4">
+          This project improves through scrutiny. If you find a rendering that misrepresents the Hebrew or Greek,
+          a translator note that is inaccurate, or any other error &mdash; please report it.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a
+            href="https://github.com/bashonda2/the-covenant-rendering/issues"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-600 text-white rounded-xl font-medium hover:bg-teal-700 transition-colors text-base"
+          >
+            Report on GitHub &rarr;
+          </a>
+          <a
+            href="mailto:contact@thecovenantrendering.com?subject=Error%20Report"
+            class="inline-flex items-center gap-2 px-5 py-2.5 border border-cream-300 text-stone-600 rounded-xl font-medium hover:border-teal-300 hover:text-teal-600 transition-colors text-base"
+          >
+            Email: contact@thecovenantrendering.com
+          </a>
+        </div>
       </div>
     </section>
 
     <!-- GitHub CTA -->
     <div class="bg-teal-600 rounded-2xl px-8 py-10 text-center text-white">
       <h3 class="font-serif text-2xl font-medium mb-3">Open Source</h3>
-      <p class="text-teal-100 mb-6 text-sm leading-relaxed max-w-lg mx-auto">
+      <p class="text-teal-100 mb-6 text-lg leading-relaxed max-w-lg mx-auto">
         The full translation data (JSON), generation prompt, and methodology are available on GitHub.
         Contributions, corrections, and forks are welcome.
       </p>

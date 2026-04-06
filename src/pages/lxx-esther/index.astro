@@ -1,0 +1,156 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { loadVariantChapter } from '../../data/tcr';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+const dataRoot = join(process.cwd(), 'src', 'data', 'lxx-esther');
+
+function loadEstherFile(filename: string): any {
+  const file = join(dataRoot, filename);
+  return JSON.parse(readFileSync(file, 'utf-8'));
+}
+
+// Variant chapters 1-10
+const variantChapters = Array.from({ length: 10 }, (_, i) => {
+  const ch = loadVariantChapter('lxx-esther', i + 1);
+  const variants = ch.verses.filter((v: any) => v.has_variant).length;
+  const theological = ch.verses.filter((v: any) => v.significance === 'theological').length;
+  const major = ch.verses.filter((v: any) => v.significance === 'major').length;
+  return {
+    slug: String(i + 1),
+    label: `Chapter ${i + 1}`,
+    verses: ch.verses.length,
+    variants,
+    theological,
+    major,
+    isAddition: false,
+  };
+});
+
+// Addition files A-F
+const additionLabels: Record<string, string> = {
+  A: "Addition A (Mordecai's Dream)",
+  B: "Addition B (King's First Decree)",
+  C: "Addition C (Prayers of Mordecai and Esther)",
+  D: "Addition D (Esther Before the King)",
+  E: "Addition E (King's Second Decree)",
+  F: "Addition F (Interpretation of Mordecai's Dream)",
+};
+
+const additions = ['A', 'B', 'C', 'D', 'E', 'F'].map((letter) => {
+  const ch = loadEstherFile(`addition-${letter}.json`);
+  return {
+    slug: `addition-${letter}`,
+    label: additionLabels[letter],
+    verses: ch.verses.length,
+    variants: 0,
+    theological: 0,
+    major: 0,
+    isAddition: true,
+  };
+});
+
+const allEntries = [...variantChapters, ...additions];
+const totalVerses = allEntries.reduce((s, c) => s + c.verses, 0);
+const totalVariants = variantChapters.reduce((s, c) => s + c.variants, 0);
+const totalTheological = variantChapters.reduce((s, c) => s + c.theological, 0);
+---
+
+<Layout
+  title="Septuagint Esther (LXX)"
+  description="The Septuagint Esther compared verse-by-verse against the Masoretic Text, including the six deuterocanonical Additions (A-F) that introduce God into a book that never mentions him."
+  canonical="/lxx-esther"
+>
+  <div class="bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
+    <div class="max-w-3xl mx-auto px-6 py-12">
+      <div class="flex items-center gap-2 text-base text-stone-400 mb-5">
+        <a href="/books" class="hover:text-teal-600 transition-colors">Library</a>
+        <span>/</span>
+        <span class="text-stone-600">Septuagint Variants</span>
+      </div>
+
+      <h1 class="font-serif text-4xl font-medium text-stone-800 mb-2">
+        Septuagint Esther
+      </h1>
+      <p class="text-lg text-stone-500 mb-4">LXX &mdash; Including the six Additions that name God</p>
+
+      <div class="flex flex-wrap gap-4 text-base text-stone-500">
+        <span>{totalVerses.toLocaleString()} verses</span>
+        <span>&bull;</span>
+        <span>{totalVariants} variants documented</span>
+        <span>&bull;</span>
+        <span>{totalTheological} theologically significant</span>
+        <span>&bull;</span>
+        <span>2nd&ndash;1st c. BCE</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 py-8">
+    <div class="bg-cream-50 border border-cream-200 rounded-xl p-6 mb-10 text-lg leading-relaxed text-stone-600">
+      <h2 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-3">About This Tradition</h2>
+      <p class="mb-3">
+        The Septuagint Esther is famously longer than the Masoretic Text, containing six Additions (labeled A through F)
+        that add 107 verses not found in the Hebrew. The most striking difference: the MT of Esther never mentions God.
+        The LXX Additions correct this, introducing prayers, divine interventions, and explicit theological commentary.
+      </p>
+      <p>
+        Chapters 1&ndash;10 are presented as verse-by-verse variant comparisons against the MT. The six Additions
+        are standalone renderings since they have no Hebrew counterpart.
+      </p>
+    </div>
+
+    <h2 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-4">Chapters 1&ndash;10 (Variant Comparison)</h2>
+    <div class="space-y-2 mb-10">
+      {variantChapters.map((ch) => (
+        <a
+          href={`/lxx-esther/${ch.slug}`}
+          class="block p-4 rounded-lg border border-cream-200 hover:border-teal-200 hover:bg-cream-50 transition-colors"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="font-serif text-lg text-stone-800">{ch.label}</span>
+              <span class="text-base text-stone-400 ml-3">{ch.verses} verses</span>
+            </div>
+            <div class="flex items-center gap-3 text-base">
+              {ch.theological > 0 && (
+                <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-medium">
+                  {ch.theological} theological
+                </span>
+              )}
+              {ch.major > 0 && (
+                <span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-medium">
+                  {ch.major} major
+                </span>
+              )}
+              <span class="text-stone-400">{ch.variants} variant{ch.variants !== 1 ? 's' : ''}</span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <h2 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-4">Deuterocanonical Additions (A&ndash;F)</h2>
+    <div class="space-y-2">
+      {additions.map((ch) => (
+        <a
+          href={`/lxx-esther/${ch.slug}`}
+          class="block p-4 rounded-lg border border-teal-100 hover:border-teal-200 hover:bg-teal-50/30 transition-colors"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="font-serif text-lg text-stone-800">{ch.label}</span>
+              <span class="text-base text-stone-400 ml-3">{ch.verses} verses</span>
+            </div>
+            <div class="flex items-center gap-3 text-base">
+              <span class="px-2 py-0.5 rounded-full bg-teal-100 text-teal-700 font-medium">
+                standalone
+              </span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>

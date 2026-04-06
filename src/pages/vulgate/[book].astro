@@ -1,0 +1,172 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+const dataRoot = join(process.cwd(), 'src', 'data', 'vulgate');
+
+const bookConfig: Record<string, { file: string; name: string }> = {
+  genesis:     { file: 'genesis.json', name: 'Genesis' },
+  psalms:      { file: 'psalms.json', name: 'Psalms' },
+  isaiah:      { file: 'isaiah.json', name: 'Isaiah' },
+  jeremiah:    { file: 'jeremiah.json', name: 'Jeremiah' },
+  daniel:      { file: 'daniel.json', name: 'Daniel' },
+  gospels:     { file: 'gospels.json', name: 'Gospels' },
+  romans:      { file: 'romans.json', name: 'Romans' },
+  hebrews:     { file: 'hebrews.json', name: 'Hebrews' },
+  revelation:  { file: 'revelation.json', name: 'Revelation' },
+};
+
+const bookOrder = Object.keys(bookConfig);
+
+export async function getStaticPaths() {
+  return [
+    'genesis', 'psalms', 'isaiah', 'jeremiah', 'daniel',
+    'gospels', 'romans', 'hebrews', 'revelation',
+  ].map((book) => ({ params: { book } }));
+}
+
+const book = Astro.params.book!;
+const config = bookConfig[book];
+const data = JSON.parse(readFileSync(join(dataRoot, config.file), 'utf-8'));
+const renderings = data.renderings || [];
+
+const currentIdx = bookOrder.indexOf(book);
+const prevBook = currentIdx > 0 ? bookOrder[currentIdx - 1] : null;
+const nextBook = currentIdx < bookOrder.length - 1 ? bookOrder[currentIdx + 1] : null;
+---
+
+<Layout
+  title={`${config.name} — Latin Vulgate`}
+  description={`Latin Vulgate renderings for ${config.name}. ${renderings.length} significant passages compared with the TCR translation.`}
+  canonical={`/vulgate/${book}`}
+>
+  <div class="bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
+    <div class="max-w-3xl mx-auto px-6 py-12">
+      <div class="flex items-center gap-2 text-base text-stone-400 mb-5">
+        <a href="/vulgate" class="hover:text-teal-600 transition-colors">Latin Vulgate</a>
+        <span>/</span>
+        <span class="text-stone-600">{config.name}</span>
+      </div>
+
+      <h1 class="font-serif text-4xl font-medium text-stone-800 mb-2">
+        {config.name}
+        <span class="text-lg font-normal text-stone-400 ml-2">&mdash; Latin Vulgate</span>
+      </h1>
+      <p class="text-stone-600 text-base">
+        {renderings.length} renderings documented
+      </p>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 py-8">
+
+    {data.preamble && (
+      <details class="mb-10 group" open>
+        <summary class="cursor-pointer select-none flex items-center gap-2 text-base font-semibold uppercase tracking-widest text-teal-600 mb-4 hover:text-teal-700 transition-colors">
+          <svg class="w-3.5 h-3.5 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+          Overview
+        </summary>
+        <div class="bg-cream-50 border border-cream-200 rounded-xl p-6 sm:p-8 space-y-5 text-lg leading-relaxed text-stone-600">
+          <div>
+            <h3 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1.5">Summary</h3>
+            <p class="font-serif italic">{data.preamble.summary}</p>
+          </div>
+          {data.preamble.notable_renderings && (
+            <div>
+              <h3 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1.5">Notable Renderings</h3>
+              <p>{data.preamble.notable_renderings}</p>
+            </div>
+          )}
+          {data.preamble.theological_legacy && (
+            <div>
+              <h3 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1.5">Theological Legacy</h3>
+              <p>{data.preamble.theological_legacy}</p>
+            </div>
+          )}
+        </div>
+      </details>
+    )}
+
+    <div class="space-y-4">
+      {renderings.map((r: any) => (
+        <div class="rounded-lg border border-cream-200 bg-white p-5">
+          <div class="flex items-start justify-between mb-3">
+            <span class="font-serif text-stone-800 font-medium">{r.reference}</span>
+          </div>
+
+          {r.source_text && (
+            <div class="bg-stone-50 rounded-lg border border-stone-200 p-3 mb-3">
+              <p class="text-sm font-semibold uppercase tracking-wider text-stone-400 mb-1">Source Text</p>
+              <p class="font-hebrew text-lg text-stone-800 text-right" dir="rtl">{r.source_text}</p>
+            </div>
+          )}
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+            {r.vulgate_text && (
+              <div class="bg-amber-50/50 rounded-lg border border-amber-200 p-3">
+                <p class="text-sm font-semibold uppercase tracking-wider text-amber-700 mb-1">Vulgate (Latin)</p>
+                <p class="text-lg text-stone-700 font-serif italic">{r.vulgate_text}</p>
+                {r.vulgate_rendering && (
+                  <p class="text-base text-stone-500 mt-1.5">{r.vulgate_rendering}</p>
+                )}
+              </div>
+            )}
+            {r.tcr_rendering && (
+              <div class="bg-teal-50/50 rounded-lg border border-teal-200 p-3">
+                <p class="text-sm font-semibold uppercase tracking-wider text-teal-600 mb-1">TCR Rendering</p>
+                <p class="text-lg text-stone-700">{r.tcr_rendering}</p>
+              </div>
+            )}
+          </div>
+
+          {r.theological_legacy && (
+            <div class="bg-cream-50 rounded-lg border border-cream-200 p-3 mb-3">
+              <p class="text-sm font-semibold uppercase tracking-wider text-stone-400 mb-1">Theological Legacy</p>
+              <p class="text-lg text-stone-600 leading-relaxed">{r.theological_legacy}</p>
+            </div>
+          )}
+
+          {r.notes && r.notes.length > 0 && (
+            <div class="space-y-1.5">
+              {r.notes.map((note: string) => (
+                <p class="text-lg text-stone-500 leading-relaxed">{note}</p>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 pb-16">
+    <div class="flex items-center justify-between pt-8 border-t border-cream-200">
+      {prevBook ? (
+        <a
+          href={`/vulgate/${prevBook}`}
+          class="text-base text-teal-600 hover:text-teal-700 transition-colors"
+        >
+          &larr; {bookConfig[prevBook].name}
+        </a>
+      ) : (
+        <a href="/vulgate" class="text-base text-teal-600 hover:text-teal-700 transition-colors">
+          &larr; Vulgate Index
+        </a>
+      )}
+      {nextBook ? (
+        <a
+          href={`/vulgate/${nextBook}`}
+          class="text-base text-teal-600 hover:text-teal-700 transition-colors"
+        >
+          {bookConfig[nextBook].name} &rarr;
+        </a>
+      ) : (
+        <a href="/vulgate" class="text-base text-teal-600 hover:text-teal-700 transition-colors">
+          Vulgate Index &rarr;
+        </a>
+      )}
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,207 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { BOOKS, type BookInfo } from '../data/tcr';
+
+// All 66 standard books in canonical order
+const standardBooks = BOOKS.filter((b: BookInfo) => b.tier === 'standard').sort((a, b) => a.order - b.order);
+const otBooks = standardBooks.filter((b: BookInfo) => b.testament === 'old');
+const ntBooks = standardBooks.filter((b: BookInfo) => b.testament === 'new');
+
+function bookLabel(name: string): string {
+  return name;
+}
+---
+
+<Layout
+  title="Download"
+  description="Free PDF downloads of The Covenant Rendering — a modern English Bible from the Hebrew and Greek. CC-BY-4.0 licensed."
+  canonical="/download"
+>
+  <!-- Hero -->
+  <div class="bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
+    <div class="max-w-3xl mx-auto px-6 py-16">
+      <p class="text-base font-semibold uppercase tracking-widest text-teal-600 mb-3">Download</p>
+      <h1 class="font-serif text-4xl font-medium text-stone-800 mb-4">
+        Download The Covenant Rendering
+      </h1>
+      <p class="text-stone-500 text-lg font-serif italic leading-relaxed">
+        Free PDF downloads of the complete Bible. CC-BY-4.0 licensed.
+      </p>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 py-16 space-y-16">
+
+    <!-- Main Downloads -->
+    <section>
+      <h2 class="font-serif text-2xl font-medium text-stone-800 mb-6">Complete Downloads</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+
+        <!-- Full Bible -->
+        <a
+          href="/pdf/the-covenant-rendering-full.pdf"
+          download
+          class="group p-6 bg-white rounded-xl border border-cream-200 hover:border-teal-300 hover:shadow-lg transition-all text-center"
+        >
+          <div class="w-14 h-14 mx-auto mb-4 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+            </svg>
+          </div>
+          <p class="font-serif text-lg font-medium text-stone-800 group-hover:text-teal-700 transition-colors mb-1">Full Bible</p>
+          <p class="text-base text-stone-500 mb-3">Old &amp; New Testament</p>
+          <span class="inline-flex items-center gap-1.5 text-base font-medium text-teal-600 group-hover:text-teal-700">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+            17 MB
+          </span>
+        </a>
+
+        <!-- Old Testament -->
+        <a
+          href="/pdf/old-testament.pdf"
+          download
+          class="group p-6 bg-white rounded-xl border border-cream-200 hover:border-teal-300 hover:shadow-lg transition-all text-center"
+        >
+          <div class="w-14 h-14 mx-auto mb-4 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292" />
+            </svg>
+          </div>
+          <p class="font-serif text-lg font-medium text-stone-800 group-hover:text-teal-700 transition-colors mb-1">Old Testament</p>
+          <p class="text-base text-stone-500 mb-3">39 books &mdash; Genesis to Malachi</p>
+          <span class="inline-flex items-center gap-1.5 text-base font-medium text-teal-600 group-hover:text-teal-700">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+            13 MB
+          </span>
+        </a>
+
+        <!-- New Testament -->
+        <a
+          href="/pdf/new-testament.pdf"
+          download
+          class="group p-6 bg-white rounded-xl border border-cream-200 hover:border-teal-300 hover:shadow-lg transition-all text-center"
+        >
+          <div class="w-14 h-14 mx-auto mb-4 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042a8.967 8.967 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292" />
+            </svg>
+          </div>
+          <p class="font-serif text-lg font-medium text-stone-800 group-hover:text-teal-700 transition-colors mb-1">New Testament</p>
+          <p class="text-base text-stone-500 mb-3">27 books &mdash; Matthew to Revelation</p>
+          <span class="inline-flex items-center gap-1.5 text-base font-medium text-teal-600 group-hover:text-teal-700">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+            4 MB
+          </span>
+        </a>
+      </div>
+    </section>
+
+    <hr class="teal-rule" />
+
+    <!-- Individual Books -->
+    <section>
+      <h2 class="font-serif text-2xl font-medium text-stone-800 mb-2">Individual Books</h2>
+      <p class="text-stone-500 text-base mb-8">
+        All 66 books are available as individual PDF downloads from the
+        <a href="https://github.com/bashonda2/the-covenant-rendering" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:underline">GitHub repository</a>.
+        Popular books are linked below.
+      </p>
+
+      <!-- Old Testament -->
+      <div class="mb-8">
+        <p class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-4">Old Testament</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+          {otBooks.map((b: BookInfo) => {
+            const hasLocal = ['genesis', 'psalms'].includes(b.slug);
+            return hasLocal ? (
+              <a
+                href={`/pdf/${b.slug}.pdf`}
+                download
+                class="flex items-center gap-2 px-3 py-2.5 bg-white rounded-lg border border-cream-200 hover:border-teal-300 hover:shadow transition-all text-base text-stone-700 hover:text-teal-600"
+              >
+                <svg class="w-3.5 h-3.5 text-teal-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                {b.name}
+              </a>
+            ) : (
+              <span class="flex items-center gap-2 px-3 py-2.5 rounded-lg text-base text-stone-300">
+                {b.name}
+              </span>
+            );
+          })}
+        </div>
+      </div>
+
+      <!-- New Testament -->
+      <div>
+        <p class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-4">New Testament</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+          {ntBooks.map((b: BookInfo) => {
+            const hasLocal = ['matthew', 'john', 'romans', 'revelation'].includes(b.slug);
+            return hasLocal ? (
+              <a
+                href={`/pdf/${b.slug}.pdf`}
+                download
+                class="flex items-center gap-2 px-3 py-2.5 bg-white rounded-lg border border-cream-200 hover:border-teal-300 hover:shadow transition-all text-base text-stone-700 hover:text-teal-600"
+              >
+                <svg class="w-3.5 h-3.5 text-teal-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                {b.name}
+              </a>
+            ) : (
+              <span class="flex items-center gap-2 px-3 py-2.5 rounded-lg text-base text-stone-300">
+                {b.name}
+              </span>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+
+    <hr class="teal-rule" />
+
+    <!-- License note -->
+    <section>
+      <div class="p-6 bg-white rounded-xl border border-cream-200">
+        <div class="flex items-start gap-4">
+          <div class="flex-shrink-0 w-12 h-12 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center font-bold text-base">
+            CC
+          </div>
+          <div>
+            <p class="font-semibold text-stone-700 mb-1">CC-BY-4.0 License</p>
+            <p class="text-lg text-stone-600 leading-relaxed">
+              All downloads are free to use, share, and adapt for any purpose &mdash; including commercial &mdash;
+              with attribution. Credit: "The Covenant Rendering, thecovenantrendering.com, CC-BY-4.0."
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GitHub CTA -->
+    <div class="bg-teal-600 rounded-2xl px-8 py-10 text-center text-white">
+      <h3 class="font-serif text-2xl font-medium mb-3">Need All 66 Books?</h3>
+      <p class="text-teal-100 mb-6 text-lg leading-relaxed max-w-lg mx-auto">
+        Every individual book PDF, the full JSON data, and the complete translation pipeline
+        are available on GitHub.
+      </p>
+      <a
+        href="https://github.com/bashonda2/the-covenant-rendering"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 px-7 py-3 bg-white text-teal-700 rounded-xl font-medium hover:bg-teal-50 transition-colors"
+      >
+        View on GitHub &rarr;
+      </a>
+    </div>
+
+  </div>
+</Layout>

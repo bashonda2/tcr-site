@@ -1,0 +1,170 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+const dataRoot = join(process.cwd(), 'src', 'data', 'jst');
+
+const slugMap: Record<string, string> = {
+  'moses-1': 'moses-01.json',
+  'moses-2': 'moses-02.json',
+  'moses-3': 'moses-03.json',
+  'moses-4': 'moses-04.json',
+  'moses-5': 'moses-05.json',
+  'moses-6': 'moses-06.json',
+  'moses-7': 'moses-07.json',
+  'moses-8': 'moses-08.json',
+  'js-matthew': 'js-matthew.json',
+};
+
+export async function getStaticPaths() {
+  return [
+    { params: { slug: 'moses-1' } },
+    { params: { slug: 'moses-2' } },
+    { params: { slug: 'moses-3' } },
+    { params: { slug: 'moses-4' } },
+    { params: { slug: 'moses-5' } },
+    { params: { slug: 'moses-6' } },
+    { params: { slug: 'moses-7' } },
+    { params: { slug: 'moses-8' } },
+    { params: { slug: 'js-matthew' } },
+  ];
+}
+
+const slug = Astro.params.slug!;
+const filename = slugMap[slug];
+const data = JSON.parse(readFileSync(join(dataRoot, filename), 'utf-8'));
+
+const isMoses = slug.startsWith('moses-');
+const chapterNum = isMoses ? parseInt(slug.split('-')[1], 10) : null;
+const pageTitle = isMoses ? `Moses ${chapterNum}` : 'Joseph Smith\u2014Matthew';
+const prevSlug = isMoses && chapterNum! > 1 ? `moses-${chapterNum! - 1}` : null;
+const nextSlug = isMoses && chapterNum! < 8 ? `moses-${chapterNum! + 1}` : null;
+---
+
+<Layout
+  title={`${pageTitle} — Joseph Smith Translation`}
+  description={data.preamble?.summary || `${pageTitle} from the Joseph Smith Translation.`}
+  canonical={`/jst/${slug}`}
+>
+  <div class="bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
+    <div class="max-w-3xl mx-auto px-6 py-12">
+      <div class="flex items-center gap-2 text-base text-stone-400 mb-5">
+        <a href="/jst" class="hover:text-teal-600 transition-colors">Joseph Smith Translation</a>
+        <span>/</span>
+        <span class="text-stone-600">{pageTitle}</span>
+      </div>
+
+      <h1 class="font-serif text-4xl font-medium text-stone-800 mb-2">
+        {pageTitle}
+        <span class="text-lg font-normal text-stone-400 ml-2">&mdash; JST</span>
+      </h1>
+      <p class="text-stone-600 text-base">
+        {data.verses.length} verses &bull; {data.meta.source_text}
+      </p>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 py-8">
+
+    {data.preamble && (
+      <details class="mb-10 group" open>
+        <summary class="cursor-pointer select-none flex items-center gap-2 text-base font-semibold uppercase tracking-widest text-teal-600 mb-4 hover:text-teal-700 transition-colors">
+          <svg class="w-3.5 h-3.5 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+          Preamble
+        </summary>
+        <div class="bg-cream-50 border border-cream-200 rounded-xl p-6 sm:p-8 space-y-5 text-lg leading-relaxed text-stone-600">
+          <div>
+            <h3 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1.5">Summary</h3>
+            <p class="font-serif italic">{data.preamble.summary}</p>
+          </div>
+          {data.preamble.remarkable && (
+            <div>
+              <h3 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1.5">What Is Remarkable</h3>
+              <p>{data.preamble.remarkable}</p>
+            </div>
+          )}
+          {data.preamble.friction && (
+            <div>
+              <h3 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1.5">Points of Friction</h3>
+              <p>{data.preamble.friction}</p>
+            </div>
+          )}
+          {data.preamble.connections && (
+            <div>
+              <h3 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1.5">Connections</h3>
+              <p>{data.preamble.connections}</p>
+            </div>
+          )}
+        </div>
+      </details>
+    )}
+
+    <div class="space-y-4">
+      {data.verses.map((v: any) => (
+        <div class="rounded-lg border border-cream-200 bg-white p-5">
+          <div class="flex items-start justify-between mb-2">
+            <span class="text-base font-mono text-stone-400">{v.verse}</span>
+            {v.text_reference && (
+              <span class="text-base text-stone-400">{v.text_reference}</span>
+            )}
+          </div>
+
+          <p class="text-stone-700 text-lg leading-relaxed mb-3 font-serif">
+            {v.rendering}
+          </p>
+
+          {v.text_source && v.text_source !== v.rendering && (
+            <div class="bg-stone-50 rounded-lg border border-stone-200 p-3 mb-3">
+              <p class="text-sm font-semibold uppercase tracking-wider text-stone-400 mb-1">Source Text</p>
+              <p class="text-lg text-stone-600">{v.text_source}</p>
+            </div>
+          )}
+
+          {v.translator_notes && v.translator_notes.length > 0 && (
+            <div class="space-y-1.5">
+              {v.translator_notes.map((note: string) => (
+                <p class="text-lg text-stone-500 leading-relaxed">{note}</p>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 pb-16">
+    <div class="flex items-center justify-between pt-8 border-t border-cream-200">
+      {prevSlug ? (
+        <a
+          href={`/jst/${prevSlug}`}
+          class="text-base text-teal-600 hover:text-teal-700 transition-colors"
+        >
+          &larr; Moses {chapterNum! - 1}
+        </a>
+      ) : (
+        <a href="/jst" class="text-base text-teal-600 hover:text-teal-700 transition-colors">
+          &larr; JST Index
+        </a>
+      )}
+      {nextSlug ? (
+        <a
+          href={`/jst/${nextSlug}`}
+          class="text-base text-teal-600 hover:text-teal-700 transition-colors"
+        >
+          Moses {chapterNum! + 1} &rarr;
+        </a>
+      ) : isMoses ? (
+        <a href="/jst/js-matthew" class="text-base text-teal-600 hover:text-teal-700 transition-colors">
+          JS-Matthew &rarr;
+        </a>
+      ) : (
+        <a href="/jst" class="text-base text-teal-600 hover:text-teal-700 transition-colors">
+          JST Index &rarr;
+        </a>
+      )}
+    </div>
+  </div>
+</Layout>

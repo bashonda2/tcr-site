@@ -1,0 +1,107 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+const dataRoot = join(process.cwd(), 'src', 'data', 'vulgate');
+
+const bookFiles = [
+  { file: 'genesis.json', slug: 'genesis', name: 'Genesis' },
+  { file: 'psalms.json', slug: 'psalms', name: 'Psalms' },
+  { file: 'isaiah.json', slug: 'isaiah', name: 'Isaiah' },
+  { file: 'jeremiah.json', slug: 'jeremiah', name: 'Jeremiah' },
+  { file: 'daniel.json', slug: 'daniel', name: 'Daniel' },
+  { file: 'gospels.json', slug: 'gospels', name: 'Gospels' },
+  { file: 'romans.json', slug: 'romans', name: 'Romans' },
+  { file: 'hebrews.json', slug: 'hebrews', name: 'Hebrews' },
+  { file: 'revelation.json', slug: 'revelation', name: 'Revelation' },
+];
+
+const books = bookFiles.map((b) => {
+  const data = JSON.parse(readFileSync(join(dataRoot, b.file), 'utf-8'));
+  return {
+    ...b,
+    renderings: data.renderings.length,
+    summary: data.preamble?.summary || '',
+    legacy: data.preamble?.theological_legacy || '',
+  };
+});
+
+const totalRenderings = books.reduce((s, b) => s + b.renderings, 0);
+---
+
+<Layout
+  title="Latin Vulgate — Interpretive Tradition Comparisons"
+  description="Jerome's Latin Vulgate compared with the TCR across 9 biblical books. Explore how Vulgate renderings shaped Western theology for over a millennium."
+  canonical="/vulgate"
+>
+  <div class="bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
+    <div class="max-w-3xl mx-auto px-6 py-12">
+      <div class="flex items-center gap-2 text-base text-stone-400 mb-5">
+        <a href="/books" class="hover:text-teal-600 transition-colors">Library</a>
+        <span>/</span>
+        <span class="text-stone-600">Interpretive Traditions</span>
+      </div>
+
+      <h1 class="font-serif text-4xl font-medium text-stone-800 mb-2">
+        Latin Vulgate
+      </h1>
+      <p class="text-lg text-stone-500 mb-4">
+        Jerome&rsquo;s Latin translation (382&ndash;405 CE) &mdash; the Bible of Western Christianity for over a thousand years
+      </p>
+
+      <div class="flex flex-wrap gap-4 text-base text-stone-500">
+        <span>{totalRenderings} renderings</span>
+        <span>&bull;</span>
+        <span>{books.length} books</span>
+        <span>&bull;</span>
+        <span>Biblia Sacra Vulgata (Stuttgart critical edition)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 py-8">
+    <div class="bg-cream-50 border border-cream-200 rounded-xl p-6 mb-10 text-lg leading-relaxed text-stone-600">
+      <h2 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-3">About the Vulgate</h2>
+      <p class="mb-3">
+        The Vulgate is Jerome&rsquo;s Latin translation of the Bible, commissioned by Pope Damasus I in 382 CE.
+        For the Old Testament, Jerome broke with tradition by translating directly from the Hebrew
+        (<span class="italic">Hebraica veritas</span>) rather than from the Greek Septuagint, producing a
+        text that often diverges from the Old Latin (Vetus Latina) versions.
+      </p>
+      <p class="mb-3">
+        Jerome&rsquo;s translation choices &mdash; vocabulary, syntax, and occasional interpretation &mdash;
+        became the foundation of Western theological language. Terms like
+        <span class="font-serif italic">firmamentum</span>, <span class="font-serif italic">omnipotens</span>,
+        <span class="font-serif italic">iustitia</span>, and <span class="font-serif italic">sacramentum</span>
+        shaped how Latin Christianity understood creation, divine attributes, righteousness, and mystery.
+      </p>
+      <p>
+        These comparison pages document where the Vulgate diverges from or interprets the Hebrew and Greek source texts,
+        and how those renderings influenced Western theology.
+      </p>
+    </div>
+
+    <h2 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-4">
+      Browse by Book ({totalRenderings} renderings)
+    </h2>
+    <div class="space-y-2">
+      {books.map((book) => (
+        <a
+          href={`/vulgate/${book.slug}`}
+          class="block p-4 rounded-lg border border-cream-200 hover:border-teal-200 hover:bg-cream-50 transition-colors"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="font-serif text-lg text-stone-800">{book.name}</span>
+              <span class="text-base text-stone-400 ml-3">{book.renderings} renderings</span>
+            </div>
+          </div>
+          {book.summary && (
+            <p class="text-lg text-stone-500 mt-1 line-clamp-2">{book.summary}</p>
+          )}
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>

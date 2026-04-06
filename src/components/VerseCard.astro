@@ -12,20 +12,37 @@ const { verse, chapterNum, bookName = 'Genesis', showAll = true } = Astro.props;
 const hasNotes = verse.translator_notes?.length > 0;
 const hasTerms = verse.key_terms?.length > 0;
 const cardId = `${bookName.toLowerCase().slice(0,3)}-${chapterNum}-${verse.verse}`;
+const bookSlug = bookName.toLowerCase().replace(/\s+/g, '-');
+const permalink = `/${bookSlug}/${chapterNum}/${verse.verse}`;
 ---
 
-<article id={cardId} class="scroll-mt-24 py-8 border-b border-cream-200 last:border-0">
+<article id={`v${verse.verse}`} class="group/verse scroll-mt-24 py-8 border-b border-cream-200 last:border-0 transition-colors duration-1000">
   <!-- Verse header -->
   <div class="flex items-baseline gap-3 mb-5">
-    <span class="font-sans text-xs font-semibold text-teal-600 tracking-widest uppercase">
+    <span class="font-sans text-base font-semibold text-teal-600 tracking-widest uppercase">
       {bookName} {chapterNum}:{verse.verse}
     </span>
+    <button
+      class="verse-permalink opacity-0 group-hover/verse:opacity-100 focus:opacity-100 text-stone-300 hover:text-teal-600 transition-all duration-200"
+      data-permalink={permalink}
+      title="Copy verse link"
+      aria-label={`Copy link to ${bookName} ${chapterNum}:${verse.verse}`}
+    >
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.172 13.828a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.102 1.101" />
+      </svg>
+    </button>
   </div>
 
-  <!-- Source text (Hebrew or Aramaic) -->
+  <!-- Source text (Hebrew, Aramaic, Greek, or source note) -->
   <div class="mb-4 p-4 bg-teal-50/50 rounded-xl border border-teal-100">
     {verse.text_aramaic ? (
       <p class="text-hebrew text-right leading-loose">{verse.text_aramaic}</p>
+    ) : verse.text_greek ? (
+      <p class="text-greek text-left leading-loose">{verse.text_greek}</p>
+    ) : verse.text_source ? (
+      <p class="text-lg text-stone-500 leading-relaxed italic">{verse.text_source}</p>
     ) : (
       <p class="text-hebrew text-right leading-loose">{verse.text_hebrew}</p>
     )}
@@ -34,15 +51,19 @@ const cardId = `${bookName.toLowerCase().slice(0,3)}-${chapterNum}-${verse.verse
   <!-- Modern English rendering -->
   <p class="text-rendering mb-4">{verse.rendering}</p>
 
-  <!-- KJV comparison -->
-  <p class="text-base text-stone-600 italic font-serif mb-5">
-    <span class="not-italic font-sans text-xs font-semibold text-stone-500 uppercase tracking-wider mr-2">KJV</span>
-    {verse.text_kjv}
-  </p>
+  <!-- Reference text comparison (KJV for Bible, Charles for 1 Enoch, etc.) -->
+  {(verse.text_kjv || verse.text_reference) && (
+    <p class="text-lg text-stone-600 italic font-serif mb-5">
+      <span class="not-italic font-sans text-base font-semibold text-stone-500 uppercase tracking-wider mr-2">
+        {verse.text_reference ? 'REF' : 'KJV'}
+      </span>
+      {verse.text_kjv || verse.text_reference}
+    </p>
+  )}
 
   {showAll && (hasTerms || hasNotes) && (
     <details class="group">
-      <summary class="cursor-pointer list-none flex items-center gap-2 text-xs font-semibold text-teal-600 uppercase tracking-wider hover:text-teal-700 transition-colors">
+      <summary class="cursor-pointer list-none flex items-center gap-2 text-base font-semibold text-teal-600 uppercase tracking-wider hover:text-teal-700 transition-colors">
         <svg
           class="w-4 h-4 transition-transform group-open:rotate-90"
           fill="none" stroke="currentColor" stroke-width="2"
@@ -58,21 +79,21 @@ const cardId = `${bookName.toLowerCase().slice(0,3)}-${chapterNum}-${verse.verse
         <!-- Key Terms -->
         {hasTerms && (
           <div>
-            <h4 class="text-xs font-semibold uppercase tracking-wider text-stone-400 mb-3">Key Terms</h4>
+            <h4 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-3">Key Terms</h4>
             <div class="space-y-4">
               {verse.key_terms.map((term) => (
                 <div class="flex gap-4 p-4 bg-white rounded-xl border border-cream-200 shadow-sm">
-                  <div class="flex-shrink-0 text-right min-w-[80px]">
-                    <span class="font-hebrew text-xl text-stone-700 block leading-loose">{term.hebrew}</span>
-                    <span class="text-xs text-stone-500 italic">{term.transliteration}</span>
+                  <div class={`flex-shrink-0 min-w-[80px] ${term.greek ? 'text-left' : 'text-right'}`}>
+                    <span class={`${term.greek ? 'font-greek' : 'font-hebrew'} text-xl text-stone-700 block leading-loose`}>{term.greek || term.hebrew}</span>
+                    <span class="text-base text-stone-500 italic">{term.transliteration}</span>
                   </div>
                   <div class="flex-1 border-l border-cream-200 pl-4">
                     <div class="flex flex-wrap items-center gap-2 mb-1">
-                      <span class="text-sm font-medium text-stone-700">"{term.rendered_as}"</span>
-                      <span class="text-xs text-stone-400">&mdash;</span>
-                      <span class="text-xs text-stone-600 italic">{term.semantic_range}</span>
+                      <span class="text-base font-medium text-stone-700">"{term.rendered_as}"</span>
+                      <span class="text-base text-stone-400">&mdash;</span>
+                      <span class="text-base text-stone-600 italic">{term.semantic_range}</span>
                     </div>
-                    <p class="text-sm text-stone-600 leading-relaxed">{term.note}</p>
+                    <p class="text-lg text-stone-600 leading-relaxed">{term.note}</p>
                   </div>
                 </div>
               ))}
@@ -83,10 +104,10 @@ const cardId = `${bookName.toLowerCase().slice(0,3)}-${chapterNum}-${verse.verse
         <!-- Translator Notes -->
         {hasNotes && (
           <div>
-            <h4 class="text-xs font-semibold uppercase tracking-wider text-stone-400 mb-3">Translator Notes</h4>
+            <h4 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-3">Translator Notes</h4>
             <ol class="space-y-3 list-decimal list-outside ml-4">
               {verse.translator_notes.map((note) => (
-                <li class="text-sm text-stone-600 leading-relaxed pl-1">{note}</li>
+                <li class="text-lg text-stone-600 leading-relaxed pl-1">{note}</li>
               ))}
             </ol>
           </div>

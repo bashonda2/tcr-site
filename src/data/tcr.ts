@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 
 // ── Types ──────────────────────────────────────────────────────────────────
@@ -31,7 +31,8 @@ export interface AlternateEdition {
 }
 
 export interface KeyTerm {
-  hebrew: string;
+  hebrew?: string;
+  greek?: string;
   transliteration: string;
   rendered_as: string;
   semantic_range: string;
@@ -40,7 +41,8 @@ export interface KeyTerm {
 
 export interface Verse {
   verse: number;
-  text_hebrew: string;
+  text_hebrew?: string;
+  text_greek?: string;
   text_aramaic?: string;
   text_kjv: string;
   rendering: string;
@@ -137,11 +139,11 @@ export const BOOKS: BookInfo[] = [
     alternateEditions: [
       { slug: 'genesis-lxx', label: 'Septuagint (LXX)', sourceText: 'lxx', status: 'not-started',
         tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '3rd–2nd c. BCE', preNicaea: true, scope: 'full', license: 'public-domain' },
-      { slug: 'genesis-sam', label: 'Samaritan Pentateuch', sourceText: 'samaritan', status: 'not-started',
+      { slug: 'genesis-sam', label: 'Samaritan Pentateuch', sourceText: 'samaritan', status: 'complete',
         tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '4th c. BCE divergence', preNicaea: true, scope: 'full', description: '~6,000 variant readings vs. MT. Theologically significant: 10th commandment designates Mt. Gerizim.', license: 'public-domain' },
-      { slug: 'genesis-targum', label: 'Targum Onkelos', sourceText: 'targum', status: 'not-started',
+      { slug: 'genesis-targum', label: 'Targum Onkelos', sourceText: 'targum', status: 'complete',
         tier: 'interpretive', uiLabel: 'How traditions read this passage', date: '1st c. BCE – 5th c. CE', preNicaea: true, scope: 'full', description: 'Aramaic interpretive paraphrase used in synagogue worship.', license: 'public-domain' },
-      { slug: 'genesis-jst', label: 'Joseph Smith Translation (Book of Moses)', sourceText: 'jst', status: 'not-started',
+      { slug: 'genesis-jst', label: 'Joseph Smith Translation (Book of Moses)', sourceText: 'jst', status: 'complete',
         tier: 'interpretive', uiLabel: 'How traditions read this passage', date: '1830s CE', preNicaea: false, scope: 'partial', description: 'Revelatory revision of Genesis 1-24. Not a translation from original languages.', license: 'research-required' },
     ],
   },
@@ -153,9 +155,9 @@ export const BOOKS: BookInfo[] = [
     alternateEditions: [
       { slug: 'exodus-lxx', label: 'Septuagint (LXX)', sourceText: 'lxx', status: 'not-started',
         tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '3rd–2nd c. BCE', preNicaea: true, scope: 'full', license: 'public-domain' },
-      { slug: 'exodus-sam', label: 'Samaritan Pentateuch', sourceText: 'samaritan', status: 'not-started',
+      { slug: 'exodus-sam', label: 'Samaritan Pentateuch', sourceText: 'samaritan', status: 'complete',
         tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '4th c. BCE divergence', preNicaea: true, scope: 'full', license: 'public-domain' },
-      { slug: 'exodus-targum', label: 'Targum Onkelos', sourceText: 'targum', status: 'not-started',
+      { slug: 'exodus-targum', label: 'Targum Onkelos', sourceText: 'targum', status: 'complete',
         tier: 'interpretive', uiLabel: 'How traditions read this passage', date: '1st c. BCE – 5th c. CE', preNicaea: true, scope: 'full', license: 'public-domain' },
     ],
   },
@@ -167,9 +169,9 @@ export const BOOKS: BookInfo[] = [
     alternateEditions: [
       { slug: 'leviticus-lxx', label: 'Septuagint (LXX)', sourceText: 'lxx', status: 'not-started',
         tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '3rd–2nd c. BCE', preNicaea: true, scope: 'full', license: 'public-domain' },
-      { slug: 'leviticus-sam', label: 'Samaritan Pentateuch', sourceText: 'samaritan', status: 'not-started',
+      { slug: 'leviticus-sam', label: 'Samaritan Pentateuch', sourceText: 'samaritan', status: 'complete',
         tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '4th c. BCE divergence', preNicaea: true, scope: 'full', license: 'public-domain' },
-      { slug: 'leviticus-targum', label: 'Targum Onkelos', sourceText: 'targum', status: 'not-started',
+      { slug: 'leviticus-targum', label: 'Targum Onkelos', sourceText: 'targum', status: 'complete',
         tier: 'interpretive', uiLabel: 'How traditions read this passage', date: '1st c. BCE – 5th c. CE', preNicaea: true, scope: 'full', license: 'public-domain' },
     ],
   },
@@ -181,9 +183,9 @@ export const BOOKS: BookInfo[] = [
     alternateEditions: [
       { slug: 'numbers-lxx', label: 'Septuagint (LXX)', sourceText: 'lxx', status: 'not-started',
         tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '3rd–2nd c. BCE', preNicaea: true, scope: 'full', license: 'public-domain' },
-      { slug: 'numbers-sam', label: 'Samaritan Pentateuch', sourceText: 'samaritan', status: 'not-started',
+      { slug: 'numbers-sam', label: 'Samaritan Pentateuch', sourceText: 'samaritan', status: 'complete',
         tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '4th c. BCE divergence', preNicaea: true, scope: 'full', license: 'public-domain' },
-      { slug: 'numbers-targum', label: 'Targum Onkelos', sourceText: 'targum', status: 'not-started',
+      { slug: 'numbers-targum', label: 'Targum Onkelos', sourceText: 'targum', status: 'complete',
         tier: 'interpretive', uiLabel: 'How traditions read this passage', date: '1st c. BCE – 5th c. CE', preNicaea: true, scope: 'full', license: 'public-domain' },
     ],
   },
@@ -195,9 +197,9 @@ export const BOOKS: BookInfo[] = [
     alternateEditions: [
       { slug: 'deuteronomy-lxx', label: 'Septuagint (LXX)', sourceText: 'lxx', status: 'not-started',
         tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '3rd–2nd c. BCE', preNicaea: true, scope: 'full', license: 'public-domain' },
-      { slug: 'deuteronomy-sam', label: 'Samaritan Pentateuch', sourceText: 'samaritan', status: 'not-started',
+      { slug: 'deuteronomy-sam', label: 'Samaritan Pentateuch', sourceText: 'samaritan', status: 'complete',
         tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '4th c. BCE divergence', preNicaea: true, scope: 'full', license: 'public-domain' },
-      { slug: 'deuteronomy-targum', label: 'Targum Onkelos', sourceText: 'targum', status: 'not-started',
+      { slug: 'deuteronomy-targum', label: 'Targum Onkelos', sourceText: 'targum', status: 'complete',
         tier: 'interpretive', uiLabel: 'How traditions read this passage', date: '1st c. BCE – 5th c. CE', preNicaea: true, scope: 'full', license: 'public-domain' },
     ],
   },
@@ -276,7 +278,7 @@ export const BOOKS: BookInfo[] = [
     chapters: 10, testament: 'old', tier: 'standard', section: 'historical', order: 17,
     canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
     alternateEditions: [
-      { slug: 'esther-lxx', label: 'Greek Esther (LXX, with additions)', sourceText: 'lxx', status: 'not-started',
+      { slug: 'esther-lxx', label: 'Greek Esther (LXX, with additions)', sourceText: 'lxx', status: 'complete',
         tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '2nd–1st c. BCE', preNicaea: true, scope: 'full', description: '107 added verses not in the Hebrew text.', license: 'public-domain' },
     ],
   },
@@ -328,11 +330,11 @@ export const BOOKS: BookInfo[] = [
     chapters: 66, testament: 'old', tier: 'standard', section: 'major-prophets', order: 23,
     canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
     alternateEditions: [
-      { slug: 'isaiah-dss', label: 'Great Isaiah Scroll (1QIsaᵃ)', sourceText: 'dss', status: 'not-started',
+      { slug: 'isaiah-dss', label: 'Great Isaiah Scroll (1QIsaᵃ)', sourceText: 'dss', status: 'complete',
         tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '150–100 BCE', preNicaea: true, scope: 'full', description: 'The oldest complete manuscript of any biblical book. All 66 chapters preserved.', license: 'public-domain' },
       { slug: 'isaiah-lxx', label: 'Septuagint Isaiah (LXX)', sourceText: 'lxx', status: 'not-started',
         tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '3rd–2nd c. BCE', preNicaea: true, scope: 'full', license: 'public-domain' },
-      { slug: 'isaiah-targum', label: 'Targum Jonathan', sourceText: 'targum', status: 'not-started',
+      { slug: 'isaiah-targum', label: 'Targum Jonathan', sourceText: 'targum', status: 'complete',
         tier: 'interpretive', uiLabel: 'How traditions read this passage', date: '1st c. BCE – 5th c. CE', preNicaea: true, scope: 'full', description: 'Aramaic interpretive paraphrase of the Prophets.', license: 'public-domain' },
     ],
   },
@@ -342,9 +344,9 @@ export const BOOKS: BookInfo[] = [
     chapters: 52, testament: 'old', tier: 'standard', section: 'major-prophets', order: 24,
     canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
     alternateEditions: [
-      { slug: 'jeremiah-lxx', label: 'Septuagint Jeremiah (LXX, shorter text)', sourceText: 'lxx', status: 'not-started',
+      { slug: 'jeremiah-lxx', label: 'Septuagint Jeremiah (LXX, shorter text)', sourceText: 'lxx', status: 'complete',
         tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '3rd–2nd c. BCE', preNicaea: true, scope: 'full', description: 'Significantly shorter than the MT (~1/8 less text) with different chapter arrangement.', license: 'public-domain' },
-      { slug: 'jeremiah-targum', label: 'Targum Jonathan', sourceText: 'targum', status: 'not-started',
+      { slug: 'jeremiah-targum', label: 'Targum Jonathan', sourceText: 'targum', status: 'complete',
         tier: 'interpretive', uiLabel: 'How traditions read this passage', date: '1st c. BCE – 5th c. CE', preNicaea: true, scope: 'full', license: 'public-domain' },
     ],
   },
@@ -366,7 +368,7 @@ export const BOOKS: BookInfo[] = [
     chapters: 12, testament: 'old', tier: 'standard', section: 'major-prophets', order: 27,
     canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'wlc', status: 'complete',
     alternateEditions: [
-      { slug: 'daniel-lxx', label: 'Greek Daniel (LXX, with additions)', sourceText: 'lxx', status: 'not-started',
+      { slug: 'daniel-lxx', label: 'Greek Daniel (LXX, with additions)', sourceText: 'lxx', status: 'complete',
         tier: 'manuscript', uiLabel: 'Other manuscript traditions', date: '2nd c. BCE', preNicaea: true, scope: 'full', description: 'Includes additions: Prayer of Azariah, Susanna, Bel and the Dragon.', license: 'public-domain' },
     ],
   },
@@ -452,25 +454,25 @@ export const BOOKS: BookInfo[] = [
     slug: 'matthew', name: 'Matthew',
     greekName: 'Κατὰ Μαθθαῖον', transliteration: 'Kata Maththaion', meaning: 'According to Matthew',
     chapters: 28, testament: 'new', tier: 'standard', section: 'gospels', order: 40,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: 'mark', name: 'Mark',
     greekName: 'Κατὰ Μᾶρκον', transliteration: 'Kata Markon', meaning: 'According to Mark',
     chapters: 16, testament: 'new', tier: 'standard', section: 'gospels', order: 41,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: 'luke', name: 'Luke',
     greekName: 'Κατὰ Λουκᾶν', transliteration: 'Kata Loukan', meaning: 'According to Luke',
     chapters: 24, testament: 'new', tier: 'standard', section: 'gospels', order: 42,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: 'john', name: 'John',
     greekName: 'Κατὰ Ἰωάννην', transliteration: 'Kata Iōannēn', meaning: 'According to John',
     chapters: 21, testament: 'new', tier: 'standard', section: 'gospels', order: 43,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
 
   // ─── NEW TESTAMENT: History ──────────────────────────────────────────────
@@ -479,7 +481,7 @@ export const BOOKS: BookInfo[] = [
     slug: 'acts', name: 'Acts',
     greekName: 'Πράξεις Ἀποστόλων', transliteration: 'Praxeis Apostolōn', meaning: 'Acts of the Apostles',
     chapters: 28, testament: 'new', tier: 'standard', section: 'acts', order: 44,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
 
   // ─── NEW TESTAMENT: Pauline Epistles ─────────────────────────────────────
@@ -488,79 +490,79 @@ export const BOOKS: BookInfo[] = [
     slug: 'romans', name: 'Romans',
     greekName: 'Πρὸς Ῥωμαίους', transliteration: 'Pros Rhōmaious', meaning: 'To the Romans',
     chapters: 16, testament: 'new', tier: 'standard', section: 'pauline-epistles', order: 45,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: '1-corinthians', name: '1 Corinthians',
     greekName: 'Πρὸς Κορινθίους Αʹ', transliteration: 'Pros Korinthious A', meaning: 'First to the Corinthians',
     chapters: 16, testament: 'new', tier: 'standard', section: 'pauline-epistles', order: 46,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: '2-corinthians', name: '2 Corinthians',
     greekName: 'Πρὸς Κορινθίους Βʹ', transliteration: 'Pros Korinthious B', meaning: 'Second to the Corinthians',
     chapters: 13, testament: 'new', tier: 'standard', section: 'pauline-epistles', order: 47,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: 'galatians', name: 'Galatians',
     greekName: 'Πρὸς Γαλάτας', transliteration: 'Pros Galatas', meaning: 'To the Galatians',
     chapters: 6, testament: 'new', tier: 'standard', section: 'pauline-epistles', order: 48,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: 'ephesians', name: 'Ephesians',
     greekName: 'Πρὸς Ἐφεσίους', transliteration: 'Pros Ephesious', meaning: 'To the Ephesians',
     chapters: 6, testament: 'new', tier: 'standard', section: 'pauline-epistles', order: 49,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: 'philippians', name: 'Philippians',
     greekName: 'Πρὸς Φιλιππησίους', transliteration: 'Pros Philippēsious', meaning: 'To the Philippians',
     chapters: 4, testament: 'new', tier: 'standard', section: 'pauline-epistles', order: 50,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: 'colossians', name: 'Colossians',
     greekName: 'Πρὸς Κολοσσαεῖς', transliteration: 'Pros Kolossaeis', meaning: 'To the Colossians',
     chapters: 4, testament: 'new', tier: 'standard', section: 'pauline-epistles', order: 51,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: '1-thessalonians', name: '1 Thessalonians',
     greekName: 'Πρὸς Θεσσαλονικεῖς Αʹ', transliteration: 'Pros Thessalonikeis A', meaning: 'First to the Thessalonians',
     chapters: 5, testament: 'new', tier: 'standard', section: 'pauline-epistles', order: 52,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: '2-thessalonians', name: '2 Thessalonians',
     greekName: 'Πρὸς Θεσσαλονικεῖς Βʹ', transliteration: 'Pros Thessalonikeis B', meaning: 'Second to the Thessalonians',
     chapters: 3, testament: 'new', tier: 'standard', section: 'pauline-epistles', order: 53,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: '1-timothy', name: '1 Timothy',
     greekName: 'Πρὸς Τιμόθεον Αʹ', transliteration: 'Pros Timotheon A', meaning: 'First to Timothy',
     chapters: 6, testament: 'new', tier: 'standard', section: 'pauline-epistles', order: 54,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: '2-timothy', name: '2 Timothy',
     greekName: 'Πρὸς Τιμόθεον Βʹ', transliteration: 'Pros Timotheon B', meaning: 'Second to Timothy',
     chapters: 4, testament: 'new', tier: 'standard', section: 'pauline-epistles', order: 55,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: 'titus', name: 'Titus',
     greekName: 'Πρὸς Τίτον', transliteration: 'Pros Titon', meaning: 'To Titus',
     chapters: 3, testament: 'new', tier: 'standard', section: 'pauline-epistles', order: 56,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: 'philemon', name: 'Philemon',
     greekName: 'Πρὸς Φιλήμονα', transliteration: 'Pros Philēmona', meaning: 'To Philemon',
     chapters: 1, testament: 'new', tier: 'standard', section: 'pauline-epistles', order: 57,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
 
   // ─── NEW TESTAMENT: General Epistles ─────────────────────────────────────
@@ -569,49 +571,49 @@ export const BOOKS: BookInfo[] = [
     slug: 'hebrews', name: 'Hebrews',
     greekName: 'Πρὸς Ἑβραίους', transliteration: 'Pros Hebraious', meaning: 'To the Hebrews',
     chapters: 13, testament: 'new', tier: 'standard', section: 'general-epistles', order: 58,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: 'james', name: 'James',
     greekName: 'Ἰακώβου', transliteration: 'Iakōbou', meaning: 'Of James',
     chapters: 5, testament: 'new', tier: 'standard', section: 'general-epistles', order: 59,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: '1-peter', name: '1 Peter',
     greekName: 'Πέτρου Αʹ', transliteration: 'Petrou A', meaning: 'First of Peter',
     chapters: 5, testament: 'new', tier: 'standard', section: 'general-epistles', order: 60,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: '2-peter', name: '2 Peter',
     greekName: 'Πέτρου Βʹ', transliteration: 'Petrou B', meaning: 'Second of Peter',
     chapters: 3, testament: 'new', tier: 'standard', section: 'general-epistles', order: 61,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: '1-john', name: '1 John',
     greekName: 'Ἰωάννου Αʹ', transliteration: 'Iōannou A', meaning: 'First of John',
     chapters: 5, testament: 'new', tier: 'standard', section: 'general-epistles', order: 62,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: '2-john', name: '2 John',
     greekName: 'Ἰωάννου Βʹ', transliteration: 'Iōannou B', meaning: 'Second of John',
     chapters: 1, testament: 'new', tier: 'standard', section: 'general-epistles', order: 63,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: '3-john', name: '3 John',
     greekName: 'Ἰωάννου Γʹ', transliteration: 'Iōannou G', meaning: 'Third of John',
     chapters: 1, testament: 'new', tier: 'standard', section: 'general-epistles', order: 64,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
   {
     slug: 'jude', name: 'Jude',
     greekName: 'Ἰούδα', transliteration: 'Iouda', meaning: 'Of Jude',
     chapters: 1, testament: 'new', tier: 'standard', section: 'general-epistles', order: 65,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
 
   // ─── NEW TESTAMENT: Apocalyptic ──────────────────────────────────────────
@@ -620,7 +622,7 @@ export const BOOKS: BookInfo[] = [
     slug: 'revelation', name: 'Revelation',
     greekName: 'Ἀποκάλυψις Ἰωάννου', transliteration: 'Apokalypsis Iōannou', meaning: 'Revelation of John',
     chapters: 22, testament: 'new', tier: 'standard', section: 'apocalyptic', order: 66,
-    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'not-started',
+    canons: ['protestant', 'catholic', 'orthodox', 'ethiopian'], sourceText: 'sblgnt', status: 'complete',
   },
 
   // ─── EXTENDED: Deuterocanonical / Apocrypha ──────────────────────────────
@@ -715,13 +717,13 @@ export const BOOKS: BookInfo[] = [
     slug: '1-enoch', name: '1 Enoch',
     transliteration: 'Henok', meaning: 'Book of Enoch',
     chapters: 108, testament: 'old', tier: 'extended', section: 'pre-nicaea-canon', order: 80,
-    canons: ['ethiopian'], sourceText: 'ethiopic', status: 'not-started',
+    canons: ['ethiopian'], sourceText: 'ethiopic', status: 'complete',
   },
   {
     slug: 'jubilees', name: 'Jubilees',
     transliteration: 'Kufale', meaning: 'Book of Jubilees',
     chapters: 50, testament: 'old', tier: 'extended', section: 'pre-nicaea-canon', order: 81,
-    canons: ['ethiopian'], sourceText: 'ethiopic', status: 'not-started',
+    canons: ['ethiopian'], sourceText: 'ethiopic', status: 'complete',
   },
 
   // ─── EXTENDED: Dead Sea Scrolls ──────────────────────────────────────────
@@ -730,7 +732,7 @@ export const BOOKS: BookInfo[] = [
     slug: 'great-isaiah-scroll', name: 'Great Isaiah Scroll',
     hebrewName: '1QIsaᵃ', transliteration: '1QIsa-a', meaning: 'The oldest complete manuscript of any biblical book',
     chapters: 66, testament: 'old', tier: 'extended', section: 'dead-sea-scrolls', order: 82,
-    canons: [], sourceText: 'dss', status: 'not-started',
+    canons: [], sourceText: 'dss', status: 'complete',
   },
   {
     slug: 'community-rule', name: 'Community Rule',
@@ -767,6 +769,11 @@ export function loadChapter(book: string, num: number): Chapter {
   return JSON.parse(readFileSync(file, 'utf-8'));
 }
 
+export function loadVariantChapter(tradition: string, num: number): any {
+  const file = join(dataRoot, tradition, `chapter-${String(num).padStart(2, '0')}.json`);
+  return JSON.parse(readFileSync(file, 'utf-8'));
+}
+
 export function getBook(slug: string): BookInfo | undefined {
   return BOOKS.find((b) => b.slug === slug);
 }
@@ -777,16 +784,46 @@ export function getAllChapterNums(book: string): number[] {
   return Array.from({ length: info.chapters }, (_, i) => i + 1);
 }
 
+// Map extended-library slugs to their data directory names
+const SLUG_TO_DIR: Record<string, string> = {
+  'great-isaiah-scroll': 'dss-isaiah',
+};
+
 export function getBookVerseCount(book: string): number {
+  const dir = SLUG_TO_DIR[book] || book;
   let total = 0;
-  for (const n of getAllChapterNums(book)) {
-    total += loadChapter(book, n).verses.length;
+  try {
+    for (const n of getAllChapterNums(book)) {
+      const file = join(dataRoot, dir, `chapter-${String(n).padStart(2, '0')}.json`);
+      const data = JSON.parse(readFileSync(file, 'utf-8'));
+      total += data.verses.length;
+    }
+  } catch {
+    return 0;
   }
   return total;
 }
 
+// Books that use the standard verse schema (rendering, translator_notes, etc.)
+// Includes standard Bible AND extended books that are standalone renderings (not variant comparisons)
+const VARIANT_TRADITIONS = new Set([
+  'great-isaiah-scroll',
+  // JST — dedicated pages at /jst/
+  'genesis-jst',
+  // Samaritan Pentateuch — dedicated pages at /samaritan-pentateuch/
+  'genesis-sam', 'exodus-sam', 'leviticus-sam', 'numbers-sam', 'deuteronomy-sam',
+  // Targum Onkelos — dedicated pages at /targum/
+  'genesis-targum', 'exodus-targum', 'leviticus-targum', 'numbers-targum', 'deuteronomy-targum',
+  // Targum Jonathan — dedicated pages at /targum/
+  'isaiah-targum', 'jeremiah-targum',
+]); // These use non-standard schemas and need dedicated pages
+
 export function getAvailableBooks(): BookInfo[] {
-  return BOOKS.filter((b) => b.status === 'complete');
+  return BOOKS.filter((b) => b.status === 'complete' && !VARIANT_TRADITIONS.has(b.slug));
+}
+
+export function getAvailableExtendedBooks(): BookInfo[] {
+  return BOOKS.filter((b) => b.status === 'complete' && b.tier === 'extended');
 }
 
 export function getBooksBySection(section: Section): BookInfo[] {
@@ -844,3 +881,566 @@ export const EDITION_TIER_LABELS: Record<EditionTier, string> = {
   'pre-nicaea-canon': 'Books read before the councils',
   interpretive: 'How traditions read this passage',
 };
+
+// ── Verse Stacking: Types ─────────────────────────────────────────────────
+
+export interface StackedVerse {
+  verseNum: number;
+  hasContent: boolean;
+  // For variants (DSS, LXX, Samaritan):
+  significance?: string;
+  variantText?: string;
+  variantRendering?: string;
+  notes?: string[];
+  // For Targum/Vulgate renderings:
+  traditionRendering?: string;
+  category?: string;
+  theologicalLegacy?: string;
+  // For JST:
+  changeSummary?: string;
+}
+
+export interface StackedTradition {
+  id: string;
+  label: string;
+  type: 'variant' | 'rendering' | 'interpretive';
+  verses: Map<number, StackedVerse>;
+}
+
+// ── Verse Stacking: Reference Parsing ─────────────────────────────────────
+
+/** Slug-to-display-name map for reference matching */
+const SLUG_TO_NAME: Record<string, string> = {
+  'genesis': 'Genesis', 'exodus': 'Exodus', 'leviticus': 'Leviticus',
+  'numbers': 'Numbers', 'deuteronomy': 'Deuteronomy',
+  'joshua': 'Joshua', 'judges': 'Judges', 'ruth': 'Ruth',
+  '1-samuel': '1 Samuel', '2-samuel': '2 Samuel',
+  '1-kings': '1 Kings', '2-kings': '2 Kings',
+  '1-chronicles': '1 Chronicles', '2-chronicles': '2 Chronicles',
+  'ezra': 'Ezra', 'nehemiah': 'Nehemiah', 'esther': 'Esther',
+  'job': 'Job', 'psalms': 'Psalms', 'proverbs': 'Proverbs',
+  'ecclesiastes': 'Ecclesiastes', 'song-of-solomon': 'Song of Solomon',
+  'isaiah': 'Isaiah', 'jeremiah': 'Jeremiah', 'lamentations': 'Lamentations',
+  'ezekiel': 'Ezekiel', 'daniel': 'Daniel',
+  'hosea': 'Hosea', 'joel': 'Joel', 'amos': 'Amos', 'obadiah': 'Obadiah',
+  'jonah': 'Jonah', 'micah': 'Micah', 'nahum': 'Nahum', 'habakkuk': 'Habakkuk',
+  'zephaniah': 'Zephaniah', 'haggai': 'Haggai', 'zechariah': 'Zechariah', 'malachi': 'Malachi',
+  'matthew': 'Matthew', 'mark': 'Mark', 'luke': 'Luke', 'john': 'John',
+  'acts': 'Acts', 'romans': 'Romans',
+  '1-corinthians': '1 Corinthians', '2-corinthians': '2 Corinthians',
+  'galatians': 'Galatians', 'ephesians': 'Ephesians', 'philippians': 'Philippians',
+  'colossians': 'Colossians', '1-thessalonians': '1 Thessalonians', '2-thessalonians': '2 Thessalonians',
+  '1-timothy': '1 Timothy', '2-timothy': '2 Timothy', 'titus': 'Titus', 'philemon': 'Philemon',
+  'hebrews': 'Hebrews', 'james': 'James',
+  '1-peter': '1 Peter', '2-peter': '2 Peter',
+  '1-john': '1 John', '2-john': '2 John', '3-john': '3 John',
+  'jude': 'Jude', 'revelation': 'Revelation',
+};
+
+/** Also support "Psalm" matching "Psalms" */
+const NAME_ALIASES: Record<string, string> = {
+  'Psalm': 'Psalms',
+  'Song of Songs': 'Song of Solomon',
+};
+
+/**
+ * Parse a reference string like "Isaiah 53:11" or "Genesis 9:4-15" or "Isaiah 52:13-53:12"
+ * and return all {chapter, verse} pairs that match `targetChapter`.
+ */
+function parseReference(ref: string, bookName: string, targetChapter: number): number[] {
+  // Normalize book name aliases
+  const normalizedBookName = NAME_ALIASES[bookName] || bookName;
+
+  // Check the reference starts with this book name (case-insensitive partial match)
+  const refLower = ref.toLowerCase();
+  const bookLower = normalizedBookName.toLowerCase();
+  if (!refLower.startsWith(bookLower)) return [];
+
+  const afterBook = ref.slice(normalizedBookName.length).trim();
+
+  // Handle semicolons (multiple references): "Exodus 33:20; 34:1-2"
+  const parts = afterBook.split(';').map(s => s.trim());
+  const verses: number[] = [];
+
+  for (const part of parts) {
+    // Match patterns like "53:11", "52:13-53:12", "9:4-15"
+    const crossChapterMatch = part.match(/(\d+):(\d+)\s*-\s*(\d+):(\d+)/);
+    if (crossChapterMatch) {
+      const startCh = parseInt(crossChapterMatch[1]);
+      const startV = parseInt(crossChapterMatch[2]);
+      const endCh = parseInt(crossChapterMatch[3]);
+      const endV = parseInt(crossChapterMatch[4]);
+
+      if (targetChapter === startCh) {
+        // All verses from startV onward
+        for (let v = startV; v <= 200; v++) verses.push(v);
+      } else if (targetChapter === endCh) {
+        for (let v = 1; v <= endV; v++) verses.push(v);
+      } else if (targetChapter > startCh && targetChapter < endCh) {
+        // Entire chapter in range
+        for (let v = 1; v <= 200; v++) verses.push(v);
+      }
+      continue;
+    }
+
+    const sameChapterRange = part.match(/(\d+):(\d+)\s*-\s*(\d+)/);
+    if (sameChapterRange) {
+      const ch = parseInt(sameChapterRange[1]);
+      const startV = parseInt(sameChapterRange[2]);
+      const endV = parseInt(sameChapterRange[3]);
+      if (ch === targetChapter) {
+        for (let v = startV; v <= endV; v++) verses.push(v);
+      }
+      continue;
+    }
+
+    const singleVerse = part.match(/(\d+):(\d+)/);
+    if (singleVerse) {
+      const ch = parseInt(singleVerse[1]);
+      const v = parseInt(singleVerse[2]);
+      if (ch === targetChapter) verses.push(v);
+      continue;
+    }
+  }
+
+  return verses;
+}
+
+function safeReadJSON(filePath: string): any | null {
+  try {
+    if (!existsSync(filePath)) return null;
+    return JSON.parse(readFileSync(filePath, 'utf-8'));
+  } catch {
+    return null;
+  }
+}
+
+// ── Verse Stacking: Per-chapter file traditions ───────────────────────────
+
+function loadChapterVariantTradition(
+  dir: string,
+  filePattern: string,
+  chapter: number,
+  id: string,
+  label: string,
+  type: 'variant' | 'rendering' | 'interpretive',
+): StackedTradition | null {
+  const padded = String(chapter).padStart(2, '0');
+  const fileName = filePattern.replace('XX', padded);
+  const filePath = join(dataRoot, dir, fileName);
+  const data = safeReadJSON(filePath);
+  if (!data || !data.verses) return null;
+
+  const verses = new Map<number, StackedVerse>();
+  for (const v of data.verses) {
+    if (!v.has_variant && !v.variant_notes?.some((n: string) => n.length > 50)) continue;
+    const sv: StackedVerse = {
+      verseNum: v.verse,
+      hasContent: v.has_variant === true,
+      significance: v.significance,
+      variantText: v.dss_reading || v.lxx_reading || v.sp_reading || undefined,
+      variantRendering: v.variant_rendering || v.dss_rendering || v.lxx_rendering || v.sp_rendering || undefined,
+      notes: v.variant_notes || [],
+    };
+    if (sv.hasContent) verses.set(v.verse, sv);
+  }
+
+  if (verses.size === 0) return null;
+  return { id, label, type, verses };
+}
+
+// ── Verse Stacking: Per-book file traditions (Targum, Vulgate, Samaritan, JST) ──
+
+function loadPerBookTradition(
+  filePath: string,
+  bookSlug: string,
+  chapter: number,
+  id: string,
+  label: string,
+  type: 'variant' | 'rendering' | 'interpretive',
+  dataKey: 'renderings' | 'variants' | 'footnotes' | 'passages',
+): StackedTradition | null {
+  const data = safeReadJSON(filePath);
+  if (!data) return null;
+
+  const entries = data[dataKey];
+  if (!Array.isArray(entries)) return null;
+
+  const bookName = SLUG_TO_NAME[bookSlug] || '';
+  const verses = new Map<number, StackedVerse>();
+
+  for (const entry of entries) {
+    const ref = entry.reference;
+    if (!ref) continue;
+
+    const matchedVerses = parseReference(ref, bookName, chapter);
+    if (matchedVerses.length === 0) continue;
+
+    for (const vNum of matchedVerses) {
+      if (verses.has(vNum)) continue; // first match wins
+
+      if (dataKey === 'renderings') {
+        // Targum or Vulgate rendering
+        verses.set(vNum, {
+          verseNum: vNum,
+          hasContent: true,
+          traditionRendering: entry.targum_rendering || entry.vulgate_rendering || undefined,
+          category: entry.category || undefined,
+          theologicalLegacy: entry.theological_legacy || undefined,
+          notes: entry.notes || [],
+        });
+      } else if (dataKey === 'variants') {
+        // Samaritan Pentateuch
+        verses.set(vNum, {
+          verseNum: vNum,
+          hasContent: entry.has_variant === true,
+          significance: entry.significance,
+          variantText: entry.sp_reading || undefined,
+          variantRendering: entry.sp_rendering || undefined,
+          notes: entry.notes || [],
+        });
+      } else if (dataKey === 'footnotes') {
+        // JST footnotes
+        verses.set(vNum, {
+          verseNum: vNum,
+          hasContent: true,
+          changeSummary: entry.change_summary || undefined,
+          significance: entry.significance,
+          notes: entry.notes || [],
+        });
+      } else if (dataKey === 'passages') {
+        // JST appendix
+        verses.set(vNum, {
+          verseNum: vNum,
+          hasContent: true,
+          changeSummary: entry.jst_summary || entry.title || undefined,
+          significance: entry.significance,
+          notes: entry.notes || [],
+        });
+      }
+    }
+  }
+
+  if (verses.size === 0) return null;
+  return { id, label, type, verses };
+}
+
+// ── Verse Stacking: Main Function ─────────────────────────────────────────
+
+const PENTATEUCH_SLUGS = ['genesis', 'exodus', 'leviticus', 'numbers', 'deuteronomy'];
+const GOSPEL_SLUGS = ['matthew', 'mark', 'luke', 'john'];
+const MINOR_PROPHET_SLUGS = [
+  'hosea', 'joel', 'amos', 'obadiah', 'jonah', 'micah',
+  'nahum', 'habakkuk', 'zephaniah', 'haggai', 'zechariah', 'malachi',
+];
+const FORMER_PROPHET_SLUGS = ['joshua', 'judges', '1-samuel', '2-samuel', '1-kings', '2-kings'];
+
+/** Vulgate file mapping: which Vulgate JSON file covers which book slugs */
+const VULGATE_FILE_MAP: Record<string, string[]> = {
+  'genesis.json': ['genesis'],
+  'isaiah.json': ['isaiah'],
+  'jeremiah.json': ['jeremiah'],
+  'daniel.json': ['daniel'],
+  'psalms.json': ['psalms'],
+  'gospels.json': ['matthew', 'mark', 'luke', 'john'],
+  'romans.json': ['romans'],
+  'hebrews.json': ['hebrews'],
+  'revelation.json': ['revelation'],
+};
+
+function getVulgateFile(bookSlug: string): string | null {
+  for (const [file, slugs] of Object.entries(VULGATE_FILE_MAP)) {
+    if (slugs.includes(bookSlug)) return file;
+  }
+  return null;
+}
+
+export function getStackedTraditions(book: string, chapter: number): StackedTradition[] {
+  const traditions: StackedTradition[] = [];
+
+  // ── Isaiah ──
+  if (book === 'isaiah') {
+    // DSS Isaiah (per-chapter files)
+    const dss = loadChapterVariantTradition(
+      'dss-isaiah', 'chapter-XX.json', chapter,
+      'dss-isaiah', 'Dead Sea Scrolls (1QIsa\u1d43, 125 BCE)', 'variant'
+    );
+    if (dss) traditions.push(dss);
+
+    // Targum Jonathan (per-book)
+    const targum = loadPerBookTradition(
+      join(dataRoot, 'targum-jonathan', 'isaiah.json'), book, chapter,
+      'targum-jonathan', 'Targum Jonathan (Aramaic, 1st-5th c. CE)', 'interpretive', 'renderings'
+    );
+    if (targum) traditions.push(targum);
+
+    // Vulgate
+    const vulgate = loadPerBookTradition(
+      join(dataRoot, 'vulgate', 'isaiah.json'), book, chapter,
+      'vulgate', 'Latin Vulgate (Jerome, 405 CE)', 'rendering', 'renderings'
+    );
+    if (vulgate) traditions.push(vulgate);
+  }
+
+  // ── Jeremiah ──
+  if (book === 'jeremiah') {
+    // LXX Jeremiah (per-chapter files with pattern jeremiah_XX_lxx.json)
+    const lxx = loadChapterVariantTradition(
+      'lxx-jeremiah', 'jeremiah_XX_lxx.json', chapter,
+      'lxx-jeremiah', 'Septuagint (LXX, shorter text)', 'variant'
+    );
+    if (lxx) traditions.push(lxx);
+
+    // Targum Jonathan
+    const targum = loadPerBookTradition(
+      join(dataRoot, 'targum-jonathan', 'jeremiah.json'), book, chapter,
+      'targum-jonathan', 'Targum Jonathan (Aramaic, 1st-5th c. CE)', 'interpretive', 'renderings'
+    );
+    if (targum) traditions.push(targum);
+
+    // Vulgate
+    const vulgate = loadPerBookTradition(
+      join(dataRoot, 'vulgate', 'jeremiah.json'), book, chapter,
+      'vulgate', 'Latin Vulgate (Jerome, 405 CE)', 'rendering', 'renderings'
+    );
+    if (vulgate) traditions.push(vulgate);
+  }
+
+  // ── Daniel ──
+  if (book === 'daniel') {
+    const lxx = loadChapterVariantTradition(
+      'lxx-daniel', 'chapter-XX.json', chapter,
+      'lxx-daniel', 'Septuagint (LXX/Theodotion)', 'variant'
+    );
+    if (lxx) traditions.push(lxx);
+
+    const vulgate = loadPerBookTradition(
+      join(dataRoot, 'vulgate', 'daniel.json'), book, chapter,
+      'vulgate', 'Latin Vulgate (Jerome, 405 CE)', 'rendering', 'renderings'
+    );
+    if (vulgate) traditions.push(vulgate);
+  }
+
+  // ── Esther ──
+  if (book === 'esther') {
+    const lxx = loadChapterVariantTradition(
+      'lxx-esther', 'chapter-XX.json', chapter,
+      'lxx-esther', 'Greek Esther (LXX, with additions)', 'variant'
+    );
+    if (lxx) traditions.push(lxx);
+  }
+
+  // ── Pentateuch ──
+  if (PENTATEUCH_SLUGS.includes(book)) {
+    // Samaritan Pentateuch
+    const sam = loadPerBookTradition(
+      join(dataRoot, 'samaritan-pentateuch', `${book}.json`), book, chapter,
+      'samaritan-pentateuch', 'Samaritan Pentateuch (4th c. BCE divergence)', 'variant', 'variants'
+    );
+    if (sam) traditions.push(sam);
+
+    // Targum Onkelos
+    const onkelos = loadPerBookTradition(
+      join(dataRoot, 'targum-onkelos', `${book}.json`), book, chapter,
+      'targum-onkelos', 'Targum Onkelos (Aramaic, 1st-5th c. CE)', 'interpretive', 'renderings'
+    );
+    if (onkelos) traditions.push(onkelos);
+
+    // Vulgate (only Genesis has a dedicated file currently)
+    const vulgateFile = getVulgateFile(book);
+    if (vulgateFile) {
+      const vulgate = loadPerBookTradition(
+        join(dataRoot, 'vulgate', vulgateFile), book, chapter,
+        'vulgate', 'Latin Vulgate (Jerome, 405 CE)', 'rendering', 'renderings'
+      );
+      if (vulgate) traditions.push(vulgate);
+    }
+
+    // JST footnotes + appendix
+    const jstFn = loadPerBookTradition(
+      join(dataRoot, 'jst', 'jst-footnotes.json'), book, chapter,
+      'jst-footnotes', 'Joseph Smith Translation (Footnotes)', 'interpretive', 'footnotes'
+    );
+    if (jstFn) traditions.push(jstFn);
+
+    const jstApp = loadPerBookTradition(
+      join(dataRoot, 'jst', 'jst-appendix.json'), book, chapter,
+      'jst-appendix', 'Joseph Smith Translation (Appendix)', 'interpretive', 'passages'
+    );
+    if (jstApp) traditions.push(jstApp);
+  }
+
+  // ── Psalms ──
+  if (book === 'psalms') {
+    const vulgate = loadPerBookTradition(
+      join(dataRoot, 'vulgate', 'psalms.json'), book, chapter,
+      'vulgate', 'Latin Vulgate (Jerome, 405 CE)', 'rendering', 'renderings'
+    );
+    if (vulgate) traditions.push(vulgate);
+
+    // JST footnotes
+    const jstFn = loadPerBookTradition(
+      join(dataRoot, 'jst', 'jst-footnotes.json'), book, chapter,
+      'jst-footnotes', 'Joseph Smith Translation (Footnotes)', 'interpretive', 'footnotes'
+    );
+    if (jstFn) traditions.push(jstFn);
+
+    const jstApp = loadPerBookTradition(
+      join(dataRoot, 'jst', 'jst-appendix.json'), book, chapter,
+      'jst-appendix', 'Joseph Smith Translation (Appendix)', 'interpretive', 'passages'
+    );
+    if (jstApp) traditions.push(jstApp);
+  }
+
+  // ── Ezekiel ──
+  if (book === 'ezekiel') {
+    const targum = loadPerBookTradition(
+      join(dataRoot, 'targum-jonathan', 'ezekiel.json'), book, chapter,
+      'targum-jonathan', 'Targum Jonathan (Aramaic, 1st-5th c. CE)', 'interpretive', 'renderings'
+    );
+    if (targum) traditions.push(targum);
+  }
+
+  // ── Minor Prophets ──
+  if (MINOR_PROPHET_SLUGS.includes(book)) {
+    const targum = loadPerBookTradition(
+      join(dataRoot, 'targum-jonathan', 'minor-prophets.json'), book, chapter,
+      'targum-jonathan', 'Targum Jonathan (Aramaic, 1st-5th c. CE)', 'interpretive', 'renderings'
+    );
+    if (targum) traditions.push(targum);
+
+    // JST footnotes (Amos has some)
+    const jstFn = loadPerBookTradition(
+      join(dataRoot, 'jst', 'jst-footnotes.json'), book, chapter,
+      'jst-footnotes', 'Joseph Smith Translation (Footnotes)', 'interpretive', 'footnotes'
+    );
+    if (jstFn) traditions.push(jstFn);
+  }
+
+  // ── Former Prophets (Joshua-Kings) ──
+  if (FORMER_PROPHET_SLUGS.includes(book)) {
+    const targum = loadPerBookTradition(
+      join(dataRoot, 'targum-jonathan', 'former-prophets.json'), book, chapter,
+      'targum-jonathan', 'Targum Jonathan (Aramaic, 1st-5th c. CE)', 'interpretive', 'renderings'
+    );
+    if (targum) traditions.push(targum);
+
+    const jstFn = loadPerBookTradition(
+      join(dataRoot, 'jst', 'jst-footnotes.json'), book, chapter,
+      'jst-footnotes', 'Joseph Smith Translation (Footnotes)', 'interpretive', 'footnotes'
+    );
+    if (jstFn) traditions.push(jstFn);
+  }
+
+  // ── Gospels ──
+  if (GOSPEL_SLUGS.includes(book)) {
+    const vulgate = loadPerBookTradition(
+      join(dataRoot, 'vulgate', 'gospels.json'), book, chapter,
+      'vulgate', 'Latin Vulgate (Jerome, 384 CE)', 'rendering', 'renderings'
+    );
+    if (vulgate) traditions.push(vulgate);
+
+    const jstFn = loadPerBookTradition(
+      join(dataRoot, 'jst', 'jst-footnotes.json'), book, chapter,
+      'jst-footnotes', 'Joseph Smith Translation (Footnotes)', 'interpretive', 'footnotes'
+    );
+    if (jstFn) traditions.push(jstFn);
+
+    const jstApp = loadPerBookTradition(
+      join(dataRoot, 'jst', 'jst-appendix.json'), book, chapter,
+      'jst-appendix', 'Joseph Smith Translation (Appendix)', 'interpretive', 'passages'
+    );
+    if (jstApp) traditions.push(jstApp);
+  }
+
+  // ── Romans ──
+  if (book === 'romans') {
+    const vulgate = loadPerBookTradition(
+      join(dataRoot, 'vulgate', 'romans.json'), book, chapter,
+      'vulgate', 'Latin Vulgate (Jerome, 384 CE)', 'rendering', 'renderings'
+    );
+    if (vulgate) traditions.push(vulgate);
+
+    const jstFn = loadPerBookTradition(
+      join(dataRoot, 'jst', 'jst-footnotes.json'), book, chapter,
+      'jst-footnotes', 'Joseph Smith Translation (Footnotes)', 'interpretive', 'footnotes'
+    );
+    if (jstFn) traditions.push(jstFn);
+
+    const jstApp = loadPerBookTradition(
+      join(dataRoot, 'jst', 'jst-appendix.json'), book, chapter,
+      'jst-appendix', 'Joseph Smith Translation (Appendix)', 'interpretive', 'passages'
+    );
+    if (jstApp) traditions.push(jstApp);
+  }
+
+  // ── Hebrews ──
+  if (book === 'hebrews') {
+    const vulgate = loadPerBookTradition(
+      join(dataRoot, 'vulgate', 'hebrews.json'), book, chapter,
+      'vulgate', 'Latin Vulgate (Jerome, 384 CE)', 'rendering', 'renderings'
+    );
+    if (vulgate) traditions.push(vulgate);
+
+    const jstFn = loadPerBookTradition(
+      join(dataRoot, 'jst', 'jst-footnotes.json'), book, chapter,
+      'jst-footnotes', 'Joseph Smith Translation (Footnotes)', 'interpretive', 'footnotes'
+    );
+    if (jstFn) traditions.push(jstFn);
+
+    const jstApp = loadPerBookTradition(
+      join(dataRoot, 'jst', 'jst-appendix.json'), book, chapter,
+      'jst-appendix', 'Joseph Smith Translation (Appendix)', 'interpretive', 'passages'
+    );
+    if (jstApp) traditions.push(jstApp);
+  }
+
+  // ── Revelation ──
+  if (book === 'revelation') {
+    const vulgate = loadPerBookTradition(
+      join(dataRoot, 'vulgate', 'revelation.json'), book, chapter,
+      'vulgate', 'Latin Vulgate (Jerome, 405 CE)', 'rendering', 'renderings'
+    );
+    if (vulgate) traditions.push(vulgate);
+
+    const jstFn = loadPerBookTradition(
+      join(dataRoot, 'jst', 'jst-footnotes.json'), book, chapter,
+      'jst-footnotes', 'Joseph Smith Translation (Footnotes)', 'interpretive', 'footnotes'
+    );
+    if (jstFn) traditions.push(jstFn);
+  }
+
+  // ── All other NT books: JST footnotes only ──
+  const NT_WITH_DEDICATED_HANDLING = [
+    ...GOSPEL_SLUGS, 'romans', 'hebrews', 'revelation',
+  ];
+  const bookInfo = getBook(book);
+  if (bookInfo && bookInfo.testament === 'new' && !NT_WITH_DEDICATED_HANDLING.includes(book)) {
+    const jstFn = loadPerBookTradition(
+      join(dataRoot, 'jst', 'jst-footnotes.json'), book, chapter,
+      'jst-footnotes', 'Joseph Smith Translation (Footnotes)', 'interpretive', 'footnotes'
+    );
+    if (jstFn) traditions.push(jstFn);
+
+    const jstApp = loadPerBookTradition(
+      join(dataRoot, 'jst', 'jst-appendix.json'), book, chapter,
+      'jst-appendix', 'Joseph Smith Translation (Appendix)', 'interpretive', 'passages'
+    );
+    if (jstApp) traditions.push(jstApp);
+  }
+
+  // ── Other OT books not handled above: JST footnotes ──
+  const OT_WITH_DEDICATED_HANDLING = [
+    ...PENTATEUCH_SLUGS, 'isaiah', 'jeremiah', 'daniel', 'esther', 'psalms',
+    'ezekiel', ...MINOR_PROPHET_SLUGS, ...FORMER_PROPHET_SLUGS,
+  ];
+  if (bookInfo && bookInfo.testament === 'old' && !OT_WITH_DEDICATED_HANDLING.includes(book)) {
+    const jstFn = loadPerBookTradition(
+      join(dataRoot, 'jst', 'jst-footnotes.json'), book, chapter,
+      'jst-footnotes', 'Joseph Smith Translation (Footnotes)', 'interpretive', 'footnotes'
+    );
+    if (jstFn) traditions.push(jstFn);
+  }
+
+  return traditions;
+}

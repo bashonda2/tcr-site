@@ -1,0 +1,219 @@
+---
+// AI Search component — sends queries to tcr-search-api
+---
+
+<section class="max-w-4xl mx-auto px-6 py-20">
+  <div class="text-center mb-10">
+    <p class="text-base font-semibold uppercase tracking-widest text-teal-600 mb-3">AI-Powered</p>
+    <h2 class="font-serif text-3xl font-medium text-stone-800 mb-3">Ask the Text</h2>
+    <p class="text-stone-600 text-base max-w-xl mx-auto">
+      Search across all 66 books, Extended Library traditions, concordance data, and cross-references.
+      Every answer cites specific verses you can click to read.
+    </p>
+  </div>
+
+  <div id="ai-search-widget">
+    <form id="ai-search-form" class="relative max-w-2xl mx-auto mb-8">
+      <input
+        id="ai-search-input"
+        type="text"
+        placeholder="Ask anything about the Bible text, traditions, or translation decisions..."
+        maxlength="500"
+        class="w-full px-5 py-4 pr-28 bg-white border border-cream-200 rounded-2xl text-stone-800 placeholder-stone-400 focus:outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-100 shadow-sm text-lg"
+      />
+      <button
+        id="ai-search-btn"
+        type="submit"
+        class="absolute right-2 top-1/2 -translate-y-1/2 px-5 py-2.5 bg-teal-600 text-white rounded-xl font-medium hover:bg-teal-700 transition-colors text-base disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Search
+      </button>
+    </form>
+
+    <!-- Loading state -->
+    <div id="ai-search-loading" class="hidden max-w-2xl mx-auto text-center py-12">
+      <div class="inline-flex items-center gap-3 text-stone-500">
+        <div class="ai-search-spinner"></div>
+        <span class="text-base">Searching the text...</span>
+      </div>
+    </div>
+
+    <!-- Error state -->
+    <div id="ai-search-error" class="hidden max-w-2xl mx-auto">
+      <div class="bg-red-50 border border-red-200 rounded-xl px-6 py-4 text-red-700 text-base">
+        <p id="ai-search-error-msg"></p>
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div id="ai-search-result" class="hidden max-w-2xl mx-auto">
+      <div class="bg-white border border-cream-200 rounded-2xl shadow-sm overflow-hidden">
+        <div class="px-7 pt-5 pb-2">
+          <span class="text-base font-semibold text-teal-600 uppercase tracking-widest">Answer</span>
+        </div>
+        <div id="ai-search-answer" class="px-7 pb-7 prose prose-stone prose-sm max-w-none ai-answer-content">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ai-search-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #d1d5db;
+    border-top-color: #0d9488;
+    border-radius: 50%;
+    animation: ai-spin 0.8s linear infinite;
+  }
+
+  @keyframes ai-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .ai-answer-content :global(a) {
+    color: #0d9488;
+    text-decoration: underline;
+    text-decoration-color: #99f6e4;
+    text-underline-offset: 2px;
+    transition: color 0.15s;
+  }
+
+  .ai-answer-content :global(a:hover) {
+    color: #0f766e;
+  }
+
+  .ai-answer-content :global(p) {
+    margin-bottom: 0.75rem;
+    line-height: 1.7;
+    color: #44403c;
+  }
+
+  .ai-answer-content :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .ai-answer-content :global(strong) {
+    color: #1c1917;
+    font-weight: 600;
+  }
+
+  .ai-answer-content :global(code) {
+    background: #f5f5f4;
+    padding: 0.1em 0.3em;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+
+  .ai-answer-content :global(ul),
+  .ai-answer-content :global(ol) {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+  }
+
+  .ai-answer-content :global(li) {
+    margin-bottom: 0.25rem;
+    color: #44403c;
+  }
+
+  .ai-answer-content :global(blockquote) {
+    border-left: 3px solid #99f6e4;
+    padding-left: 1rem;
+    margin: 0.75rem 0;
+    color: #57534e;
+    font-style: italic;
+  }
+</style>
+
+<script>
+  const API_URL = 'https://thecovenantrendering.com/api/search';
+
+  const form = document.getElementById('ai-search-form') as HTMLFormElement;
+  const input = document.getElementById('ai-search-input') as HTMLInputElement;
+  const btn = document.getElementById('ai-search-btn') as HTMLButtonElement;
+  const loadingEl = document.getElementById('ai-search-loading')!;
+  const errorEl = document.getElementById('ai-search-error')!;
+  const errorMsg = document.getElementById('ai-search-error-msg')!;
+  const resultEl = document.getElementById('ai-search-result')!;
+  const answerEl = document.getElementById('ai-search-answer')!;
+
+  function showState(state: 'idle' | 'loading' | 'error' | 'result') {
+    loadingEl.classList.toggle('hidden', state !== 'loading');
+    errorEl.classList.toggle('hidden', state !== 'error');
+    resultEl.classList.toggle('hidden', state !== 'result');
+    btn.disabled = state === 'loading';
+    btn.textContent = state === 'loading' ? 'Searching...' : 'Search';
+  }
+
+  // Minimal markdown to HTML (handles the most common patterns)
+  function renderMarkdown(md: string): string {
+    let html = md
+      // Bold
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      // Italic
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      // Inline code
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      // Links
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+      // Blockquotes
+      .replace(/^> (.+)$/gm, '<blockquote><p>$1</p></blockquote>');
+
+    // Split into paragraphs on double newlines
+    const blocks = html.split(/\n{2,}/);
+    return blocks.map(block => {
+      block = block.trim();
+      if (!block) return '';
+      if (block.startsWith('<blockquote>')) return block;
+      // Unordered lists
+      if (/^[-*] /.test(block)) {
+        const items = block.split(/\n/).map(line =>
+          `<li>${line.replace(/^[-*] /, '')}</li>`
+        ).join('');
+        return `<ul>${items}</ul>`;
+      }
+      // Ordered lists
+      if (/^\d+\. /.test(block)) {
+        const items = block.split(/\n/).map(line =>
+          `<li>${line.replace(/^\d+\. /, '')}</li>`
+        ).join('');
+        return `<ol>${items}</ol>`;
+      }
+      // Headings
+      if (block.startsWith('### ')) return `<h4>${block.slice(4)}</h4>`;
+      if (block.startsWith('## ')) return `<h3>${block.slice(3)}</h3>`;
+      if (block.startsWith('# ')) return `<h2>${block.slice(2)}</h2>`;
+      // Regular paragraphs — preserve single newlines as <br>
+      return `<p>${block.replace(/\n/g, '<br>')}</p>`;
+    }).join('');
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const query = input.value.trim();
+    if (!query) return;
+
+    showState('loading');
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || `Request failed (${res.status})`);
+      }
+
+      const data = await res.json();
+      answerEl.innerHTML = renderMarkdown(data.answer);
+      showState('result');
+    } catch (err: any) {
+      errorMsg.textContent = err.message || 'Something went wrong. Please try again.';
+      showState('error');
+    }
+  });
+</script>

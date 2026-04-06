@@ -1,0 +1,35 @@
+---
+import { getAvailableBooks, getAllChapterNums, loadChapter } from '../../../data/tcr';
+
+export async function getStaticPaths() {
+  const paths: { params: { book: string; chapter: string; verse: string } }[] = [];
+  for (const b of getAvailableBooks()) {
+    for (const n of getAllChapterNums(b.slug)) {
+      const ch = loadChapter(b.slug, n);
+      for (const v of ch.verses) {
+        paths.push({ params: { book: b.slug, chapter: String(n), verse: String(v.verse) } });
+      }
+    }
+  }
+  return paths;
+}
+
+const { book, chapter, verse } = Astro.params;
+const redirectUrl = `/${book}/${chapter}#v${verse}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content={`0;url=${redirectUrl}`} />
+    <link rel="canonical" href={`https://thecovenantrendering.com/${book}/${chapter}`} />
+    <title>Redirecting...</title>
+  </head>
+  <body>
+    <p>Redirecting to <a href={redirectUrl}>{redirectUrl}</a>...</p>
+    <script define:vars={{ redirectUrl }}>
+      window.location.replace(redirectUrl);
+    </script>
+  </body>
+</html>

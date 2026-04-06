@@ -1,0 +1,108 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+const dataRoot = join(process.cwd(), 'src', 'data', 'lxx-jeremiah');
+
+function loadLxxJeremiah(num: number): any {
+  const file = join(dataRoot, `jeremiah_${String(num).padStart(2, '0')}_lxx.json`);
+  return JSON.parse(readFileSync(file, 'utf-8'));
+}
+
+const chapters = Array.from({ length: 52 }, (_, i) => {
+  const ch = loadLxxJeremiah(i + 1);
+  const variants = ch.verses.filter((v: any) => v.has_variant).length;
+  const theological = ch.verses.filter((v: any) => v.significance === 'theological').length;
+  const major = ch.verses.filter((v: any) => v.significance === 'major').length;
+  return {
+    num: i + 1,
+    verses: ch.verses.length,
+    variants,
+    theological,
+    major,
+    summary: ch.preamble?.summary || '',
+  };
+});
+
+const totalVerses = chapters.reduce((s, c) => s + c.verses, 0);
+const totalVariants = chapters.reduce((s, c) => s + c.variants, 0);
+const totalTheological = chapters.reduce((s, c) => s + c.theological, 0);
+---
+
+<Layout
+  title="Septuagint Jeremiah (LXX)"
+  description="The Septuagint Jeremiah compared verse-by-verse against the Masoretic Text. The LXX preserves a shorter, older text confirmed by Qumran."
+  canonical="/lxx-jeremiah"
+>
+  <div class="bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
+    <div class="max-w-3xl mx-auto px-6 py-12">
+      <div class="flex items-center gap-2 text-base text-stone-400 mb-5">
+        <a href="/books" class="hover:text-teal-600 transition-colors">Library</a>
+        <span>/</span>
+        <span class="text-stone-600">Septuagint Variants</span>
+      </div>
+
+      <h1 class="font-serif text-4xl font-medium text-stone-800 mb-2">
+        Septuagint Jeremiah
+      </h1>
+      <p class="text-lg text-stone-500 mb-4">LXX &mdash; The shorter, older text confirmed by Qumran</p>
+
+      <div class="flex flex-wrap gap-4 text-base text-stone-500">
+        <span>{totalVerses.toLocaleString()} verses</span>
+        <span>&bull;</span>
+        <span>{totalVariants} variants documented</span>
+        <span>&bull;</span>
+        <span>{totalTheological} theologically significant</span>
+        <span>&bull;</span>
+        <span>3rd&ndash;2nd c. BCE</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 py-8">
+    <div class="bg-cream-50 border border-cream-200 rounded-xl p-6 mb-10 text-lg leading-relaxed text-stone-600">
+      <h2 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-3">About This Tradition</h2>
+      <p class="mb-3">
+        The Septuagint Jeremiah preserves what many scholars believe is the older, shorter text of Jeremiah &mdash;
+        approximately 2,700 words (12&ndash;15%) shorter than the Masoretic Text. This shorter text was confirmed
+        by 4QJer<sup>b</sup> from Qumran, proving that two distinct Hebrew editions existed: a shorter text
+        (behind the LXX) and a longer, expanded text (behind the MT).
+      </p>
+      <p>
+        What you see below is a verse-by-verse comparison: where does the Septuagint agree with the Masoretic
+        tradition, and where does it differ? Jeremiah is the most dramatically divergent book between LXX and MT
+        in the entire Hebrew Bible. Every variant is documented. Nothing is hidden.
+      </p>
+    </div>
+
+    <div class="space-y-2">
+      {chapters.map((ch) => (
+        <a
+          href={`/lxx-jeremiah/${ch.num}`}
+          class="block p-4 rounded-lg border border-cream-200 hover:border-teal-200 hover:bg-cream-50 transition-colors"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="font-serif text-lg text-stone-800">Chapter {ch.num}</span>
+              <span class="text-base text-stone-400 ml-3">{ch.verses} verses</span>
+            </div>
+            <div class="flex items-center gap-3 text-base">
+              {ch.theological > 0 && (
+                <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-medium">
+                  {ch.theological} theological
+                </span>
+              )}
+              {ch.major > 0 && (
+                <span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-medium">
+                  {ch.major} major
+                </span>
+              )}
+              <span class="text-stone-400">{ch.variants} variant{ch.variants !== 1 ? 's' : ''}</span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>

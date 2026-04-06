@@ -1,0 +1,114 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+const dataRoot = join(process.cwd(), 'src', 'data', 'samaritan-pentateuch');
+
+const bookSlugs = ['genesis', 'exodus', 'leviticus', 'numbers', 'deuteronomy'];
+const bookNames: Record<string, string> = {
+  genesis: 'Genesis',
+  exodus: 'Exodus',
+  leviticus: 'Leviticus',
+  numbers: 'Numbers',
+  deuteronomy: 'Deuteronomy',
+};
+
+const books = bookSlugs.map((slug) => {
+  const data = JSON.parse(readFileSync(join(dataRoot, `${slug}.json`), 'utf-8'));
+  const variants = data.variants || [];
+  const highSig = variants.filter((v: any) => v.significance === 'high').length;
+  const moderate = variants.filter((v: any) => v.significance === 'moderate').length;
+  return {
+    slug,
+    name: bookNames[slug],
+    totalVariants: variants.length,
+    highSig,
+    moderate,
+    summary: data.preamble?.summary || '',
+  };
+});
+
+const totalVariants = books.reduce((s, b) => s + b.totalVariants, 0);
+const totalHigh = books.reduce((s, b) => s + b.highSig, 0);
+---
+
+<Layout
+  title="Samaritan Pentateuch"
+  description="The Samaritan Pentateuch compared against the Masoretic Text. Five books, variant readings documented with significance ratings."
+  canonical="/samaritan-pentateuch"
+>
+  <div class="bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
+    <div class="max-w-3xl mx-auto px-6 py-12">
+      <div class="flex items-center gap-2 text-base text-stone-400 mb-5">
+        <a href="/books" class="hover:text-teal-600 transition-colors">Library</a>
+        <span>/</span>
+        <span class="text-stone-600">Manuscript Traditions</span>
+      </div>
+
+      <h1 class="font-serif text-4xl font-medium text-stone-800 mb-2">
+        Samaritan Pentateuch
+      </h1>
+      <p class="text-lg text-stone-500 mb-4">An independent Hebrew text tradition diverging from the proto-MT c. 4th century BCE</p>
+
+      <div class="flex flex-wrap gap-4 text-base text-stone-500">
+        <span>5 books</span>
+        <span>&bull;</span>
+        <span>{totalVariants} variants documented</span>
+        <span>&bull;</span>
+        <span>{totalHigh} high significance</span>
+        <span>&bull;</span>
+        <span>4th c. BCE divergence</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 py-8">
+    <div class="bg-cream-50 border border-cream-200 rounded-xl p-6 mb-10 text-lg leading-relaxed text-stone-600">
+      <h2 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-3">About This Tradition</h2>
+      <p class="mb-3">
+        The Samaritan Pentateuch (SP) is an independent Hebrew text of the Torah maintained by the Samaritan
+        community. It diverged from what became the Masoretic Text around the 4th century BCE and contains
+        approximately 6,000 variant readings. While the majority are orthographic or grammatical, several
+        hundred are theologically significant &mdash; particularly those redirecting sacred geography toward
+        Mount Gerizim and harmonizing parallel passages.
+      </p>
+      <p>
+        TCR documents the significant variants below: where the SP and MT agree, there is nothing to report.
+        Where they differ, both readings are presented with notes on textual and theological significance.
+        The SP sometimes agrees with the LXX against the MT, which can indicate an older reading.
+      </p>
+    </div>
+
+    <div class="space-y-2">
+      {books.map((book) => (
+        <a
+          href={`/samaritan-pentateuch/${book.slug}`}
+          class="block p-4 rounded-lg border border-cream-200 hover:border-teal-200 hover:bg-cream-50 transition-colors"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="font-serif text-lg text-stone-800">{book.name}</span>
+              <span class="text-base text-stone-400 ml-3">{book.totalVariants} variants</span>
+            </div>
+            <div class="flex items-center gap-3 text-base">
+              {book.highSig > 0 && (
+                <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-medium">
+                  {book.highSig} high
+                </span>
+              )}
+              {book.moderate > 0 && (
+                <span class="px-2 py-0.5 rounded-full bg-teal-50 text-teal-700 font-medium">
+                  {book.moderate} moderate
+                </span>
+              )}
+            </div>
+          </div>
+          {book.summary && (
+            <p class="text-lg text-stone-500 mt-1 line-clamp-2">{book.summary}</p>
+          )}
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>

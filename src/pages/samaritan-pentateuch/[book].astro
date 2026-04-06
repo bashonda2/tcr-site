@@ -1,0 +1,180 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+const dataRoot = join(process.cwd(), 'src', 'data', 'samaritan-pentateuch');
+
+const bookSlugs = ['genesis', 'exodus', 'leviticus', 'numbers', 'deuteronomy'];
+const bookNames: Record<string, string> = {
+  genesis: 'Genesis',
+  exodus: 'Exodus',
+  leviticus: 'Leviticus',
+  numbers: 'Numbers',
+  deuteronomy: 'Deuteronomy',
+};
+
+export async function getStaticPaths() {
+  return [
+    { params: { book: 'genesis' } },
+    { params: { book: 'exodus' } },
+    { params: { book: 'leviticus' } },
+    { params: { book: 'numbers' } },
+    { params: { book: 'deuteronomy' } },
+  ];
+}
+
+const bookSlug = Astro.params.book!;
+const bookName = bookNames[bookSlug];
+const data = JSON.parse(readFileSync(join(dataRoot, `${bookSlug}.json`), 'utf-8'));
+const variants = data.variants || [];
+
+const highCount = variants.filter((v: any) => v.significance === 'high').length;
+const moderateCount = variants.filter((v: any) => v.significance === 'moderate').length;
+
+const currentIdx = bookSlugs.indexOf(bookSlug);
+const prevBook = currentIdx > 0 ? bookSlugs[currentIdx - 1] : null;
+const nextBook = currentIdx < bookSlugs.length - 1 ? bookSlugs[currentIdx + 1] : null;
+
+function sigColor(sig: string) {
+  switch (sig) {
+    case 'high': return 'bg-amber-100 text-amber-800 border-amber-200';
+    case 'moderate': return 'bg-teal-50 text-teal-700 border-teal-200';
+    case 'minor': return 'bg-stone-100 text-stone-500 border-stone-200';
+    default: return 'bg-stone-50 text-stone-400 border-stone-200';
+  }
+}
+---
+
+<Layout
+  title={`${bookName} — Samaritan Pentateuch`}
+  description={`Samaritan Pentateuch variants for ${bookName}. ${variants.length} variant readings documented against the Masoretic Text.`}
+  canonical={`/samaritan-pentateuch/${bookSlug}`}
+>
+  <div class="bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
+    <div class="max-w-3xl mx-auto px-6 py-12">
+      <div class="flex items-center gap-2 text-base text-stone-400 mb-5">
+        <a href="/samaritan-pentateuch" class="hover:text-teal-600 transition-colors">Samaritan Pentateuch</a>
+        <span>/</span>
+        <span class="text-stone-600">{bookName}</span>
+      </div>
+
+      <h1 class="font-serif text-4xl font-medium text-stone-800 mb-2">
+        {bookName}
+        <span class="text-lg font-normal text-stone-400 ml-2">&mdash; Samaritan Pentateuch</span>
+      </h1>
+      <p class="text-stone-600 text-base">
+        {variants.length} variants &bull; {highCount} high significance &bull; {moderateCount} moderate
+      </p>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 py-8">
+
+    {data.preamble && (
+      <details class="mb-10 group" open>
+        <summary class="cursor-pointer select-none flex items-center gap-2 text-base font-semibold uppercase tracking-widest text-teal-600 mb-4 hover:text-teal-700 transition-colors">
+          <svg class="w-3.5 h-3.5 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+          Overview
+        </summary>
+        <div class="bg-cream-50 border border-cream-200 rounded-xl p-6 sm:p-8 space-y-5 text-lg leading-relaxed text-stone-600">
+          <div>
+            <h3 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1.5">Summary</h3>
+            <p class="font-serif italic">{data.preamble.summary}</p>
+          </div>
+          {data.preamble.notable_variants && (
+            <div>
+              <h3 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1.5">Notable Variants</h3>
+              <p>{data.preamble.notable_variants}</p>
+            </div>
+          )}
+          {data.preamble.theological_significance && (
+            <div>
+              <h3 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1.5">Theological Significance</h3>
+              <p>{data.preamble.theological_significance}</p>
+            </div>
+          )}
+        </div>
+      </details>
+    )}
+
+    <div class="space-y-4">
+      {variants.map((v: any) => (
+        <div
+          class={`rounded-lg border p-5 ${
+            v.significance === 'high'
+              ? 'border-amber-200 bg-amber-50/30'
+              : v.significance === 'moderate'
+                ? 'border-teal-100 bg-white'
+                : 'border-cream-100 bg-white/50'
+          }`}
+        >
+          <div class="flex items-start justify-between mb-3">
+            <span class="font-serif text-stone-800">{v.reference}</span>
+            {v.significance && (
+              <span class={`text-base px-2 py-0.5 rounded-full border font-medium ${sigColor(v.significance)}`}>
+                {v.significance}
+              </span>
+            )}
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 mb-3">
+            <div class="bg-white rounded-lg border border-stone-200 p-3">
+              <p class="text-sm font-semibold uppercase tracking-wider text-stone-400 mb-1">Masoretic (MT)</p>
+              {v.mt_reading && (
+                <p class="font-hebrew text-lg text-stone-800 text-right mb-1" dir="rtl">{v.mt_reading}</p>
+              )}
+              {v.mt_rendering && <p class="text-base text-stone-500">{v.mt_rendering}</p>}
+            </div>
+            <div class="bg-teal-50/50 rounded-lg border border-teal-200 p-3">
+              <p class="text-sm font-semibold uppercase tracking-wider text-teal-600 mb-1">Samaritan (SP)</p>
+              {v.sp_reading && (
+                <p class="font-hebrew text-lg text-stone-800 text-right mb-1" dir="rtl">{v.sp_reading}</p>
+              )}
+              {v.sp_rendering && <p class="text-base text-stone-600">{v.sp_rendering}</p>}
+            </div>
+          </div>
+
+          {v.notes && v.notes.length > 0 && (
+            <div class="space-y-1.5">
+              {v.notes.map((note: string) => (
+                <p class="text-lg text-stone-500 leading-relaxed">{note}</p>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 pb-16">
+    <div class="flex items-center justify-between pt-8 border-t border-cream-200">
+      {prevBook ? (
+        <a
+          href={`/samaritan-pentateuch/${prevBook}`}
+          class="text-base text-teal-600 hover:text-teal-700 transition-colors"
+        >
+          &larr; {bookNames[prevBook]}
+        </a>
+      ) : (
+        <a href="/samaritan-pentateuch" class="text-base text-teal-600 hover:text-teal-700 transition-colors">
+          &larr; SP Index
+        </a>
+      )}
+      {nextBook ? (
+        <a
+          href={`/samaritan-pentateuch/${nextBook}`}
+          class="text-base text-teal-600 hover:text-teal-700 transition-colors"
+        >
+          {bookNames[nextBook]} &rarr;
+        </a>
+      ) : (
+        <a href="/samaritan-pentateuch" class="text-base text-teal-600 hover:text-teal-700 transition-colors">
+          SP Index &rarr;
+        </a>
+      )}
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,207 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+const dataRoot = join(process.cwd(), 'src', 'data');
+
+interface SlugInfo {
+  tradition: string;
+  traditionLabel: string;
+  dataDir: string;
+  bookFile: string;
+  bookName: string;
+}
+
+const slugConfig: Record<string, SlugInfo> = {
+  'onkelos-genesis':       { tradition: 'onkelos', traditionLabel: 'Targum Onkelos', dataDir: 'targum-onkelos', bookFile: 'genesis.json', bookName: 'Genesis' },
+  'onkelos-exodus':        { tradition: 'onkelos', traditionLabel: 'Targum Onkelos', dataDir: 'targum-onkelos', bookFile: 'exodus.json', bookName: 'Exodus' },
+  'onkelos-leviticus':     { tradition: 'onkelos', traditionLabel: 'Targum Onkelos', dataDir: 'targum-onkelos', bookFile: 'leviticus.json', bookName: 'Leviticus' },
+  'onkelos-numbers':       { tradition: 'onkelos', traditionLabel: 'Targum Onkelos', dataDir: 'targum-onkelos', bookFile: 'numbers.json', bookName: 'Numbers' },
+  'onkelos-deuteronomy':   { tradition: 'onkelos', traditionLabel: 'Targum Onkelos', dataDir: 'targum-onkelos', bookFile: 'deuteronomy.json', bookName: 'Deuteronomy' },
+  'jonathan-isaiah':       { tradition: 'jonathan', traditionLabel: 'Targum Jonathan', dataDir: 'targum-jonathan', bookFile: 'isaiah.json', bookName: 'Isaiah' },
+  'jonathan-jeremiah':     { tradition: 'jonathan', traditionLabel: 'Targum Jonathan', dataDir: 'targum-jonathan', bookFile: 'jeremiah.json', bookName: 'Jeremiah' },
+  'jonathan-ezekiel':      { tradition: 'jonathan', traditionLabel: 'Targum Jonathan', dataDir: 'targum-jonathan', bookFile: 'ezekiel.json', bookName: 'Ezekiel' },
+  'jonathan-former-prophets': { tradition: 'jonathan', traditionLabel: 'Targum Jonathan', dataDir: 'targum-jonathan', bookFile: 'former-prophets.json', bookName: 'Former Prophets' },
+  'jonathan-minor-prophets':  { tradition: 'jonathan', traditionLabel: 'Targum Jonathan', dataDir: 'targum-jonathan', bookFile: 'minor-prophets.json', bookName: 'Minor Prophets' },
+};
+
+const allSlugs = Object.keys(slugConfig);
+const onkelosSlugs = allSlugs.filter((s) => s.startsWith('onkelos-'));
+const jonathanSlugs = allSlugs.filter((s) => s.startsWith('jonathan-'));
+
+export async function getStaticPaths() {
+  return [
+    'onkelos-genesis', 'onkelos-exodus', 'onkelos-leviticus', 'onkelos-numbers', 'onkelos-deuteronomy',
+    'jonathan-isaiah', 'jonathan-jeremiah', 'jonathan-ezekiel', 'jonathan-former-prophets', 'jonathan-minor-prophets',
+  ].map((slug) => ({ params: { slug } }));
+}
+
+const slug = Astro.params.slug!;
+const config = slugConfig[slug];
+const data = JSON.parse(readFileSync(join(dataRoot, config.dataDir, config.bookFile), 'utf-8'));
+const renderings = data.renderings || [];
+
+const isOnkelos = config.tradition === 'onkelos';
+const siblingList = isOnkelos ? onkelosSlugs : jonathanSlugs;
+const currentIdx = siblingList.indexOf(slug);
+const prevSlug = currentIdx > 0 ? siblingList[currentIdx - 1] : null;
+const nextSlug = currentIdx < siblingList.length - 1 ? siblingList[currentIdx + 1] : null;
+
+function catColor(cat: string) {
+  switch (cat) {
+    case 'memra': return 'bg-purple-100 text-purple-800 border-purple-200';
+    case 'anti-anthropomorphism': return 'bg-amber-100 text-amber-800 border-amber-200';
+    case 'shekinah': return 'bg-blue-100 text-blue-800 border-blue-200';
+    case 'messianic': return 'bg-rose-100 text-rose-800 border-rose-200';
+    case 'eschatological': return 'bg-orange-100 text-orange-800 border-orange-200';
+    case 'divine-name': return 'bg-teal-100 text-teal-800 border-teal-200';
+    case 'expansion': return 'bg-indigo-100 text-indigo-800 border-indigo-200';
+    case 'literal': return 'bg-stone-100 text-stone-500 border-stone-200';
+    default: return 'bg-stone-50 text-stone-400 border-stone-200';
+  }
+}
+---
+
+<Layout
+  title={`${config.bookName} — ${config.traditionLabel}`}
+  description={`${config.traditionLabel} renderings for ${config.bookName}. ${renderings.length} significant passages documented.`}
+  canonical={`/targum/${slug}`}
+>
+  <div class="bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
+    <div class="max-w-3xl mx-auto px-6 py-12">
+      <div class="flex items-center gap-2 text-base text-stone-400 mb-5">
+        <a href="/targum" class="hover:text-teal-600 transition-colors">Targumim</a>
+        <span>/</span>
+        <span class="text-stone-600">{config.traditionLabel}</span>
+        <span>/</span>
+        <span class="text-stone-600">{config.bookName}</span>
+      </div>
+
+      <h1 class="font-serif text-4xl font-medium text-stone-800 mb-2">
+        {config.bookName}
+        <span class="text-lg font-normal text-stone-400 ml-2">&mdash; {config.traditionLabel}</span>
+      </h1>
+      <p class="text-stone-600 text-base">
+        {renderings.length} renderings documented
+      </p>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 py-8">
+
+    {data.preamble && (
+      <details class="mb-10 group" open>
+        <summary class="cursor-pointer select-none flex items-center gap-2 text-base font-semibold uppercase tracking-widest text-teal-600 mb-4 hover:text-teal-700 transition-colors">
+          <svg class="w-3.5 h-3.5 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+          Overview
+        </summary>
+        <div class="bg-cream-50 border border-cream-200 rounded-xl p-6 sm:p-8 space-y-5 text-lg leading-relaxed text-stone-600">
+          <div>
+            <h3 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1.5">Summary</h3>
+            <p class="font-serif italic">{data.preamble.summary}</p>
+          </div>
+          {data.preamble.notable_renderings && (
+            <div>
+              <h3 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1.5">Notable Renderings</h3>
+              <p>{data.preamble.notable_renderings}</p>
+            </div>
+          )}
+          {data.preamble.theological_themes && (
+            <div>
+              <h3 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1.5">Theological Themes</h3>
+              <p>{data.preamble.theological_themes}</p>
+            </div>
+          )}
+        </div>
+      </details>
+    )}
+
+    <div class="space-y-4">
+      {renderings.map((r: any) => (
+        <div
+          class={`rounded-lg border p-5 ${
+            r.category === 'memra' || r.category === 'messianic'
+              ? 'border-purple-100 bg-purple-50/20'
+              : r.category === 'anti-anthropomorphism'
+                ? 'border-amber-100 bg-amber-50/20'
+                : r.category === 'shekinah'
+                  ? 'border-blue-100 bg-blue-50/20'
+                  : 'border-cream-200 bg-white'
+          }`}
+        >
+          <div class="flex items-start justify-between mb-3">
+            <span class="font-serif text-stone-800">{r.reference}</span>
+            {r.category && (
+              <span class={`text-base px-2 py-0.5 rounded-full border font-medium ${catColor(r.category)}`}>
+                {r.category}
+              </span>
+            )}
+          </div>
+
+          {r.hebrew_text && (
+            <div class="bg-stone-50 rounded-lg border border-stone-200 p-3 mb-3">
+              <p class="text-sm font-semibold uppercase tracking-wider text-stone-400 mb-1">Hebrew (MT)</p>
+              <p class="font-hebrew text-lg text-stone-800 text-right" dir="rtl">{r.hebrew_text}</p>
+              {r.mt_rendering && <p class="text-base text-stone-500 mt-1">{r.mt_rendering}</p>}
+            </div>
+          )}
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+            {r.targum_text && (
+              <div class="bg-purple-50/50 rounded-lg border border-purple-200 p-3">
+                <p class="text-sm font-semibold uppercase tracking-wider text-purple-600 mb-1">Targum (Aramaic)</p>
+                <p class="text-lg text-stone-700 italic">{r.targum_text}</p>
+              </div>
+            )}
+            {r.targum_rendering && (
+              <div class="bg-teal-50/50 rounded-lg border border-teal-200 p-3">
+                <p class="text-sm font-semibold uppercase tracking-wider text-teal-600 mb-1">Targum Rendering</p>
+                <p class="text-lg text-stone-700">{r.targum_rendering}</p>
+              </div>
+            )}
+          </div>
+
+          {r.notes && r.notes.length > 0 && (
+            <div class="space-y-1.5">
+              {r.notes.map((note: string) => (
+                <p class="text-lg text-stone-500 leading-relaxed">{note}</p>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 pb-16">
+    <div class="flex items-center justify-between pt-8 border-t border-cream-200">
+      {prevSlug ? (
+        <a
+          href={`/targum/${prevSlug}`}
+          class="text-base text-teal-600 hover:text-teal-700 transition-colors"
+        >
+          &larr; {slugConfig[prevSlug].bookName}
+        </a>
+      ) : (
+        <a href="/targum" class="text-base text-teal-600 hover:text-teal-700 transition-colors">
+          &larr; Targumim Index
+        </a>
+      )}
+      {nextSlug ? (
+        <a
+          href={`/targum/${nextSlug}`}
+          class="text-base text-teal-600 hover:text-teal-700 transition-colors"
+        >
+          {slugConfig[nextSlug].bookName} &rarr;
+        </a>
+      ) : (
+        <a href="/targum" class="text-base text-teal-600 hover:text-teal-700 transition-colors">
+          Targumim Index &rarr;
+        </a>
+      )}
+    </div>
+  </div>
+</Layout>

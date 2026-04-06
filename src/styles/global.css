@@ -20,6 +20,7 @@
   --font-serif: "Cormorant Garamond", "Georgia", serif;
   --font-sans: "Inter", system-ui, sans-serif;
   --font-hebrew: "Noto Serif Hebrew", "SBL Hebrew", serif;
+  --font-greek: "Noto Serif", "SBL Greek", "Times New Roman", serif;
 }
 
 @layer base {
@@ -36,7 +37,8 @@
 }
 
 /* Hebrew text */
-.text-hebrew {
+.text-hebrew,
+.font-hebrew {
   font-family: var(--font-hebrew);
   direction: rtl;
   unicode-bidi: bidi-override;
@@ -45,10 +47,20 @@
   color: #2a2a2a;
 }
 
+/* Greek text */
+.text-greek,
+.font-greek {
+  font-family: var(--font-greek);
+  direction: ltr;
+  line-height: 2;
+  font-size: 1.35rem;
+  color: #2a2a2a;
+}
+
 /* Verse rendering text */
 .text-rendering {
   font-family: var(--font-serif);
-  font-size: 1.25rem;
+  font-size: 1.375rem;
   line-height: 1.8;
   color: #1c1c1c;
 }
@@ -56,7 +68,7 @@
 /* Verse number badge */
 .verse-num {
   font-family: var(--font-sans);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--color-teal-600);
   vertical-align: super;

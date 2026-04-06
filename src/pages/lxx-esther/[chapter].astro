@@ -1,0 +1,284 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { loadVariantChapter, loadChapter } from '../../data/tcr';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+const dataRoot = join(process.cwd(), 'src', 'data', 'lxx-esther');
+
+function loadEstherFile(filename: string): any {
+  const file = join(dataRoot, filename);
+  return JSON.parse(readFileSync(file, 'utf-8'));
+}
+
+const variantSlugs = Array.from({ length: 10 }, (_, i) => String(i + 1));
+const additionSlugs = ['addition-A', 'addition-B', 'addition-C', 'addition-D', 'addition-E', 'addition-F'];
+
+const additionLabels: Record<string, string> = {
+  'addition-A': "Mordecai's Dream",
+  'addition-B': "King's First Decree",
+  'addition-C': "Prayers of Mordecai and Esther",
+  'addition-D': "Esther Before the King",
+  'addition-E': "King's Second Decree",
+  'addition-F': "Interpretation of Mordecai's Dream",
+};
+
+export async function getStaticPaths() {
+  const paths = [
+    ...Array.from({ length: 10 }, (_, i) => ({ params: { chapter: String(i + 1) } })),
+    ...['addition-A', 'addition-B', 'addition-C', 'addition-D', 'addition-E', 'addition-F'].map(
+      (s) => ({ params: { chapter: s } })
+    ),
+  ];
+  return paths;
+}
+
+const slug = Astro.params.chapter!;
+const isVariant = variantSlugs.includes(slug);
+const isAddition = additionSlugs.includes(slug);
+
+let data: any;
+let base: any = null;
+let chapterNum: number | null = null;
+let isStandalone = false;
+
+if (isVariant) {
+  chapterNum = parseInt(slug, 10);
+  data = loadVariantChapter('lxx-esther', chapterNum);
+  base = loadChapter('esther', chapterNum);
+} else if (isAddition) {
+  data = loadEstherFile(`${slug}.json`);
+  isStandalone = true;
+}
+
+const variantCount = isStandalone ? 0 : data.verses.filter((v: any) => v.has_variant).length;
+
+// Navigation
+const allSlugs = [...variantSlugs, ...additionSlugs];
+const currentIdx = allSlugs.indexOf(slug);
+const prevSlug = currentIdx > 0 ? allSlugs[currentIdx - 1] : null;
+const nextSlug = currentIdx < allSlugs.length - 1 ? allSlugs[currentIdx + 1] : null;
+
+function slugLabel(s: string): string {
+  if (s.startsWith('addition-')) return `Addition ${s.slice(-1)}`;
+  return `Chapter ${s}`;
+}
+
+const pageTitle = isAddition
+  ? `Esther ${slugLabel(slug)} — Septuagint (LXX)`
+  : `Esther ${chapterNum} — Septuagint (LXX)`;
+
+const pageDesc = isStandalone
+  ? `${data.meta.book} — a deuterocanonical addition preserved in the Septuagint. ${data.verses.length} verses.`
+  : `Septuagint variant comparison for Esther ${chapterNum}. ${variantCount} variants documented against the Masoretic Text.`;
+
+function sigColor(sig: string) {
+  switch (sig) {
+    case 'theological': return 'bg-amber-100 text-amber-800 border-amber-200';
+    case 'major': return 'bg-blue-100 text-blue-800 border-blue-200';
+    case 'moderate': return 'bg-teal-50 text-teal-700 border-teal-200';
+    case 'minor': return 'bg-stone-100 text-stone-500 border-stone-200';
+    default: return 'bg-stone-50 text-stone-400 border-stone-200';
+  }
+}
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDesc}
+  canonical={`/lxx-esther/${slug}`}
+>
+  <div class="bg-gradient-to-b from-cream-100 to-cream-50 border-b border-cream-200">
+    <div class="max-w-3xl mx-auto px-6 py-12">
+      <div class="flex items-center gap-2 text-base text-stone-400 mb-5">
+        <a href="/lxx-esther" class="hover:text-teal-600 transition-colors">Septuagint Esther</a>
+        <span>/</span>
+        <span class="text-stone-600">{slugLabel(slug)}</span>
+      </div>
+
+      <h1 class="font-serif text-4xl font-medium text-stone-800 mb-2">
+        {isAddition ? (
+          <>Esther {slugLabel(slug)}<span class="text-lg font-normal text-stone-400 ml-2">&mdash; {additionLabels[slug]}</span></>
+        ) : (
+          <>Esther {chapterNum}<span class="text-lg font-normal text-stone-400 ml-2">&mdash; Septuagint (LXX)</span></>
+        )}
+      </h1>
+      <p class="text-stone-600 text-base">
+        {data.verses.length} verses
+        {!isStandalone && <>&nbsp;&bull; {variantCount} variants</>}
+        {isStandalone && <>&nbsp;&bull; standalone (no MT counterpart)</>}
+      </p>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 py-8">
+
+    {data.preamble && (
+      <details class="mb-10 group" open>
+        <summary class="cursor-pointer select-none flex items-center gap-2 text-base font-semibold uppercase tracking-widest text-teal-600 mb-4 hover:text-teal-700 transition-colors">
+          <svg class="w-3.5 h-3.5 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+          {isStandalone ? 'About This Addition' : 'Chapter Overview'}
+        </summary>
+        <div class="bg-cream-50 border border-cream-200 rounded-xl p-6 sm:p-8 space-y-5 text-lg leading-relaxed text-stone-600">
+          <div>
+            <h3 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1.5">Summary</h3>
+            <p class="font-serif italic">{data.preamble.summary}</p>
+          </div>
+          {data.preamble.notable_variants && (
+            <div>
+              <h3 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1.5">Notable Variants</h3>
+              <p>{data.preamble.notable_variants}</p>
+            </div>
+          )}
+          {data.preamble.structural_notes && (
+            <div>
+              <h3 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1.5">Structural Notes</h3>
+              <p>{data.preamble.structural_notes}</p>
+            </div>
+          )}
+          {data.preamble.remarkable && (
+            <div>
+              <h3 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1.5">Remarkable</h3>
+              <p>{data.preamble.remarkable}</p>
+            </div>
+          )}
+          {data.preamble.friction && (
+            <div>
+              <h3 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1.5">Friction</h3>
+              <p>{data.preamble.friction}</p>
+            </div>
+          )}
+          {data.preamble.connections && (
+            <div>
+              <h3 class="text-base font-semibold uppercase tracking-wider text-stone-400 mb-1.5">Connections</h3>
+              <p>{data.preamble.connections}</p>
+            </div>
+          )}
+        </div>
+      </details>
+    )}
+
+    {!isStandalone && chapterNum && (
+      <div class="mb-4 text-base text-stone-400">
+        <a href={`/esther/${chapterNum}`} class="text-teal-600 hover:underline">
+          View TCR base rendering of Esther {chapterNum} &rarr;
+        </a>
+      </div>
+    )}
+
+    <div class="space-y-4">
+      {isStandalone ? (
+        /* Standalone rendering (additions with no MT counterpart) */
+        data.verses.map((v: any) => (
+          <div class="rounded-lg border border-cream-200 bg-white p-5">
+            <div class="flex items-start justify-between mb-2">
+              <span class="text-base font-mono text-stone-400">{v.verse}</span>
+            </div>
+
+            <p class="text-stone-700 text-lg leading-relaxed mb-3 font-serif">
+              {v.rendering}
+            </p>
+
+            {v.text_source && (
+              <p class="text-base text-stone-400 mb-2">{v.text_source}</p>
+            )}
+
+            {v.translator_notes && v.translator_notes.length > 0 && (
+              <div class="space-y-1.5">
+                {v.translator_notes.map((note: string) => (
+                  <p class="text-lg text-stone-500 leading-relaxed">{note}</p>
+                ))}
+              </div>
+            )}
+          </div>
+        ))
+      ) : (
+        /* Variant comparison (chapters 1-10) */
+        data.verses.map((v: any) => {
+          const baseVerse = base?.verses.find((bv: any) => bv.verse === v.verse);
+          return (
+            <div
+              class={`rounded-lg border p-5 ${
+                v.has_variant
+                  ? v.significance === 'theological'
+                    ? 'border-amber-200 bg-amber-50/30'
+                    : v.significance === 'major'
+                      ? 'border-blue-200 bg-blue-50/30'
+                      : 'border-cream-200 bg-white'
+                  : 'border-cream-100 bg-white/50'
+              }`}
+            >
+              <div class="flex items-start justify-between mb-2">
+                <span class="text-base font-mono text-stone-400">
+                  {v.verse}
+                </span>
+                <div class="flex items-center gap-2">
+                  {v.has_variant && v.significance && (
+                    <span class={`text-base px-2 py-0.5 rounded-full border font-medium ${sigColor(v.significance)}`}>
+                      {v.significance}
+                    </span>
+                  )}
+                  {!v.has_variant && (
+                    <span class="text-base text-stone-300">identical</span>
+                  )}
+                </div>
+              </div>
+
+              {baseVerse && (
+                <p class="text-stone-700 text-lg leading-relaxed mb-3 font-serif">
+                  {baseVerse.rendering}
+                </p>
+              )}
+
+              {v.has_variant && v.mt_reading && (
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                  <div class="bg-white rounded-lg border border-stone-200 p-3">
+                    <p class="text-sm font-semibold uppercase tracking-wider text-stone-400 mb-1">Masoretic (WLC)</p>
+                    <p class="font-hebrew text-lg text-stone-800 text-right" dir="rtl">{v.mt_reading}</p>
+                    {v.mt_rendering && <p class="text-base text-stone-500 mt-1">{v.mt_rendering}</p>}
+                  </div>
+                  <div class="bg-amber-50 rounded-lg border border-amber-200 p-3">
+                    <p class="text-sm font-semibold uppercase tracking-wider text-amber-600 mb-1">Septuagint (LXX)</p>
+                    <p class="text-lg text-stone-800">{v.lxx_reading}</p>
+                    {v.variant_rendering && <p class="text-base text-stone-600 mt-1">{v.variant_rendering}</p>}
+                  </div>
+                </div>
+              )}
+
+              {v.variant_notes && v.variant_notes.length > 0 && (
+                <div class="space-y-1.5">
+                  {v.variant_notes.map((note: string) => (
+                    <p class="text-lg text-stone-500 leading-relaxed">{note}</p>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })
+      )}
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 pb-16">
+    <div class="flex items-center justify-between pt-8 border-t border-cream-200">
+      {prevSlug ? (
+        <a
+          href={`/lxx-esther/${prevSlug}`}
+          class="text-base text-teal-600 hover:text-teal-700 transition-colors"
+        >
+          &larr; {slugLabel(prevSlug)}
+        </a>
+      ) : <span />}
+      {nextSlug ? (
+        <a
+          href={`/lxx-esther/${nextSlug}`}
+          class="text-base text-teal-600 hover:text-teal-700 transition-colors"
+        >
+          {slugLabel(nextSlug)} &rarr;
+        </a>
+      ) : <span />}
+    </div>
+  </div>
+</Layout>
